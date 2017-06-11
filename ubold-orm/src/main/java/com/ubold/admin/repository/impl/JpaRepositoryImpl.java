@@ -1,6 +1,6 @@
 package com.ubold.admin.repository.impl;
 
-import com.whtr.loan.repository.JpaRepository;
+import com.ubold.admin.repository.JpaRepository;
 import org.springframework.context.support.ApplicationObjectSupport;
 import org.springframework.data.repository.Repository;
 

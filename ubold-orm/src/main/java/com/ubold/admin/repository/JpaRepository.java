@@ -1,6 +1,6 @@
 package com.ubold.admin.repository;
 
-import org.springframework.data.repository.Repositor;
+import org.springframework.data.repository.Repository;
 
 import java.io.Serializable;
 
