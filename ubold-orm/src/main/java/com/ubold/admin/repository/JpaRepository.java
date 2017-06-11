@@ -1,0 +1,13 @@
+package com.ubold.admin.repository;
+
+import org.springframework.data.repository.Repositor;
+
+import java.io.Serializable;
+
+/**
+ * Created by ningzuokun on 2017/5/15.
+ */
+public interface JpaRepository<I extends Repository<?, ?>> extends Serializable {
+
+    I getRepository();
+}
