@@ -9,8 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
-import com.sophia.response.Response;
-import com.sophia.web.constant.StatusCodeConstant;
+import com.ubold.admin.response.Response;
+import com.ubold.admin.constant.StatusCodeConstant;
 
 /**
  * Created by root on 2015/12/14.
