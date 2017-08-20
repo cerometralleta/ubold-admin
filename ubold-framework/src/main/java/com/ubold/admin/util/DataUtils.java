@@ -1,6 +1,7 @@
 package com.ubold.admin.util;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.Character.UnicodeBlock;
 import java.math.BigDecimal;
@@ -15,7 +16,7 @@ import java.util.Random;
  *
  */
 public class DataUtils {
-	private static Logger logger = Logger.getLogger("DataUtils");
+	private static final Logger logger = LoggerFactory.getLogger(DataUtils.class);
 
 	/**
 	 * 获取不大于的最大整数（例如：1.5 取 1）

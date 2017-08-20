@@ -1,19 +1,18 @@
 package com.ubold.admin.response;
 
-import java.io.Serializable;
-
+import com.alibaba.fastjson.JSONObject;
 import com.ubold.admin.constant.StatusCodeConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.alibaba.fastjson.JSONObject;
+import java.io.Serializable;
 
 /**
  * 响应
  * @author zkning
  */
 public class Response<T> implements Serializable{
-	private static final Logger logger = LoggerFactory.getLogger(Response.class);
+	protected Logger logger = LoggerFactory.getLogger(getClass());
 	/**
 	 * 
 	 */
