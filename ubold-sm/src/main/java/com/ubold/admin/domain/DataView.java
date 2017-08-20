@@ -16,11 +16,11 @@ public class DataView extends Auditable{
     private String dataViewName;
     private String sqlId;
     private String remark;
-    private OptionsVo options;
-    private ArrayList<ColumnVo> columns;
-    private TreeOptionsVo treeOptions;
-    private DataFilterVo dataFilters;
-    private ArrayList<ButtonVo> buttons;
+    private String options;
+    private String columns;
+    private String treeOptions;
+    private String dataFilters;
+    private String buttons;
 
     public String getDataViewCode() {
         return dataViewCode;
@@ -54,43 +54,43 @@ public class DataView extends Auditable{
         this.remark = remark;
     }
 
-    public OptionsVo getOptions() {
+    public String getOptions() {
         return options;
     }
 
-    public void setOptions(OptionsVo options) {
+    public void setOptions(String options) {
         this.options = options;
     }
 
-    public ArrayList<ColumnVo> getColumns() {
+    public String getColumns() {
         return columns;
     }
 
-    public void setColumns(ArrayList<ColumnVo> columns) {
+    public void setColumns(String columns) {
         this.columns = columns;
     }
 
-    public TreeOptionsVo getTreeOptions() {
+    public String getTreeOptions() {
         return treeOptions;
     }
 
-    public void setTreeOptions(TreeOptionsVo treeOptions) {
+    public void setTreeOptions(String treeOptions) {
         this.treeOptions = treeOptions;
     }
 
-    public DataFilterVo getDataFilters() {
+    public String getDataFilters() {
         return dataFilters;
     }
 
-    public void setDataFilters(DataFilterVo dataFilters) {
+    public void setDataFilters(String dataFilters) {
         this.dataFilters = dataFilters;
     }
 
-    public ArrayList<ButtonVo> getButtons() {
+    public String getButtons() {
         return buttons;
     }
 
-    public void setButtons(ArrayList<ButtonVo> buttons) {
+    public void setButtons(String buttons) {
         this.buttons = buttons;
     }
 }
