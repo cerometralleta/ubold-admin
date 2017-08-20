@@ -16,12 +16,10 @@ public class SimpleCORSFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws ServletException, IOException {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         String origin = (String) servletRequest.getRemoteHost()+":"+servletRequest.getRemotePort();
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
-        response.setHeader("Access-Control-Max-Age", "3600");
-        response.setHeader("Access-Control-Allow-Headers", "x-requested-with,Authorization");
-        response.setHeader("Access-Control-Allow-Credentials","true");
-        filterChain.doFilter(servletRequest, servletResponse);
+        response.addHeader("Access-Control-Allow-Origin", "*");
+        response.addHeader("Access-Control-Allow-Methods","GET, POST, PUT, DELETE, OPTIONS");
+        response.addHeader("Access-Control-Allow-Headers","origin, content-type, accept, x-requested-with, sid, mycustom, smuser");
+        filterChain.doFilter(servletRequest, response);
     }
     @Override
     public void destroy() {}
