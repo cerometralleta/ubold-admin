@@ -28,7 +28,7 @@ public class DataViewCreateRequest implements Serializable {
     @NotNull(message = "列表字段不能为空值")
     private ArrayList<ColumnVo> columns;
     private TreeOptionsVo treeOptions;
-    private DataFilterVo dataFilters;
+    private ArrayList<DataFilterVo> dataFilters;
     private ArrayList<ButtonVo> buttons;
 
     public String getDataViewCode() {
@@ -87,11 +87,11 @@ public class DataViewCreateRequest implements Serializable {
         this.treeOptions = treeOptions;
     }
 
-    public DataFilterVo getDataFilters() {
+    public ArrayList<DataFilterVo> getDataFilters() {
         return dataFilters;
     }
 
-    public void setDataFilters(DataFilterVo dataFilters) {
+    public void setDataFilters(ArrayList<DataFilterVo> dataFilters) {
         this.dataFilters = dataFilters;
     }
 
