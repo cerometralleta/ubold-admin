@@ -56,7 +56,7 @@ public class Response<T> implements Serializable{
 	 * @return
 	 */
 	public Boolean checkSuccess(){
-		return StatusCodeConstant.SUCCESS.equals(this.code);
+		return StatusCodeConstant.SUCCESS.code.equals(this.code);
 	}
 	/**
 	 * toJsonString
@@ -90,7 +90,11 @@ public class Response<T> implements Serializable{
 	public static Response FAILURE(){
 		return new Response(StatusCodeConstant.SYSTEM_ERROR.code, StatusCodeConstant.SYSTEM_ERROR.message, null);
 	}
-	
+
+	public static Response FAILURE(String message){
+		return new Response(StatusCodeConstant.SYSTEM_ERROR.code,message,null);
+	}
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static Response FAILURE(Object result){
 		return new Response(StatusCodeConstant.SYSTEM_ERROR.code, StatusCodeConstant.SYSTEM_ERROR.message, result);
@@ -100,7 +104,7 @@ public class Response<T> implements Serializable{
 	public static Response FAILURE(Exception ex){
 		return new Response(StatusCodeConstant.SYSTEM_ERROR.code, ex.getMessage(), null);
 	}
-	
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static Response FAILURE(Integer code ,String message){
 		return new Response(code, message, null);

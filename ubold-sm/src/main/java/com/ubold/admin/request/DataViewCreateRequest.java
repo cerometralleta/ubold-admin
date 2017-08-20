@@ -6,6 +6,7 @@ import org.hibernate.validator.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 数据视图创建请求
@@ -26,10 +27,10 @@ public class DataViewCreateRequest implements Serializable {
     private OptionsVo options;
 
     @NotNull(message = "列表字段不能为空值")
-    private ArrayList<ColumnVo> columns;
+    private List<ColumnVo> columns;
     private TreeOptionsVo treeOptions;
-    private ArrayList<DataFilterVo> dataFilters;
-    private ArrayList<ButtonVo> buttons;
+    private List<DataFilterVo> dataFilters;
+    private List<ButtonVo> buttons;
 
     public String getDataViewCode() {
         return dataViewCode;
@@ -71,11 +72,11 @@ public class DataViewCreateRequest implements Serializable {
         this.options = options;
     }
 
-    public ArrayList<ColumnVo> getColumns() {
+    public List<ColumnVo> getColumns() {
         return columns;
     }
 
-    public void setColumns(ArrayList<ColumnVo> columns) {
+    public void setColumns(List<ColumnVo> columns) {
         this.columns = columns;
     }
 
@@ -87,19 +88,19 @@ public class DataViewCreateRequest implements Serializable {
         this.treeOptions = treeOptions;
     }
 
-    public ArrayList<DataFilterVo> getDataFilters() {
+    public List<DataFilterVo> getDataFilters() {
         return dataFilters;
     }
 
-    public void setDataFilters(ArrayList<DataFilterVo> dataFilters) {
+    public void setDataFilters(List<DataFilterVo> dataFilters) {
         this.dataFilters = dataFilters;
     }
 
-    public ArrayList<ButtonVo> getButtons() {
+    public List<ButtonVo> getButtons() {
         return buttons;
     }
 
-    public void setButtons(ArrayList<ButtonVo> buttons) {
+    public void setButtons(List<ButtonVo> buttons) {
         this.buttons = buttons;
     }
 }

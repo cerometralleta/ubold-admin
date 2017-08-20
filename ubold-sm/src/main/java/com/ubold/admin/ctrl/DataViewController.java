@@ -28,10 +28,21 @@ public class DataViewController{
      * @return
      */
     @ResponseBody
-    @RequestMapping(value="/create",method= RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Response create(@RequestBody DataViewCreateRequest request) {
+    @RequestMapping(value="/persistent",method= RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Response persistent(@RequestBody DataViewCreateRequest request) {
         logger.info(JSON.toJSONString(request));
-        return dataViewService.create(request);
+        return dataViewService.persistent(request);
+    }
+
+    /**
+     * 根据视图编号查询
+     * @param dataViewCode
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value="/find/{dataViewCode}")
+    public Response findByDataViewCode(@PathVariable String dataViewCode) {
+        return dataViewService.findByDataViewCode(dataViewCode);
     }
 
     @ResponseBody
