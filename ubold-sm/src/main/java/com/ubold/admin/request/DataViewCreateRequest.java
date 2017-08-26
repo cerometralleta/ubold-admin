@@ -22,6 +22,7 @@ public class DataViewCreateRequest implements Serializable {
     @NotBlank(message = "SQLID不能为空值")
     private String sqlId;
     private String remark;
+    private String id;
 
     @NotNull(message = "表格选项不能为空值")
     private OptionsVo options;
@@ -31,6 +32,23 @@ public class DataViewCreateRequest implements Serializable {
     private TreeOptionsVo treeOptions;
     private List<DataFilterVo> dataFilters;
     private List<ButtonVo> buttons;
+    private long version;
+
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(long version) {
+        this.version = version;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getDataViewCode() {
         return dataViewCode;

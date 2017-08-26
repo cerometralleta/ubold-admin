@@ -47,14 +47,24 @@ public class DataViewServiceImpl  extends JpaRepositoryImpl<DataViewRepository> 
         return Response.SUCCESS();
     }
 
+    /**
+     * 创建dataView
+     * @param request
+     * @return
+     */
     private DataView createDataView(DataViewCreateRequest request){
         DataView dataView = new DataView();
-        BeanUtils.copyProperties(request, dataView);
+        dataView.setId(request.getId());
+        dataView.setSqlId(request.getSqlId());
+        dataView.setRemark(request.getRemark());
+        dataView.setDataViewCode(request.getDataViewCode());
+        dataView.setDataViewName(request.getDataViewName());
         dataView.setButtons(JSON.toJSONString(request.getButtons()));
         dataView.setColumns(JSON.toJSONString(request.getColumns()));
         dataView.setDataFilters(JSON.toJSONString(request.getDataFilters()));
         dataView.setOptions(JSON.toJSONString(request.getOptions()));
         dataView.setTreeOptions(JSON.toJSONString(request.getTreeOptions()));
+        dataView.setVersion(request.getVersion());
         return dataView;
     }
 
@@ -75,17 +85,27 @@ public class DataViewServiceImpl  extends JpaRepositoryImpl<DataViewRepository> 
             return Response.FAILURE("视图未定义,视图编号:"+dataViewCode);
         }
         DataView dataView = dataViewList.get(0);
-        return Response.SUCCESS(this.parse(dataView));
+        return Response.SUCCESS(this.parseResult(dataView));
     }
 
-    private DataViewCreateRequest parse(DataView dataView){
+    /**
+     *  转换为页面显示数据
+     * @param dataView
+     * @return
+     */
+    private DataViewCreateRequest parseResult(DataView dataView){
         DataViewCreateRequest request = new DataViewCreateRequest();
-        BeanUtils.copyProperties(dataView, request);
         request.setButtons(JSON.parseArray(dataView.getButtons(), ButtonVo.class));
         request.setColumns(JSON.parseArray(dataView.getColumns(), ColumnVo.class));
         request.setDataFilters(JSON.parseArray(dataView.getDataFilters(), DataFilterVo.class));
         request.setOptions(JSON.parseObject(dataView.getOptions(), OptionsVo.class));
         request.setTreeOptions(JSON.parseObject(dataView.getTreeOptions(), TreeOptionsVo.class));
+        request.setId(dataView.getId());
+        request.setSqlId(dataView.getSqlId());
+        request.setRemark(dataView.getRemark());
+        request.setDataViewCode(dataView.getDataViewCode());
+        request.setDataViewName(dataView.getDataViewName());
+        request.setVersion(dataView.getVersion());
         return request;
     }
 }
