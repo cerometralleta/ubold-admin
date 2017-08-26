@@ -12,7 +12,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="ubold-sm" />
-    <orderEntry type="module" module-name="ubold-rabc" />
     <orderEntry type="module" module-name="ubold-orm" />
     <orderEntry type="module" module-name="ubold-framework" />
     <orderEntry type="library" name="Maven: com.alibaba:fastjson:1.2.32" level="project" />
