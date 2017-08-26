@@ -12,7 +12,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.5.2.RELEASE</version>
+        <version>1.5.6.RELEASE</version>
     </parent>
 
     <properties>
@@ -20,49 +20,11 @@
         <hystrix.version>1.5.2</hystrix.version>
     </properties>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <exclusions>
-                <exclusion>
-                    <!--LoggerFactory is not a Logback LoggerContext but Logback is on the classpath.
-                    Either remove Logback or the competing implementation (class org.slf4j.impl.SimpleLoggerFactory) Object of class [org.slf4j.impl.SimpleLoggerFactory] must be an instance of class ch.qos.logback.classic.LoggerContext-->
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-
     <modules>
         <module>ubold-orm</module>
         <module>ubold-framework</module>
         <module>ubold-sm</module>
         <module>ubold-web</module>
+        <module>ubold-rabc</module>
     </modules>
 </project>
