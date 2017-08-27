@@ -33,15 +33,16 @@ public class ColumnVo implements Serializable{
     private boolean cardVisible;
     private boolean switchable;
     private boolean clickToSelect;
-    private String formatter;
-    private String footerFormatter;
-    private String events;
-    private String sorter;
+//    private String formatter;
+//    private String footerFormatter;
+//    private String events;
+//    private String sorter;
     private String sortName;
-    private String cellStyle;
+//    private String cellStyle;
     private boolean searchable;
     private boolean searchFormatter;
     private boolean escape;
+
     public String getField() {
         return field;
     }
@@ -250,52 +251,12 @@ public class ColumnVo implements Serializable{
         this.clickToSelect = clickToSelect;
     }
 
-    public String getFormatter() {
-        return formatter;
-    }
-
-    public void setFormatter(String formatter) {
-        this.formatter = formatter;
-    }
-
-    public String getFooterFormatter() {
-        return footerFormatter;
-    }
-
-    public void setFooterFormatter(String footerFormatter) {
-        this.footerFormatter = footerFormatter;
-    }
-
-    public String getEvents() {
-        return events;
-    }
-
-    public void setEvents(String events) {
-        this.events = events;
-    }
-
-    public String getSorter() {
-        return sorter;
-    }
-
-    public void setSorter(String sorter) {
-        this.sorter = sorter;
-    }
-
     public String getSortName() {
         return sortName;
     }
 
     public void setSortName(String sortName) {
         this.sortName = sortName;
-    }
-
-    public String getCellStyle() {
-        return cellStyle;
-    }
-
-    public void setCellStyle(String cellStyle) {
-        this.cellStyle = cellStyle;
     }
 
     public boolean isSearchable() {
