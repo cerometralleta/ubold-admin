@@ -1,13 +1,14 @@
 package com.ubold.admin.vo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by zkning on 2017/8/13.
  */
 public class OptionsVo implements Serializable{
 
-    private String classes;
     private String sortClass;
     private int height;
     private String undefinedText;
@@ -20,7 +21,7 @@ public class OptionsVo implements Serializable{
     private String iconSize;
     private String buttonsClass;
     private String icons;
-    private String data;
+    private List data = new ArrayList();
     private String dataField;
     private String totalField;
     private String  ajax;
@@ -84,14 +85,6 @@ public class OptionsVo implements Serializable{
     private String locale;
     private String footerStyle;
     private boolean showExport;
-
-    public String getClasses() {
-        return classes;
-    }
-
-    public void setClasses(String classes) {
-        this.classes = classes;
-    }
 
     public String getSortClass() {
         return sortClass;
@@ -181,11 +174,11 @@ public class OptionsVo implements Serializable{
         this.icons = icons;
     }
 
-    public String getData() {
+    public List getData() {
         return data;
     }
 
-    public void setData(String data) {
+    public void setData(List data) {
         this.data = data;
     }
 
