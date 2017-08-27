@@ -9,18 +9,19 @@ import java.util.List;
  */
 public class OptionsVo implements Serializable{
 
+    private String classes = "table table-hover";
     private String sortClass;
     private int height;
     private String undefinedText;
     //条纹
     private boolean striped;
-    private String sortName;
+//    private String sortName;
     private String sortOrder;
     private boolean  sortStable;
     private String iconsPrefix;
     private String iconSize;
     private String buttonsClass;
-    private String icons;
+//    private String icons;
     private List data = new ArrayList();
     private String dataField;
     private String totalField;
@@ -31,16 +32,16 @@ public class OptionsVo implements Serializable{
     private String contentType;
     private String dataType;
     private String ajaxOptions;
-    private String queryParams;
+//    private String queryParams;
     private String queryParamsType;
-    private String responseHandler;
+//    private String responseHandler;
     private boolean pagination;
     private boolean paginationLoop;
     private boolean onlyInfoPagination;
     private String sidePagination;
     private String pageNumber;
     private String pageSize;
-    private String pageList;
+//    private String pageList;
     private String selectItemName;
     private boolean smartDisplay;
     private boolean escape;
@@ -62,7 +63,7 @@ public class OptionsVo implements Serializable{
     private String uniqueId;
     private boolean cardView;
     private boolean detailView;
-    private String detailFormatter;
+//    private String detailFormatter;
     private String searchAlign;
     private String buttonsAlign;
     private String toolbarAlign;
@@ -78,13 +79,21 @@ public class OptionsVo implements Serializable{
     private boolean maintainSelected;
     private boolean sortable;
     private boolean silentSort;
-    private String rowStyle;
-    private String rowAttributes;
-    private String customSearch;
-    private String customSort;
+//    private String rowStyle;
+//    private String rowAttributes;
+//    private String customSearch;
+//    private String customSort;
     private String locale;
-    private String footerStyle;
+//    private String footerStyle;
     private boolean showExport;
+
+    public String getClasses() {
+        return classes;
+    }
+
+    public void setClasses(String classes) {
+        this.classes = classes;
+    }
 
     public String getSortClass() {
         return sortClass;
@@ -116,14 +125,6 @@ public class OptionsVo implements Serializable{
 
     public void setStriped(boolean striped) {
         this.striped = striped;
-    }
-
-    public String getSortName() {
-        return sortName;
-    }
-
-    public void setSortName(String sortName) {
-        this.sortName = sortName;
     }
 
     public String getSortOrder() {
@@ -164,14 +165,6 @@ public class OptionsVo implements Serializable{
 
     public void setButtonsClass(String buttonsClass) {
         this.buttonsClass = buttonsClass;
-    }
-
-    public String getIcons() {
-        return icons;
-    }
-
-    public void setIcons(String icons) {
-        this.icons = icons;
     }
 
     public List getData() {
@@ -254,28 +247,12 @@ public class OptionsVo implements Serializable{
         this.ajaxOptions = ajaxOptions;
     }
 
-    public String getQueryParams() {
-        return queryParams;
-    }
-
-    public void setQueryParams(String queryParams) {
-        this.queryParams = queryParams;
-    }
-
     public String getQueryParamsType() {
         return queryParamsType;
     }
 
     public void setQueryParamsType(String queryParamsType) {
         this.queryParamsType = queryParamsType;
-    }
-
-    public String getResponseHandler() {
-        return responseHandler;
-    }
-
-    public void setResponseHandler(String responseHandler) {
-        this.responseHandler = responseHandler;
     }
 
     public boolean isPagination() {
@@ -324,14 +301,6 @@ public class OptionsVo implements Serializable{
 
     public void setPageSize(String pageSize) {
         this.pageSize = pageSize;
-    }
-
-    public String getPageList() {
-        return pageList;
-    }
-
-    public void setPageList(String pageList) {
-        this.pageList = pageList;
     }
 
     public String getSelectItemName() {
@@ -502,14 +471,6 @@ public class OptionsVo implements Serializable{
         this.detailView = detailView;
     }
 
-    public String getDetailFormatter() {
-        return detailFormatter;
-    }
-
-    public void setDetailFormatter(String detailFormatter) {
-        this.detailFormatter = detailFormatter;
-    }
-
     public String getSearchAlign() {
         return searchAlign;
     }
@@ -630,52 +591,12 @@ public class OptionsVo implements Serializable{
         this.silentSort = silentSort;
     }
 
-    public String getRowStyle() {
-        return rowStyle;
-    }
-
-    public void setRowStyle(String rowStyle) {
-        this.rowStyle = rowStyle;
-    }
-
-    public String getRowAttributes() {
-        return rowAttributes;
-    }
-
-    public void setRowAttributes(String rowAttributes) {
-        this.rowAttributes = rowAttributes;
-    }
-
-    public String getCustomSearch() {
-        return customSearch;
-    }
-
-    public void setCustomSearch(String customSearch) {
-        this.customSearch = customSearch;
-    }
-
-    public String getCustomSort() {
-        return customSort;
-    }
-
-    public void setCustomSort(String customSort) {
-        this.customSort = customSort;
-    }
-
     public String getLocale() {
         return locale;
     }
 
     public void setLocale(String locale) {
         this.locale = locale;
-    }
-
-    public String getFooterStyle() {
-        return footerStyle;
-    }
-
-    public void setFooterStyle(String footerStyle) {
-        this.footerStyle = footerStyle;
     }
 
     public boolean isShowExport() {
