@@ -2,6 +2,7 @@ package com.ubold.admin.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.ubold.admin.domain.DataView;
+import com.ubold.admin.domain.SqlDefine;
 import com.ubold.admin.repository.DataViewRepository;
 import com.ubold.admin.repository.impl.JpaRepositoryImpl;
 import com.ubold.admin.request.DataViewCreateRequest;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by zkning on 2017/8/13.
+ * Created by zkning on 20da't17/8/13.
  */
 @Service
 public class DataViewServiceImpl  extends JpaRepositoryImpl<DataViewRepository> implements DataViewService {

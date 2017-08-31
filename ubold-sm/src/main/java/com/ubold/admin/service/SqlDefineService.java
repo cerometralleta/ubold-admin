@@ -5,6 +5,7 @@ import com.ubold.admin.repository.JpaRepository;
 import com.ubold.admin.repository.SqlDefineRepository;
 import com.ubold.admin.response.Response;
 import com.ubold.admin.vo.ColumnVo;
+import com.ubold.admin.vo.PageResultForBootstrap;
 
 import java.util.List;
 
@@ -26,4 +27,6 @@ public interface SqlDefineService  extends JpaRepository<SqlDefineRepository> {
      * @return
      */
     public List<ColumnVo> getColumnsBySqlId(String sqlId);
+
+    Response<PageResultForBootstrap> getBootstrapTableResponse(String sqlId);
 }

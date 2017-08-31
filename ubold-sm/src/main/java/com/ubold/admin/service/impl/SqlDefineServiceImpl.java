@@ -12,13 +12,16 @@ import com.ubold.admin.service.SqlDefineService;
 import com.ubold.admin.util.GUID;
 import com.ubold.admin.utils.SimpleUtils;
 import com.ubold.admin.vo.ColumnVo;
+import com.ubold.admin.vo.PageResultForBootstrap;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.jdbc.support.rowset.SqlRowSetMetaData;
 import org.springframework.stereotype.Service;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -84,7 +87,6 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
         ColumnVo field = null;
         for (int i = 1; i < srsmd.getColumnCount() + 1; i++) {
             field = new ColumnVo();
-            this.setFieldTitle(field, srsmd.getColumnLabel(i));
             field.setField(srsmd.getColumnLabel(i));// as 后的值 ，getColumnName 原始值
             field.setMaxlength(srsmd.getPrecision(i));
             field.setDataType(srsmd.getColumnTypeName(i));
@@ -105,6 +107,7 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
                 field.setCardVisible(true);
                 field.setSwitchable(true);
             }
+            this.setFieldTitle(field, srsmd.getColumnLabel(i));
             list.add(field);
         }
         return list;
@@ -119,18 +122,23 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
         switch (field.toUpperCase()) {
             case SqlViewConstant.LAST_UPDATE_TIME:
                 sqlViewField.setTitle("更新时间");
+                sqlViewField.setVisible(false);
                 break;
             case SqlViewConstant.LAST_UPDATE_USER:
                 sqlViewField.setTitle("更新者");
+                sqlViewField.setVisible(false);
                 break;
             case SqlViewConstant.CREATE_TIME:
                 sqlViewField.setTitle("创建时间");
+                sqlViewField.setVisible(false);
                 break;
             case SqlViewConstant.CREATE_USER:
                 sqlViewField.setTitle("创建者");
+                sqlViewField.setVisible(false);
                 break;
             case SqlViewConstant.VERSION:
                 sqlViewField.setTitle("版本号");
+                sqlViewField.setVisible(false);
                 break;
             default:
                 sqlViewField.setTitle(field);
@@ -138,11 +146,32 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
         }
     }
 
-    private List<ColumnVo> getColumnsByTableName(String tableName){
+    /**
+     * 默认获取bootstrapTable服务
+     * @param sqlId
+     * @return
+     */
+    @Override
+    public Response<PageResultForBootstrap> getBootstrapTableResponse(String sqlId) {
+        PageResultForBootstrap pageResultForBootstrap = new PageResultForBootstrap();
+        SqlDefine sqlDefine = this.getRepository().findBySqlId(sqlId);
+        StringBuilder sqlBuilder = new StringBuilder(sqlDefine.getSelectSql());
+        if(StringUtils.isNoneBlank(sqlDefine.getSqlExpand())){
+            sqlBuilder.append(sqlDefine.getSqlExpand());
+        }
+        if(StringUtils.isNoneBlank(sqlDefine.getSqldesc())){
+            sqlBuilder.append(sqlDefine.getSqldesc());
+        }
+        Map<String,Object> paraMap = new HashedMap();
+        List<Map<String,Object>> list = namedParameterJdbcTemplate
+                .queryForList(sqlBuilder.toString(), paraMap);
+        pageResultForBootstrap.setRows(list);
 
-
-
-        return null;
+        //查询总数
+        StringBuilder countBuilder = new StringBuilder("select count(1) from (");
+        countBuilder.append(sqlBuilder).append(") total");
+        Long count =  namedParameterJdbcTemplate.queryForObject(countBuilder.toString(), paraMap,Long.class);
+        pageResultForBootstrap.setTotlal(count);
+        return Response.SUCCESS(pageResultForBootstrap);
     }
-
 }
