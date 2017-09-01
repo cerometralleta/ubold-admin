@@ -1,7 +1,6 @@
 package com.ubold.admin.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.ubold.admin.domain.DataView;
 import com.ubold.admin.domain.FormView;
 import com.ubold.admin.repository.FormViewRepository;
 import com.ubold.admin.repository.impl.JpaRepositoryImpl;
@@ -9,7 +8,7 @@ import com.ubold.admin.request.FormViewRequest;
 import com.ubold.admin.response.Response;
 import com.ubold.admin.service.FormViewService;
 import com.ubold.admin.util.GUID;
-import com.ubold.admin.vo.FieldVo;
+import com.ubold.admin.vo.FieldParam;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -55,7 +54,7 @@ public class FormViewServiceImpl  extends JpaRepositoryImpl<FormViewRepository> 
         FormViewRequest request = new FormViewRequest();
         request.setCode(formView.getCode());
         request.setSqlId(formView.getSqlId());
-        request.setColumns(JSON.parseArray(formView.getColumns(),FieldVo.class));
+        request.setColumns(JSON.parseArray(formView.getColumns(),FieldParam.class));
         request.setRemark(formView.getRemark());
         request.setUrl(formView.getUrl());
         request.setVersion(formView.getVersion());

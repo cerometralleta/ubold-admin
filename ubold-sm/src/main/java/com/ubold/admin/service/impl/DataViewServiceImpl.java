@@ -2,7 +2,6 @@ package com.ubold.admin.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.ubold.admin.domain.DataView;
-import com.ubold.admin.domain.SqlDefine;
 import com.ubold.admin.repository.DataViewRepository;
 import com.ubold.admin.repository.impl.JpaRepositoryImpl;
 import com.ubold.admin.request.DataViewCreateRequest;
@@ -12,10 +11,8 @@ import com.ubold.admin.util.GUID;
 import com.ubold.admin.vo.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -96,11 +93,11 @@ public class DataViewServiceImpl  extends JpaRepositoryImpl<DataViewRepository> 
      */
     private DataViewCreateRequest parseResult(DataView dataView){
         DataViewCreateRequest request = new DataViewCreateRequest();
-        request.setButtons(JSON.parseArray(dataView.getButtons(), ButtonVo.class));
-        request.setColumns(JSON.parseArray(dataView.getColumns(), ColumnVo.class));
-        request.setDataFilters(JSON.parseArray(dataView.getDataFilters(), DataFilterVo.class));
-        request.setOptions(JSON.parseObject(dataView.getOptions(), OptionsVo.class));
-        request.setTreeOptions(JSON.parseObject(dataView.getTreeOptions(), TreeOptionsVo.class));
+        request.setButtons(JSON.parseArray(dataView.getButtons(), ButtonParam.class));
+        request.setColumns(JSON.parseArray(dataView.getColumns(), ColumnParam.class));
+        request.setDataFilters(JSON.parseArray(dataView.getDataFilters(), DataFilterParam.class));
+        request.setOptions(JSON.parseObject(dataView.getOptions(), OptionsParam.class));
+        request.setTreeOptions(JSON.parseObject(dataView.getTreeOptions(), TreeOptionsParam.class));
         request.setId(dataView.getId());
         request.setSqlId(dataView.getSqlId());
         request.setRemark(dataView.getRemark());

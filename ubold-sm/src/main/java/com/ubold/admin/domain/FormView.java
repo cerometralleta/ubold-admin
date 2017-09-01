@@ -1,12 +1,8 @@
 package com.ubold.admin.domain;
 
-import com.ubold.admin.vo.FieldVo;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import java.util.List;
 
 /**
  * Created by lenovo on 2017/8/28.

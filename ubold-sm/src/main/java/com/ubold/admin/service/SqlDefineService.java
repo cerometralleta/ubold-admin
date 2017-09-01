@@ -4,8 +4,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.ubold.admin.repository.JpaRepository;
 import com.ubold.admin.repository.SqlDefineRepository;
 import com.ubold.admin.response.Response;
-import com.ubold.admin.vo.ColumnVo;
-import com.ubold.admin.vo.PageResultForBootstrap;
+import com.ubold.admin.vo.BootstrapPageResult;
+import com.ubold.admin.vo.BootstrapSearchParam;
+import com.ubold.admin.vo.ColumnParam;
+import com.ubold.admin.vo.ConditionParam;
 
 import java.util.List;
 
@@ -26,8 +28,11 @@ public interface SqlDefineService  extends JpaRepository<SqlDefineRepository> {
      * @param sqlId
      * @return
      */
-    public List<ColumnVo> getColumnsBySqlId(String sqlId);
+    public List<ColumnParam> getColumnsBySqlId(String sqlId);
 
-    Response<PageResultForBootstrap> getBootstrapTableResponse(Integer pageSize, Integer pageNumber, String searchText,
-                                                               String sortName, String sortOrder,String sqlId);
+    Response<BootstrapPageResult> getBootstrapTableResponse(Integer pageSize, Integer pageNumber, String searchText,
+                                                            String sortName, String sortOrder, String sqlId
+    , List<ConditionParam> conditionParamList);
+
+    Response<BootstrapPageResult> getBootstrapTableResponse(BootstrapSearchParam bootstrapSearchParam, String sqlId);
 }

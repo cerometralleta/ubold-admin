@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * Created by lenovo on 2017/8/31.
  */
-public class PageResultForBootstrap {
+public class BootstrapPageResult {
 
     private long totlal;
     private List<Map<String,Object>> rows;

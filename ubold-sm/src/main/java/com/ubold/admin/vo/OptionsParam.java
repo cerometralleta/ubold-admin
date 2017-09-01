@@ -10,7 +10,7 @@ import java.util.List;
  * Created by zkning on 2017/8/13.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class OptionsVo implements Serializable{
+public class OptionsParam implements Serializable{
     private String classes = "table table-hover";
     private String sortClass;
     private int height;

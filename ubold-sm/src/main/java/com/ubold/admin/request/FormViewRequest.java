@@ -1,6 +1,6 @@
 package com.ubold.admin.request;
 
-import com.ubold.admin.vo.FieldVo;
+import com.ubold.admin.vo.FieldParam;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -18,7 +18,7 @@ public class FormViewRequest implements Serializable{
     private long version;
 
     @NotNull(message = "字段不能为空")
-    private List<FieldVo> columns;
+    private List<FieldParam> columns;
 
     public long getVersion() {
         return version;
@@ -68,11 +68,11 @@ public class FormViewRequest implements Serializable{
         this.remark = remark;
     }
 
-    public List<FieldVo> getColumns() {
+    public List<FieldParam> getColumns() {
         return columns;
     }
 
-    public void setColumns(List<FieldVo> columns) {
+    public void setColumns(List<FieldParam> columns) {
         this.columns = columns;
     }
 }

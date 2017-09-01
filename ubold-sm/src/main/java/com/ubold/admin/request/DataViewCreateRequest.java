@@ -5,7 +5,6 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,13 +24,13 @@ public class DataViewCreateRequest implements Serializable {
     private String id;
 
     @NotNull(message = "表格选项不能为空值")
-    private OptionsVo options;
+    private OptionsParam options;
 
     @NotNull(message = "列表字段不能为空值")
-    private List<ColumnVo> columns;
-    private TreeOptionsVo treeOptions;
-    private List<DataFilterVo> dataFilters;
-    private List<ButtonVo> buttons;
+    private List<ColumnParam> columns;
+    private TreeOptionsParam treeOptions;
+    private List<DataFilterParam> dataFilters;
+    private List<ButtonParam> buttons;
     private long version;
 
     public long getVersion() {
@@ -82,43 +81,43 @@ public class DataViewCreateRequest implements Serializable {
         this.remark = remark;
     }
 
-    public OptionsVo getOptions() {
+    public OptionsParam getOptions() {
         return options;
     }
 
-    public void setOptions(OptionsVo options) {
+    public void setOptions(OptionsParam options) {
         this.options = options;
     }
 
-    public List<ColumnVo> getColumns() {
+    public List<ColumnParam> getColumns() {
         return columns;
     }
 
-    public void setColumns(List<ColumnVo> columns) {
+    public void setColumns(List<ColumnParam> columns) {
         this.columns = columns;
     }
 
-    public TreeOptionsVo getTreeOptions() {
+    public TreeOptionsParam getTreeOptions() {
         return treeOptions;
     }
 
-    public void setTreeOptions(TreeOptionsVo treeOptions) {
+    public void setTreeOptions(TreeOptionsParam treeOptions) {
         this.treeOptions = treeOptions;
     }
 
-    public List<DataFilterVo> getDataFilters() {
+    public List<DataFilterParam> getDataFilters() {
         return dataFilters;
     }
 
-    public void setDataFilters(List<DataFilterVo> dataFilters) {
+    public void setDataFilters(List<DataFilterParam> dataFilters) {
         this.dataFilters = dataFilters;
     }
 
-    public List<ButtonVo> getButtons() {
+    public List<ButtonParam> getButtons() {
         return buttons;
     }
 
-    public void setButtons(List<ButtonVo> buttons) {
+    public void setButtons(List<ButtonParam> buttons) {
         this.buttons = buttons;
     }
 }

@@ -3,7 +3,7 @@ package com.ubold.admin.vo;
 /**
  * Created by lenovo on 2017/8/13.
  */
-public class TreeOptionsVo {
+public class TreeOptionsParam {
     private boolean isShow;
     private String sqlId;
     private String idKey;

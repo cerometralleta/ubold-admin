@@ -3,7 +3,7 @@ package com.ubold.admin.vo;
 /**
  * Created by lenovo on 2017/8/13.
  */
-public class ButtonVo {
+public class ButtonParam {
     private String id;
     private String option;//0:接口,1:弹窗,2:新窗口
     private String window;

@@ -3,9 +3,10 @@ package com.ubold.admin.ctrl;
 import com.alibaba.fastjson.JSONObject;
 import com.ubold.admin.response.Response;
 import com.ubold.admin.service.SqlDefineService;
-import com.ubold.admin.vo.ColumnVo;
+import com.ubold.admin.vo.BootstrapPageResult;
+import com.ubold.admin.vo.BootstrapSearchParam;
+import com.ubold.admin.vo.ColumnParam;
 import com.ubold.admin.vo.ConditionParam;
-import com.ubold.admin.vo.PageResultForBootstrap;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,10 +15,8 @@ import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.BufferedReader;
-import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 /**
@@ -43,7 +42,7 @@ public class SqlDefineController {
     @ResponseBody
     @RequestMapping(value="/createColumnList/{sqlId}",method= RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public Response createColumnList(@PathVariable String sqlId) {
-        List<ColumnVo> list = sqlDefineService.getColumnsBySqlId(sqlId);
+        List<ColumnParam> list = sqlDefineService.getColumnsBySqlId(sqlId);
         return Response.SUCCESS(list);
     }
 
@@ -54,17 +53,18 @@ public class SqlDefineController {
     @ResponseBody
     @RequestMapping(value="/tableData/{sqlId}")
     public Object getBootatrapTableResponse(Integer pageSize, Integer pageNumber, String searchText,
-                                            String sortName, String sortOrder,@PathVariable String sqlId){
-
-        //当查询条件中包含中文时，get请求默认会使用ISO-8859-1编码请求参数，在服务端需要对其解码
-        if (!StringUtils.isEmpty(searchText)) {
-            try {
+                                            String sortName, String sortOrder,@PathVariable String sqlId,
+                                            @RequestBody BootstrapSearchParam bootstrapSearchParam) throws UnsupportedEncodingException {
+        Response<BootstrapPageResult> response;
+        if(RequestMethod.GET.name().equals( httpServletRequest.getMethod())){
+            //当查询条件中包含中文时，get请求默认会使用ISO-8859-1编码请求参数，在服务端需要对其解码
+            if (!StringUtils.isEmpty(searchText)) {
                 searchText = new String(searchText.getBytes("ISO-8859-1"), "UTF-8");
-            } catch (Exception e) {
-                e.printStackTrace();
             }
+            response = sqlDefineService.getBootstrapTableResponse(pageSize,pageNumber,searchText,sortName,sortOrder,sqlId,null);
+        }else{
+            response = sqlDefineService.getBootstrapTableResponse(bootstrapSearchParam,sqlId);
         }
-        Response<PageResultForBootstrap> response = sqlDefineService.getBootstrapTableResponse(pageSize,pageNumber,searchText,sortName,sortOrder,sqlId);
         if(response.checkSuccess()){
             return response.getResult();
         }

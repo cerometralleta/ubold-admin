@@ -7,7 +7,7 @@ import java.util.List;
  *自定义视图字段
  * Created by lenovo on 2017/8/28.
  */
-public class FieldVo implements Serializable{
+public class FieldParam implements Serializable{
     private String field;
     private String title;
     private String updateTyp;

@@ -3,7 +3,7 @@ package com.ubold.admin.vo;
 /**
  * Created by lenovo on 2017/8/13.
  */
-public class DataFilterVo {
+public class DataFilterParam {
 
     private String title;
     private String field;

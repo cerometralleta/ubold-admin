@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by lenovo on 2017/8/13.
  */
-public class ColumnVo implements Serializable{
+public class ColumnParam implements Serializable{
     private String field;
     private String title;
     private String updateType;

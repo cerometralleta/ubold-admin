@@ -11,8 +11,10 @@ import com.ubold.admin.service.FormViewService;
 import com.ubold.admin.service.SqlDefineService;
 import com.ubold.admin.util.GUID;
 import com.ubold.admin.utils.SimpleUtils;
-import com.ubold.admin.vo.ColumnVo;
-import com.ubold.admin.vo.PageResultForBootstrap;
+import com.ubold.admin.vo.BootstrapPageResult;
+import com.ubold.admin.vo.BootstrapSearchParam;
+import com.ubold.admin.vo.ColumnParam;
+import com.ubold.admin.vo.ConditionParam;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
@@ -21,7 +23,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.jdbc.support.rowset.SqlRowSetMetaData;
 import org.springframework.stereotype.Service;
-import org.springframework.test.context.jdbc.Sql;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -65,8 +66,8 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
     }
 
     @Override
-    public List<ColumnVo> getColumnsBySqlId(String sqlId) {
-        List<ColumnVo> list = new ArrayList<ColumnVo>();
+    public List<ColumnParam> getColumnsBySqlId(String sqlId) {
+        List<ColumnParam> list = new ArrayList<ColumnParam>();
         SqlDefine sqlDefine = this.getRepository().findBySqlId(sqlId);
 
         //获取主表实际列用来过滤
@@ -84,9 +85,9 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
         //通过临时表 找到对应的字段属性
         resultSet = namedParameterJdbcTemplate.queryForRowSet(viewSql,new HashMap<String,String>());
         srsmd = resultSet.getMetaData();
-        ColumnVo field = null;
+        ColumnParam field = null;
         for (int i = 1; i < srsmd.getColumnCount() + 1; i++) {
-            field = new ColumnVo();
+            field = new ColumnParam();
             field.setField(srsmd.getColumnLabel(i));// as 后的值 ，getColumnName 原始值
             field.setMaxlength(srsmd.getPrecision(i));
             field.setDataType(srsmd.getColumnTypeName(i));
@@ -113,12 +114,19 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
         return list;
     }
 
+    @Override
+    public Response<BootstrapPageResult> getBootstrapTableResponse(BootstrapSearchParam bootstrapSearchParam, String sqlId) {
+        return this.getBootstrapTableResponse(bootstrapSearchParam.getPageSize(),bootstrapSearchParam.getPageNumber()
+        ,bootstrapSearchParam.getSearchText(),bootstrapSearchParam.getSortName(),bootstrapSearchParam.getSortOrder(),sqlId
+                , bootstrapSearchParam.getConditionParamList());
+    }
+
     /**
      * 设置名称
      * @param sqlViewField
      * @param field
      */
-    private void setFieldTitle(ColumnVo sqlViewField,String field){
+    private void setFieldTitle(ColumnParam sqlViewField, String field){
         switch (field.toUpperCase()) {
             case SqlViewConstant.LAST_UPDATE_TIME:
                 sqlViewField.setTitle("更新时间");
@@ -152,9 +160,10 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
      * @return
      */
     @Override
-    public Response<PageResultForBootstrap> getBootstrapTableResponse(Integer pageSize, Integer pageNumber, String searchText,
-                                                                      String sortName, String sortOrder,String sqlId) {
-        PageResultForBootstrap pageResultForBootstrap = new PageResultForBootstrap();
+    public Response<BootstrapPageResult> getBootstrapTableResponse(Integer pageSize, Integer pageNumber, String searchText,
+                                                                   String sortName, String sortOrder, String sqlId,
+                                                                   List<ConditionParam> conditionParamList) {
+        BootstrapPageResult pageResultForBootstrap = new BootstrapPageResult();
         SqlDefine sqlDefine = this.getRepository().findBySqlId(sqlId);
         StringBuilder sqlBuilder = new StringBuilder(sqlDefine.getSelectSql());
         if(StringUtils.isNoneBlank(sqlDefine.getSqlExpand())){
@@ -165,19 +174,30 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
         }
         StringBuilder pageBuilder = new StringBuilder("select t.* from (");
         pageBuilder.append(sqlBuilder.toString()).append(") t ");
-         if(StringUtils.isNoneBlank(sortName)){
-             pageBuilder.append(" order by ").append(sortName)
-                     .append(" ")
-                     .append(sortOrder);
+        Map<String,Object> paraMap = new HashedMap();
+
+        //条件
+        if(CollectionUtils.isNotEmpty(conditionParamList)){
+            pageBuilder.append(" where 1=1 ");
+            for(ConditionParam conditionParam : conditionParamList){
+                pageBuilder.append(" and t.").append(conditionParam.getField())
+                        .append(conditionParam.getExpression())
+                        .append(":").append(conditionParam.getField());
+                paraMap.put(conditionParam.getField(),conditionParam.getValue());
+            }
+        }
+
+        //排序
+        if(StringUtils.isNoneBlank(sortName)){
+             pageBuilder.append(" order by ").append(sortName) .append(" ") .append(sortOrder);
          }
         pageBuilder.append(" limit ").append((pageNumber - 1) * pageSize ).append(",").append(pageSize);
-        Map<String,Object> paraMap = new HashedMap();
         List<Map<String,Object>> list = namedParameterJdbcTemplate.queryForList(pageBuilder.toString(), paraMap);
         pageResultForBootstrap.setRows(list);
 
         //查询总数
         StringBuilder countBuilder = new StringBuilder("select count(1) from (").append(sqlBuilder).append(") total");
-        Long count =  namedParameterJdbcTemplate.queryForObject(countBuilder.toString(), paraMap,Long.class);
+        Long count =  namedParameterJdbcTemplate.queryForObject(countBuilder.toString(),new HashMap(),Long.class);
         pageResultForBootstrap.setTotlal(count);
         return Response.SUCCESS(pageResultForBootstrap);
     }
