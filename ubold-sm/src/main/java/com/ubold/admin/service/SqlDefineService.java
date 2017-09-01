@@ -28,5 +28,6 @@ public interface SqlDefineService  extends JpaRepository<SqlDefineRepository> {
      */
     public List<ColumnVo> getColumnsBySqlId(String sqlId);
 
-    Response<PageResultForBootstrap> getBootstrapTableResponse(String sqlId);
+    Response<PageResultForBootstrap> getBootstrapTableResponse(Integer pageSize, Integer pageNumber, String searchText,
+                                                               String sortName, String sortOrder,String sqlId);
 }

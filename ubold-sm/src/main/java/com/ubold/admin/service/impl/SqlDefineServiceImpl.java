@@ -152,7 +152,8 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
      * @return
      */
     @Override
-    public Response<PageResultForBootstrap> getBootstrapTableResponse(String sqlId) {
+    public Response<PageResultForBootstrap> getBootstrapTableResponse(Integer pageSize, Integer pageNumber, String searchText,
+                                                                      String sortName, String sortOrder,String sqlId) {
         PageResultForBootstrap pageResultForBootstrap = new PageResultForBootstrap();
         SqlDefine sqlDefine = this.getRepository().findBySqlId(sqlId);
         StringBuilder sqlBuilder = new StringBuilder(sqlDefine.getSelectSql());
@@ -162,16 +163,24 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
         if(StringUtils.isNoneBlank(sqlDefine.getSqldesc())){
             sqlBuilder.append(sqlDefine.getSqldesc());
         }
+        StringBuilder pageBuilder = new StringBuilder("select t.* from (");
+        pageBuilder.append(sqlBuilder.toString()).append(") t ");
+         if(StringUtils.isNoneBlank(sortName)){
+             pageBuilder.append(" order by ").append(sortName)
+                     .append(" ")
+                     .append(sortOrder);
+         }
+        pageBuilder.append(" limit ").append((pageNumber - 1) * pageSize ).append(",").append(pageSize);
         Map<String,Object> paraMap = new HashedMap();
-        List<Map<String,Object>> list = namedParameterJdbcTemplate
-                .queryForList(sqlBuilder.toString(), paraMap);
+        List<Map<String,Object>> list = namedParameterJdbcTemplate.queryForList(pageBuilder.toString(), paraMap);
         pageResultForBootstrap.setRows(list);
 
         //查询总数
-        StringBuilder countBuilder = new StringBuilder("select count(1) from (");
-        countBuilder.append(sqlBuilder).append(") total");
+        StringBuilder countBuilder = new StringBuilder("select count(1) from (").append(sqlBuilder).append(") total");
         Long count =  namedParameterJdbcTemplate.queryForObject(countBuilder.toString(), paraMap,Long.class);
         pageResultForBootstrap.setTotlal(count);
         return Response.SUCCESS(pageResultForBootstrap);
     }
+
+
 }
