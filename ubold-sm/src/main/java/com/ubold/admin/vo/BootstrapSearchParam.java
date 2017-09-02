@@ -13,13 +13,14 @@ public class BootstrapSearchParam implements Serializable{
     private String searchText;
     private String sortName;
     private String sortOrder;
-    private List<ConditionParam> conditionParamList;
+    private List<ConditionParam> searchArray;
 
-    public List<ConditionParam> getConditionParamList() {
-        return conditionParamList;
+    public List<ConditionParam> getSearchArray() {
+        return searchArray;
     }
-    public void setConditionParamList(List<ConditionParam> conditionParamList) {
-        this.conditionParamList = conditionParamList;
+
+    public void setSearchArray(List<ConditionParam> searchArray) {
+        this.searchArray = searchArray;
     }
 
     public Integer getPageSize() {

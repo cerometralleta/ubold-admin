@@ -118,7 +118,7 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
     public Response<BootstrapPageResult> getBootstrapTableResponse(BootstrapSearchParam bootstrapSearchParam, String sqlId) {
         return this.getBootstrapTableResponse(bootstrapSearchParam.getPageSize(),bootstrapSearchParam.getPageNumber()
         ,bootstrapSearchParam.getSearchText(),bootstrapSearchParam.getSortName(),bootstrapSearchParam.getSortOrder(),sqlId
-                , bootstrapSearchParam.getConditionParamList());
+                , bootstrapSearchParam.getSearchArray());
     }
 
     /**
@@ -180,10 +180,15 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
         if(CollectionUtils.isNotEmpty(conditionParamList)){
             pageBuilder.append(" where 1=1 ");
             for(ConditionParam conditionParam : conditionParamList){
-                pageBuilder.append(" and t.").append(conditionParam.getField())
-                        .append(conditionParam.getExpression())
-                        .append(":").append(conditionParam.getField());
-                paraMap.put(conditionParam.getField(),conditionParam.getValue());
+                if(StringUtils.isNoneBlank(conditionParam.getValue())){
+                    pageBuilder.append(" and t.").append(conditionParam.getField()).append(" ") .append(conditionParam.getExpression());
+                    if("like".equalsIgnoreCase(conditionParam.getExpression())){
+                        pageBuilder .append(" %:").append(conditionParam.getField());
+                    }else{
+                        pageBuilder .append(" :").append(conditionParam.getField());
+                    }
+                    paraMap.put(conditionParam.getField(),conditionParam.getValue());
+                }
             }
         }
 
@@ -192,12 +197,14 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
              pageBuilder.append(" order by ").append(sortName) .append(" ") .append(sortOrder);
          }
         pageBuilder.append(" limit ").append((pageNumber - 1) * pageSize ).append(",").append(pageSize);
+        logger.info(pageBuilder.toString());
         List<Map<String,Object>> list = namedParameterJdbcTemplate.queryForList(pageBuilder.toString(), paraMap);
         pageResultForBootstrap.setRows(list);
 
         //查询总数
         StringBuilder countBuilder = new StringBuilder("select count(1) from (").append(sqlBuilder).append(") total");
         Long count =  namedParameterJdbcTemplate.queryForObject(countBuilder.toString(),new HashMap(),Long.class);
+        logger.info(countBuilder.toString());
         pageResultForBootstrap.setTotlal(count);
         return Response.SUCCESS(pageResultForBootstrap);
     }
