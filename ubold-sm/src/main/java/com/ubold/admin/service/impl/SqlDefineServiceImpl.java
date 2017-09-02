@@ -11,10 +11,7 @@ import com.ubold.admin.service.FormViewService;
 import com.ubold.admin.service.SqlDefineService;
 import com.ubold.admin.util.GUID;
 import com.ubold.admin.utils.SimpleUtils;
-import com.ubold.admin.vo.BootstrapPageResult;
-import com.ubold.admin.vo.BootstrapSearchParam;
-import com.ubold.admin.vo.ColumnParam;
-import com.ubold.admin.vo.ConditionParam;
+import com.ubold.admin.vo.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
@@ -112,6 +109,19 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
             list.add(field);
         }
         return list;
+    }
+
+    @Override
+    public Response fetch(SqlDefineFetchParam sqlDefineFetchParam) {
+        //根据SQLid获取查询语句
+        SqlDefine sqlDefine = this.getRepository().findBySqlId(sqlDefineFetchParam.getSqlId());
+        StringBuilder sqlBuilder = new StringBuilder("select t.* from (")
+                .append(sqlDefine.getSelectSql()).append(") t ")
+                .append(" where ")
+        .append(sqlDefine.getMasterTableId()).append("=").append(":id");
+        Map<String,Object> paraMap = new HashedMap();
+        paraMap.put("id",sqlDefineFetchParam.getId());
+        return  Response.SUCCESS(namedParameterJdbcTemplate.queryForMap(sqlBuilder.toString(),paraMap));
     }
 
     @Override

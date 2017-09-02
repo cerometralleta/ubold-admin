@@ -4,10 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.ubold.admin.repository.JpaRepository;
 import com.ubold.admin.repository.SqlDefineRepository;
 import com.ubold.admin.response.Response;
-import com.ubold.admin.vo.BootstrapPageResult;
-import com.ubold.admin.vo.BootstrapSearchParam;
-import com.ubold.admin.vo.ColumnParam;
-import com.ubold.admin.vo.ConditionParam;
+import com.ubold.admin.vo.*;
 
 import java.util.List;
 
@@ -35,4 +32,6 @@ public interface SqlDefineService  extends JpaRepository<SqlDefineRepository> {
     , List<ConditionParam> conditionParamList);
 
     Response<BootstrapPageResult> getBootstrapTableResponse(BootstrapSearchParam bootstrapSearchParam, String sqlId);
+
+    Response fetch(SqlDefineFetchParam sqlDefineFetchParam);
 }

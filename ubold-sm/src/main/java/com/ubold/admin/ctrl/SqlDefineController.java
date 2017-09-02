@@ -3,10 +3,7 @@ package com.ubold.admin.ctrl;
 import com.alibaba.fastjson.JSONObject;
 import com.ubold.admin.response.Response;
 import com.ubold.admin.service.SqlDefineService;
-import com.ubold.admin.vo.BootstrapPageResult;
-import com.ubold.admin.vo.BootstrapSearchParam;
-import com.ubold.admin.vo.ColumnParam;
-import com.ubold.admin.vo.ConditionParam;
+import com.ubold.admin.vo.*;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,6 +41,13 @@ public class SqlDefineController {
     public Response createColumnList(@PathVariable String sqlId) {
         List<ColumnParam> list = sqlDefineService.getColumnsBySqlId(sqlId);
         return Response.SUCCESS(list);
+    }
+
+    @ResponseBody
+    @RequestMapping(value="/fetch",method= RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Response fetch(@RequestBody @Valid SqlDefineFetchParam sqlDefineFetchParam) {
+        Response response = sqlDefineService.fetch(sqlDefineFetchParam);
+        return response;
     }
 
     /**
