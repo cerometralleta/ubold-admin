@@ -9,8 +9,8 @@ public class ColumnParam implements Serializable{
     private String field;
     private String title;
     private String updateType;
-    private boolean isView;
-    private boolean isInsert;
+    private boolean view;
+    private boolean inset;
     private boolean visible;
     private String dataType;
     private String fieldType;
@@ -43,6 +43,22 @@ public class ColumnParam implements Serializable{
     private boolean searchFormatter;
     private boolean escape;
 
+    public boolean isView() {
+        return view;
+    }
+
+    public void setView(boolean view) {
+        this.view = view;
+    }
+
+    public boolean isInset() {
+        return inset;
+    }
+
+    public void setInset(boolean inset) {
+        this.inset = inset;
+    }
+
     public String getField() {
         return field;
     }
@@ -67,21 +83,7 @@ public class ColumnParam implements Serializable{
         this.updateType = updateType;
     }
 
-    public boolean isView() {
-        return isView;
-    }
 
-    public void setView(boolean view) {
-        isView = view;
-    }
-
-    public boolean isInsert() {
-        return isInsert;
-    }
-
-    public void setInsert(boolean insert) {
-        isInsert = insert;
-    }
 
     public boolean isVisible() {
         return visible;

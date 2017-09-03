@@ -3,7 +3,10 @@ package com.ubold.admin.ctrl;
 import com.alibaba.fastjson.JSONObject;
 import com.ubold.admin.response.Response;
 import com.ubold.admin.service.SqlDefineService;
-import com.ubold.admin.vo.*;
+import com.ubold.admin.vo.BootstrapPageResult;
+import com.ubold.admin.vo.BootstrapSearchParam;
+import com.ubold.admin.vo.ColumnParam;
+import com.ubold.admin.vo.SqlDefineFetchParam;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +44,42 @@ public class SqlDefineController {
     public Response createColumnList(@PathVariable String sqlId) {
         List<ColumnParam> list = sqlDefineService.getColumnsBySqlId(sqlId);
         return Response.SUCCESS(list);
+    }
+
+    /**
+     * 保存SQLVIEW记录
+     * @param param
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value="/create/{code}",method=RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Object createView(@PathVariable String code,@RequestBody JSONObject formParam) {
+        return sqlDefineService.createByDataViewCode(code, formParam);
+    }
+
+
+    /**
+     * 修改视图的数据
+     * @param code
+     * @param formParam
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value="/modfity/{code}",method=RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Object modfityView(@PathVariable String code,@RequestBody JSONObject formParam) {
+        return sqlDefineService.modifyByDataViewCode(code, formParam);
+    }
+
+    /**
+     * 删除视图的数据
+     * @param code
+     * @param id
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value="/delete/{code}",method=RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public  Object deleteView(@PathVariable String code,@RequestBody JSONObject row) {
+        return sqlDefineService.deleteByDataViewCode(code, row);
     }
 
     @ResponseBody

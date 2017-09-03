@@ -1,6 +1,6 @@
 package com.ubold.admin.utils;
 
-import com.ubold.admin.constant.SqlViewConstant;
+import com.ubold.admin.constant.SqlDefineConstant;
 import com.ubold.admin.vo.DataTypeResult;
 import org.apache.commons.lang3.StringUtils;
 
@@ -56,22 +56,22 @@ public class SimpleUtils {
 
 		boolean isChar = isSpecType(dbType, varchar);
 		if (isChar) {
-			return SqlViewConstant.COLUMNTYPE_VARCHAR;
+			return SqlDefineConstant.COLUMNTYPE_VARCHAR;
 		}
 
 		boolean isNumber = isSpecType(dbType, number);
 		if (isNumber) {
-			return SqlViewConstant.COLUMNTYPE_NUMBER;
+			return SqlDefineConstant.COLUMNTYPE_NUMBER;
 		}
 
 		boolean isDate = isSpecType(dbType, date);
 		if (isDate) {
-			return SqlViewConstant.COLUMNTYPE_DATE;
+			return SqlDefineConstant.COLUMNTYPE_DATE;
 		}
 
 		boolean isText = isSpecType(dbType, text);
 		if (isText) {
-			return SqlViewConstant.COLUMNTYPE_TEXT;
+			return SqlDefineConstant.COLUMNTYPE_TEXT;
 		}
 		return dbType;
 	}

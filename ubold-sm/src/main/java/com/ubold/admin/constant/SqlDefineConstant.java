@@ -1,6 +1,6 @@
 package com.ubold.admin.constant;
 
-public class SqlViewConstant {
+public class SqlDefineConstant {
 	
 	public static final String COLUMNTYPE_INT	  = "int";
 	public static final String COLUMNTYPE_VARCHAR = "varchar";

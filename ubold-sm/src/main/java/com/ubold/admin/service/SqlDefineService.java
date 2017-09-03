@@ -28,10 +28,14 @@ public interface SqlDefineService  extends JpaRepository<SqlDefineRepository> {
     public List<ColumnParam> getColumnsBySqlId(String sqlId);
 
     Response<BootstrapPageResult> getBootstrapTableResponse(Integer pageSize, Integer pageNumber, String searchText,
-                                                            String sortName, String sortOrder, String sqlId
-    , List<ConditionParam> conditionParamList);
+                                                            String sortName, String sortOrder, String sqlId, List<ConditionParam> conditionParamList);
 
     Response<BootstrapPageResult> getBootstrapTableResponse(BootstrapSearchParam bootstrapSearchParam, String sqlId);
 
     Response fetch(SqlDefineFetchParam sqlDefineFetchParam);
+
+    public Response createByDataViewCode(String code,JSONObject row);
+    public Response deleteByDataViewCode(String code,JSONObject row);
+    public Response modifyByDataViewCode(String code,JSONObject row);
+
 }

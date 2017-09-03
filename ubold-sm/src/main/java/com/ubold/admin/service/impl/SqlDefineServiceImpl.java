@@ -1,12 +1,15 @@
 package com.ubold.admin.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.ubold.admin.constant.ComponentType;
-import com.ubold.admin.constant.SqlViewConstant;
+import com.ubold.admin.constant.SqlDefineConstant;
+import com.ubold.admin.domain.DataView;
 import com.ubold.admin.domain.SqlDefine;
 import com.ubold.admin.repository.SqlDefineRepository;
 import com.ubold.admin.repository.impl.JpaRepositoryImpl;
 import com.ubold.admin.response.Response;
+import com.ubold.admin.service.DataViewService;
 import com.ubold.admin.service.FormViewService;
 import com.ubold.admin.service.SqlDefineService;
 import com.ubold.admin.util.GUID;
@@ -37,6 +40,9 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
 
     @Autowired
     NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
+    @Autowired
+    DataViewService dataViewService;
 
     @Override
     public Response persistent(JSONObject paramJson) {
@@ -90,25 +96,161 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
             field.setDataType(srsmd.getColumnTypeName(i));
             field.setFieldType(ComponentType.TEXT.getValue());
             //判断是否是日期类型
-            if (SimpleUtils.getDataType(field.getDataType()).equals(SqlViewConstant.COLUMNTYPE_DATE)) {
+            if (SimpleUtils.getDataType(field.getDataType()).equals(SqlDefineConstant.COLUMNTYPE_DATE)) {
                 field.setFieldType(ComponentType.DATEPICKER.getValue());
             }
             field.setIdx(i-1);
             if(masterFieldMap.containsKey(field.getField())){
 
                 //修改类型
-                field.setUpdateType(SqlViewConstant.MODIFTY_ENABLE);
-
-                //是否增加
-                field.setInsert(true);
+                field.setUpdateType(SqlDefineConstant.MODIFTY_ENABLE);
+                field.setInset(true);
                 field.setVisible(true);
                 field.setCardVisible(true);
                 field.setSwitchable(true);
+                field.setView(true);
+
+                //是否增加
+                if((StringUtils.isNoneBlank(sqlDefine.getMasterTableId()) &&
+                        field.getField().equalsIgnoreCase(sqlDefine.getMasterTableId()))||
+                        SqlDefineConstant.VERSION.equals(field.getField().toUpperCase())
+                        ){
+                    field.setInset(false);
+                    field.setUpdateType(SqlDefineConstant.MODIFTY_HIDE);
+                }
             }
             this.setFieldTitle(field, srsmd.getColumnLabel(i));
             list.add(field);
         }
         return list;
+    }
+
+    @Override
+    public Response deleteByDataViewCode(String code,JSONObject row){
+        List<DataView> dataViewList = dataViewService.getRepository().findByDataViewCode(code);
+        if(CollectionUtils.isEmpty(dataViewList)){
+            return Response.FAILURE();
+        }
+        DataView dataView = dataViewList.get(0);
+        //获取sqlDefine
+        SqlDefine sqlDefine = getRepository().findBySqlId(dataView.getSqlId());
+        if(StringUtils.isEmpty(sqlDefine.getMasterTableId())){
+            return Response.FAILURE("未配置主键");
+        }
+
+        //delete SQL
+        StringBuffer deleteSql = new StringBuffer(" DELETE FROM ")
+                .append(sqlDefine.getMasterTable())
+                .append(" WHERE ")
+                .append(sqlDefine.getMasterTableId())
+                .append(" = :").append(sqlDefine.getMasterTableId());
+
+        //参数
+        Map<String,Object> paramMap = new HashMap<>();
+        paramMap.put(sqlDefine.getMasterTableId(),row.get(sqlDefine.getMasterTableId()));
+        if(namedParameterJdbcTemplate.update(deleteSql.toString(), paramMap) < 1){
+            return Response.FAILURE(deleteSql);
+        }
+        return Response.SUCCESS();
+    }
+
+    @Override
+    public Response modifyByDataViewCode(String code,JSONObject row){
+        List<DataView> dataViewList = dataViewService.getRepository().findByDataViewCode(code);
+        if(CollectionUtils.isEmpty(dataViewList)){
+            return Response.FAILURE();
+        }
+        DataView dataView = dataViewList.get(0);
+
+        //获取sqlDefine
+        SqlDefine sqlDefine = getRepository().findBySqlId(dataView.getSqlId());
+        //获取修改列
+        List<ColumnParam> dataViewFields = JSON.parseArray(dataView.getColumns(),ColumnParam.class);
+        if(CollectionUtils.isEmpty(dataViewFields)){
+            return Response.FAILURE("视图编号:"+ dataView.getSqlId() + "未设置字段列表");
+        }
+
+        //update SQL
+        StringBuffer modifySQL = new StringBuffer(" UPDATE ")
+                .append(sqlDefine.getMasterTable())
+                .append(" SET ");
+
+        //参数
+        Map<String,Object> paramMap = new HashMap<>();
+        for(ColumnParam field : dataViewFields){
+            if(SqlDefineConstant.MODIFTY_ENABLE.equals(field.getUpdateType())){
+                modifySQL.append(field.getField()).append("= :")
+                        .append(field.getField())
+                        .append(",");
+                paramMap.put(field.getField(), row.get(field.getField()));
+            }
+        }
+        modifySQL.deleteCharAt(modifySQL.lastIndexOf(","));
+
+        //是否包含主键
+        if(StringUtils.isBlank(sqlDefine.getMasterTableId())){
+            return Response.FAILURE("SQLID:"+dataView.getSqlId()+",未设置主键");
+        }
+        modifySQL.append(" WHERE ")
+                .append(sqlDefine.getMasterTableId())
+                .append("= :").append(sqlDefine.getMasterTableId());
+        paramMap.put(sqlDefine.getMasterTableId(),row.get(sqlDefine.getMasterTableId()));
+        if(namedParameterJdbcTemplate.update(modifySQL.toString(), paramMap) < 1){
+          Response.FAILURE(modifySQL);
+        }
+        return Response.SUCCESS();
+    }
+
+    @Override
+    public Response createByDataViewCode(String code,JSONObject row){
+        List<DataView> dataViewList = dataViewService.getRepository().findByDataViewCode(code);
+        if(CollectionUtils.isEmpty(dataViewList)){
+            return Response.FAILURE();
+        }
+        DataView dataView = dataViewList.get(0);
+
+        //获取sqlDefine
+        SqlDefine sqlDefine = getRepository().findBySqlId(dataView.getSqlId());
+
+        //获取修改列
+        List<ColumnParam> dataViewFields = JSON.parseArray(dataView.getColumns(),ColumnParam.class);
+        if(CollectionUtils.isEmpty(dataViewFields)){
+            return Response.FAILURE("视图编号:"+ dataView.getSqlId() + "未设置字段列表");
+        }
+
+        //insert SQL
+        StringBuffer insertSQL = new StringBuffer("INSERT INTO ")
+                .append(sqlDefine.getMasterTable())
+                .append("(");
+
+        //输入
+        StringBuffer values = new StringBuffer("(");
+
+        //参数
+        Map<String,Object> paramMap = new HashMap<>();
+        for(ColumnParam field : dataViewFields){
+            if(field.isInset()){
+                insertSQL.append(field.getField()).append(",");
+                values.append(":").append(field.getField()).append(",");
+                paramMap.put(field.getField(), row.get(field.getField()));
+            }
+        }
+        //自动生成id
+        if(StringUtils.isNotBlank(sqlDefine.getMasterTableId())){
+            insertSQL.append(sqlDefine.getMasterTableId()).append(",");
+            values.append(":").append(sqlDefine.getMasterTableId()).append(",");
+            paramMap.put(sqlDefine.getMasterTableId(), GUID.nextId());
+        }else{
+            //是否包含主键
+            return Response.FAILURE("SQLID:"+dataView.getSqlId()+",未设置主键");
+        }
+        insertSQL.deleteCharAt(insertSQL.lastIndexOf(",")).append(") VALUES ");
+        values = values.deleteCharAt(values.lastIndexOf(",")).append(")");
+        String sql = insertSQL.append(values).toString();
+        if(namedParameterJdbcTemplate.update(sql, paramMap) < 1) {
+            return Response.FAILURE(sql);
+        }
+        return Response.SUCCESS();
     }
 
     @Override
@@ -138,23 +280,23 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
      */
     private void setFieldTitle(ColumnParam sqlViewField, String field){
         switch (field.toUpperCase()) {
-            case SqlViewConstant.LAST_UPDATE_TIME:
+            case SqlDefineConstant.LAST_UPDATE_TIME:
                 sqlViewField.setTitle("更新时间");
                 sqlViewField.setVisible(false);
                 break;
-            case SqlViewConstant.LAST_UPDATE_USER:
+            case SqlDefineConstant.LAST_UPDATE_USER:
                 sqlViewField.setTitle("更新者");
                 sqlViewField.setVisible(false);
                 break;
-            case SqlViewConstant.CREATE_TIME:
+            case SqlDefineConstant.CREATE_TIME:
                 sqlViewField.setTitle("创建时间");
                 sqlViewField.setVisible(false);
                 break;
-            case SqlViewConstant.CREATE_USER:
+            case SqlDefineConstant.CREATE_USER:
                 sqlViewField.setTitle("创建者");
                 sqlViewField.setVisible(false);
                 break;
-            case SqlViewConstant.VERSION:
+            case SqlDefineConstant.VERSION:
                 sqlViewField.setTitle("版本号");
                 sqlViewField.setVisible(false);
                 break;
