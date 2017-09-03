@@ -107,7 +107,7 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
             if(masterFieldMap.containsKey(field.getField())){
 
                 //修改类型
-                field.setUpdateType(SqlDefineConstant.MODIFTY_ENABLE);
+                field.setUpdateType(SqlDefineConstant.MODIFTY_HIDE);
                 field.setInset(true);
                 field.setVisible(true);
                 field.setCardVisible(true);
@@ -324,9 +324,6 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
         StringBuilder sqlBuilder = new StringBuilder(sqlDefine.getSelectSql());
         if(StringUtils.isNoneBlank(sqlDefine.getSqlExpand())){
             sqlBuilder.append(sqlDefine.getSqlExpand());
-        }
-        if(StringUtils.isNoneBlank(sqlDefine.getSqldesc())){
-            sqlBuilder.append(sqlDefine.getSqldesc());
         }
         StringBuilder pageBuilder = new StringBuilder("select t.* from (");
         pageBuilder.append(sqlBuilder.toString()).append(") t ");

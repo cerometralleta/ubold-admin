@@ -94,7 +94,7 @@ public class SqlDefineController {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value="/tableData/{sqlId}")
+    @RequestMapping(value="/bootstrap/{sqlId}")
     public Object getBootatrapTableResponse(Integer pageSize, Integer pageNumber, String searchText,
                                             String sortName, String sortOrder,@PathVariable String sqlId,
                                             @RequestBody BootstrapSearchParam bootstrapSearchParam) throws UnsupportedEncodingException {
