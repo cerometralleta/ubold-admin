@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
  * Created by lenovo on 2017/8/13.
  */
 @RestController
-@RequestMapping("/api/sm")
+@RequestMapping("/api/sm/view")
 //@RequestMapping("/api/permit/sm")
 public class DataViewController{
     protected Logger logger = LoggerFactory.getLogger(getClass());

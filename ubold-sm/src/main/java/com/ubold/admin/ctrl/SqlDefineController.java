@@ -23,7 +23,7 @@ import java.util.List;
  * Created by lenovo on 2017/8/30.
  */
 @RestController
-@RequestMapping("/api/sqlDefine")
+@RequestMapping("/api/sm/sql")
 public class SqlDefineController {
     protected Logger logger = LoggerFactory.getLogger(getClass());
 

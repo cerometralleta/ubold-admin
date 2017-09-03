@@ -336,11 +336,12 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
                 if(StringUtils.isNoneBlank(conditionParam.getValue())){
                     pageBuilder.append(" and t.").append(conditionParam.getField()).append(" ") .append(conditionParam.getExpression());
                     if("like".equalsIgnoreCase(conditionParam.getExpression())){
-                        pageBuilder .append(" %:").append(conditionParam.getField());
+                        pageBuilder .append(" :").append(conditionParam.getField());
+                        paraMap.put(conditionParam.getField(),"%" + conditionParam.getValue());
                     }else{
                         pageBuilder .append(" :").append(conditionParam.getField());
+                        paraMap.put(conditionParam.getField(),conditionParam.getValue());
                     }
-                    paraMap.put(conditionParam.getField(),conditionParam.getValue());
                 }
             }
         }
