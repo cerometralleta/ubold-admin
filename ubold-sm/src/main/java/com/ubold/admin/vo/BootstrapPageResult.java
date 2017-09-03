@@ -8,15 +8,15 @@ import java.util.Map;
  */
 public class BootstrapPageResult {
 
-    private long totlal;
+    private long total;
     private List<Map<String,Object>> rows;
 
-    public long getTotlal() {
-        return totlal;
+    public long getTotal() {
+        return total;
     }
 
-    public void setTotlal(long totlal) {
-        this.totlal = totlal;
+    public void setTotal(long total) {
+        this.total = total;
     }
 
     public List<Map<String, Object>> getRows() {

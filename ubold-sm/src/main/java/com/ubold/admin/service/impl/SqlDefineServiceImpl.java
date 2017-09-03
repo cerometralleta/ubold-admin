@@ -357,7 +357,7 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
         StringBuilder countBuilder = new StringBuilder("select count(1) from (").append(sqlBuilder).append(") total");
         Long count =  namedParameterJdbcTemplate.queryForObject(countBuilder.toString(),new HashMap(),Long.class);
         logger.info(countBuilder.toString());
-        pageResultForBootstrap.setTotlal(count);
+        pageResultForBootstrap.setTotal(count);
         return Response.SUCCESS(pageResultForBootstrap);
     }
 
