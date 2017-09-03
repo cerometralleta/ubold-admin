@@ -8,7 +8,7 @@ public enum ComponentType {
 	
 	 TEXT("text", "文本框"),
 	 
-	 DROPDOWN("dropdown", "下拉框"),
+	 SELECT("select", "下拉框"),
 	 
 	 SELECTOR("selector", "选择器"),
 	 

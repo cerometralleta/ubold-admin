@@ -99,6 +99,10 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
             if (SimpleUtils.getDataType(field.getDataType()).equals(SqlDefineConstant.COLUMNTYPE_DATE)) {
                 field.setFieldType(ComponentType.DATEPICKER.getValue());
             }
+            if (SimpleUtils.getDataType(field.getDataType()).equals(SqlDefineConstant.COLUMNTYPE_TEXT)) {
+                field.setFieldType(ComponentType.TEXTAREA.getValue());
+            }
+
             field.setIdx(i-1);
             if(masterFieldMap.containsKey(field.getField())){
 
