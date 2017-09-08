@@ -1,6 +1,7 @@
 package com.ubold.admin.ctrl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.ubold.admin.request.ZtreeParamsRequest;
 import com.ubold.admin.response.Response;
 import com.ubold.admin.service.SqlDefineService;
 import com.ubold.admin.vo.BootstrapPageResult;
@@ -90,11 +91,24 @@ public class SqlDefineController {
     }
 
     /**
+     * Ztree
+     * @param param
+     * @param sqlId
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value="/ztree",method= RequestMethod.POST)
+    public Object ztree(ZtreeParamsRequest ztreeParamsRequest) {
+        Response response = sqlDefineService.ztree(ztreeParamsRequest);
+        return response.getResult();
+    }
+
+    /**
      * dataViewCode  根据SQLID返回bootstrapTable数据格式
      * @return
      */
     @ResponseBody
-    @RequestMapping(value="/bootstrap/{sqlId}")
+    @RequestMapping(value="/bootstrap/{sqlId}",method= RequestMethod.POST)
     public Object getBootatrapTableResponse(Integer pageSize, Integer pageNumber, String searchText,
                                             String sortName, String sortOrder,@PathVariable String sqlId,
                                             @RequestBody BootstrapSearchParam bootstrapSearchParam) throws UnsupportedEncodingException {

@@ -1,32 +1,36 @@
-package com.ubold.admin.vo;
+package com.ubold.admin.request;
+
+import org.hibernate.validator.constraints.NotBlank;
+
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 /**
- * Created by lenovo on 2017/8/13.
+ * Created by lenovo on 2017/9/8.
  */
-public class TreeOptionsParam {
-    private boolean isShow;
+public class ZtreeParamsRequest implements Serializable{
+
+    @NotBlank
     private String sqlId;
+    @NotBlank
     private String idKey;
+    @NotBlank
     private String name;
+    @NotBlank
     private String pIdKey;
+    @NotBlank
     private String scope;
-    private String width;
+    @NotNull
     private boolean enable;
+    //点击id
+    private String id;
 
-    public boolean isEnable() {
-        return enable;
+    public String getId() {
+        return id;
     }
 
-    public void setEnable(boolean enable) {
-        this.enable = enable;
-    }
-
-    public boolean isShow() {
-        return isShow;
-    }
-
-    public void setShow(boolean show) {
-        isShow = show;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getSqlId() {
@@ -69,22 +73,11 @@ public class TreeOptionsParam {
         this.scope = scope;
     }
 
-    public String getWidth() {
-        return width;
+    public boolean isEnable() {
+        return enable;
     }
 
-    public void setWidth(String width) {
-        this.width = width;
+    public void setEnable(boolean enable) {
+        this.enable = enable;
     }
-
-    public String getRelationField() {
-        return relationField;
-    }
-
-    public void setRelationField(String relationField) {
-        this.relationField = relationField;
-    }
-
-    private String relationField
-            ;
 }

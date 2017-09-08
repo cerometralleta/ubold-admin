@@ -8,6 +8,7 @@ import com.ubold.admin.domain.DataView;
 import com.ubold.admin.domain.SqlDefine;
 import com.ubold.admin.repository.SqlDefineRepository;
 import com.ubold.admin.repository.impl.JpaRepositoryImpl;
+import com.ubold.admin.request.ZtreeParamsRequest;
 import com.ubold.admin.response.Response;
 import com.ubold.admin.service.DataViewService;
 import com.ubold.admin.service.FormViewService;
@@ -23,6 +24,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.jdbc.support.rowset.SqlRowSetMetaData;
 import org.springframework.stereotype.Service;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -363,5 +365,48 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
         return Response.SUCCESS(pageResultForBootstrap);
     }
 
+    @Override
+    public Response ztree(ZtreeParamsRequest ztreeParamsRequest) {
+        SqlDefine sqlDefine = this.getRepository().findBySqlId(ztreeParamsRequest.getSqlId());
+        StringBuilder stringBuilder = new StringBuilder("select t.* from (");
+        stringBuilder.append(sqlDefine.getSelectSql()).append(") t ");
+        Map<String,Object> paraMap = new HashedMap();
+        //异步加载
+        if(ztreeParamsRequest.isEnable()){
+            stringBuilder.append(" where t.");
+            if(StringUtils.isBlank(ztreeParamsRequest.getId())){
+                stringBuilder.append(ztreeParamsRequest.getpIdKey()).append(" = ''");
+            }else {
+                stringBuilder.append(ztreeParamsRequest.getpIdKey()).append("= :parent");
+                paraMap.put("parent",ztreeParamsRequest.getId());
+            }
+        }
+        List<Map<String, Object>> dataList = namedParameterJdbcTemplate.queryForList(stringBuilder.toString(),paraMap);
 
+        //异步加载判断是否parent
+        if(ztreeParamsRequest.isEnable()){
+            for(Map<String,Object> node : dataList){
+                node.put("isParent",this.isParent(node.get(ztreeParamsRequest.getIdKey()).toString(),sqlDefine,ztreeParamsRequest));
+            }
+        }
+        return Response.SUCCESS(dataList);
+    }
+
+    /**
+     * TODO leaf 优化
+     * 判断是否上级节点
+     * @param parent
+     * @param sqlDefine
+     * @param ztreeParamsRequest
+     * @return
+     */
+    private boolean isParent(String parent,SqlDefine sqlDefine,ZtreeParamsRequest ztreeParamsRequest){
+        StringBuilder stringBuilder = new StringBuilder("select t.* from (")
+        .append(sqlDefine.getSelectSql()).append(") t where t.")
+        .append(ztreeParamsRequest.getpIdKey()).append("= :parent");
+        Map<String,Object> paraMap = new HashedMap();
+        paraMap.put("parent",parent);
+        List<Map<String, Object>> dataList = namedParameterJdbcTemplate.queryForList(stringBuilder.toString(),paraMap);
+        return dataList.size() > 0;
+    }
 }

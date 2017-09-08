@@ -3,6 +3,7 @@ package com.ubold.admin.service;
 import com.alibaba.fastjson.JSONObject;
 import com.ubold.admin.repository.JpaRepository;
 import com.ubold.admin.repository.SqlDefineRepository;
+import com.ubold.admin.request.ZtreeParamsRequest;
 import com.ubold.admin.response.Response;
 import com.ubold.admin.vo.*;
 
@@ -34,8 +35,8 @@ public interface SqlDefineService  extends JpaRepository<SqlDefineRepository> {
 
     Response fetch(SqlDefineFetchParam sqlDefineFetchParam);
 
-    public Response createByDataViewCode(String code,JSONObject row);
-    public Response deleteByDataViewCode(String code,JSONObject row);
-    public Response modifyByDataViewCode(String code,JSONObject row);
-
+    Response createByDataViewCode(String code,JSONObject row);
+    Response deleteByDataViewCode(String code,JSONObject row);
+    Response modifyByDataViewCode(String code,JSONObject row);
+    Response ztree(ZtreeParamsRequest ztreeParamsRequest);
 }
