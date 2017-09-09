@@ -88,6 +88,15 @@ public class OptionsParam implements Serializable{
     private String locale;
 //    private String footerStyle;
     private boolean showExport;
+    private String exportDataType;
+
+    public String getExportDataType() {
+        return exportDataType;
+    }
+
+    public void setExportDataType(String exportDataType) {
+        this.exportDataType = exportDataType;
+    }
 
     public String getClasses() {
         return classes;

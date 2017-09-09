@@ -151,11 +151,13 @@ public class DataFilter {
 			storeSql.append( WHERE ).append(condition); 
 		}
 		this.addSort(this.sortName,this.sortOrder);
-		storeSql.append(orderBy)
-		.append(" LIMIT ")
-		.append((pageNo - 1) * pageSize)
-		.append(",")
-		.append(pageSize);
+		storeSql.append(orderBy);
+		if(null != pageNo && null != pageSize){
+			storeSql.append(" LIMIT ")
+			.append((pageNo - 1) * pageSize)
+			.append(",")
+			.append(pageSize);
+		}
 		return storeSql.toString();
 	}
 
