@@ -118,7 +118,7 @@ public class SqlDefineController {
             if (!StringUtils.isEmpty(searchText)) {
                 searchText = new String(searchText.getBytes("ISO-8859-1"), "UTF-8");
             }
-            response = sqlDefineService.getBootstrapTableResponse(pageSize,pageNumber,searchText,sortName,sortOrder,sqlId,null);
+            response = sqlDefineService.getBootstrapTableResponse(pageSize,pageNumber,searchText,sortName,sortOrder,sqlId,bootstrapSearchParam);
         }else{
             response = sqlDefineService.getBootstrapTableResponse(bootstrapSearchParam,sqlId);
         }

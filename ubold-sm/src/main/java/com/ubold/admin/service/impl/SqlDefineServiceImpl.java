@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.ubold.admin.constant.ComponentType;
 import com.ubold.admin.constant.SqlDefineConstant;
+import com.ubold.admin.constant.SqlExpression;
+import com.ubold.admin.constant.TreeNodeHandleType;
 import com.ubold.admin.domain.DataView;
 import com.ubold.admin.domain.SqlDefine;
 import com.ubold.admin.repository.SqlDefineRepository;
@@ -14,6 +16,7 @@ import com.ubold.admin.service.DataViewService;
 import com.ubold.admin.service.FormViewService;
 import com.ubold.admin.service.SqlDefineService;
 import com.ubold.admin.util.GUID;
+import com.ubold.admin.utils.DataFilter;
 import com.ubold.admin.utils.SimpleUtils;
 import com.ubold.admin.vo.*;
 import org.apache.commons.collections.CollectionUtils;
@@ -24,7 +27,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.jdbc.support.rowset.SqlRowSetMetaData;
 import org.springframework.stereotype.Service;
-import org.springframework.test.context.jdbc.Sql;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -276,7 +278,7 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
     public Response<BootstrapPageResult> getBootstrapTableResponse(BootstrapSearchParam bootstrapSearchParam, String sqlId) {
         return this.getBootstrapTableResponse(bootstrapSearchParam.getPageSize(),bootstrapSearchParam.getPageNumber()
         ,bootstrapSearchParam.getSearchText(),bootstrapSearchParam.getSortName(),bootstrapSearchParam.getSortOrder(),sqlId
-                , bootstrapSearchParam.getSearchArray());
+                , bootstrapSearchParam);
     }
 
     /**
@@ -320,49 +322,119 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
     @Override
     public Response<BootstrapPageResult> getBootstrapTableResponse(Integer pageSize, Integer pageNumber, String searchText,
                                                                    String sortName, String sortOrder, String sqlId,
-                                                                   List<ConditionParam> conditionParamList) {
+                                                                   BootstrapSearchParam bootstrapSearchParam) {
         BootstrapPageResult pageResultForBootstrap = new BootstrapPageResult();
         SqlDefine sqlDefine = this.getRepository().findBySqlId(sqlId);
-        StringBuilder sqlBuilder = new StringBuilder(sqlDefine.getSelectSql());
-        if(StringUtils.isNoneBlank(sqlDefine.getSqlExpand())){
-            sqlBuilder.append(sqlDefine.getSqlExpand());
-        }
-        StringBuilder pageBuilder = new StringBuilder("select t.* from (");
-        pageBuilder.append(sqlBuilder.toString()).append(") t ");
-        Map<String,Object> paraMap = new HashedMap();
+        DataFilter dataFilter = DataFilter.getInstance();
+        dataFilter.setQuerySql(sqlDefine.getSelectSql());
+        dataFilter.setSortName(sortName);
+        dataFilter.setSortOrder(sortOrder);
 
         //条件
-        if(CollectionUtils.isNotEmpty(conditionParamList)){
-            pageBuilder.append(" where 1=1 ");
-            for(ConditionParam conditionParam : conditionParamList){
-                if(StringUtils.isNoneBlank(conditionParam.getValue())){
-                    pageBuilder.append(" and t.").append(conditionParam.getField()).append(" ") .append(conditionParam.getExpression());
-                    if("like".equalsIgnoreCase(conditionParam.getExpression())){
-                        pageBuilder .append(" :").append(conditionParam.getField());
-                        paraMap.put(conditionParam.getField(),"%" + conditionParam.getValue());
-                    }else{
-                        pageBuilder .append(" :").append(conditionParam.getField());
-                        paraMap.put(conditionParam.getField(),conditionParam.getValue());
-                    }
-                }
-            }
+        List<ConditionParam> conditionParamList = bootstrapSearchParam.getSearchArray();
+        if(CollectionUtils.isEmpty(conditionParamList)){
+            conditionParamList = new ArrayList<>();
         }
-
-        //排序
-        if(StringUtils.isNoneBlank(sortName)){
-             pageBuilder.append(" order by ").append(sortName) .append(" ") .append(sortOrder);
-         }
-        pageBuilder.append(" limit ").append((pageNumber - 1) * pageSize ).append(",").append(pageSize);
-        logger.info(pageBuilder.toString());
-        List<Map<String,Object>> list = namedParameterJdbcTemplate.queryForList(pageBuilder.toString(), paraMap);
+        //解析ztree
+        ConditionParam ztreeConditionParam = this.getTreeNode(bootstrapSearchParam.getTreeOptions());
+        if(null != ztreeConditionParam){
+            conditionParamList.add(ztreeConditionParam);
+        }
+        dataFilter.addCondition(conditionParamList);
+        List<Map<String,Object>> list = namedParameterJdbcTemplate.queryForList( dataFilter.createPager(pageNumber,pageSize), dataFilter.getParams());
         pageResultForBootstrap.setRows(list);
 
         //查询总数
-        StringBuilder countBuilder = new StringBuilder("select count(1) from (").append(sqlBuilder).append(") total");
-        Long count =  namedParameterJdbcTemplate.queryForObject(countBuilder.toString(),new HashMap(),Long.class);
-        logger.info(countBuilder.toString());
+        Long count =  namedParameterJdbcTemplate.queryForObject(dataFilter.countSql(),dataFilter.getParams(),Long.class);
         pageResultForBootstrap.setTotal(count);
         return Response.SUCCESS(pageResultForBootstrap);
+    }
+
+
+    /**
+     * 获取树节点条件
+     * @param treeOptionsParam
+     * @return
+     */
+    private ConditionParam getTreeNode(TreeOptionsParam treeOptionsParam){
+        if(null == treeOptionsParam || !treeOptionsParam.isShow()){
+            return null;
+        }
+        //获取sqlDefine
+        SqlDefine sqlDefine = this.getRepository().findBySqlId(treeOptionsParam.getSqlId());
+        Map<String,Object> paramMap = new HashMap<String, Object>();
+
+        //默认是空字符串
+        String idValue = StringUtils.isBlank(treeOptionsParam.getNodeValue())? "#000000" : treeOptionsParam.getNodeValue();
+        List<Map<String,Object>> result = new ArrayList<Map<String,Object>>();
+        switch (treeOptionsParam.getScope()) {
+            case TreeNodeHandleType.TREEHANDLETYPE_ALL:
+                result = findAllNode(warpTreeSql(sqlDefine.getSelectSql(), treeOptionsParam.getpIdKey()), idValue, treeOptionsParam);
+                break;
+            case TreeNodeHandleType.TREEHANDLETYPE_CHILD:
+                paramMap.put(treeOptionsParam.getpIdKey(), idValue);
+                result = namedParameterJdbcTemplate.queryForList(warpTreeSql(sqlDefine.getSelectSql(), treeOptionsParam.getpIdKey()), paramMap);
+                break;
+            case TreeNodeHandleType.TREEHANDLETYPE_SELF:
+                paramMap.put(treeOptionsParam.getIdKey(), idValue);
+                result = namedParameterJdbcTemplate.queryForList(warpTreeSql(sqlDefine.getSelectSql(), treeOptionsParam.getIdKey()), paramMap);
+                break;
+        }
+        ConditionParam conditionDto = new ConditionParam();
+        conditionDto.setField(treeOptionsParam.getRelationField());
+        conditionDto.setExpression(SqlExpression.IN);
+        //TODO 换成in语句
+        conditionDto.setValue(appendIds(result,treeOptionsParam.getIdKey()));
+        return conditionDto;
+    }
+
+    /**
+     * 拼接in字符
+     * @param mapList
+     * @param key
+     * @return
+     */
+    private String appendIds(List<Map<String,Object>> mapList,String key){
+        StringBuffer sb = new StringBuffer();
+        for(Map<String,Object> item : mapList){
+            sb.append(item.get(key)).append(",");
+        }
+        return StringUtils.isBlank(sb) ? "#000000" : sb.deleteCharAt(sb.lastIndexOf(",")).toString();
+    }
+
+    /**
+     * tree查询SQL
+     * @param sql
+     * @param field
+     * @return
+     */
+    private String warpTreeSql(String sql,String field){
+        return  new StringBuffer("select t.* from (")
+                .append(sql).append(") t WHERE T.").append(field).append(" =:").append(field).toString();
+    }
+
+    /**
+     * 根据nodeId获取所有子节点
+     * @param sql
+     * @param pId
+     * @param treeVo
+     * @return
+     */
+    private List<Map<String, Object>> findAllNode(String sql,Object pId,TreeOptionsParam treeVo){
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put(treeVo.getpIdKey(), pId);
+        List<Map<String, Object>> queryResult = new ArrayList<Map<String,Object>>();
+        List<Map<String, Object>> result = namedParameterJdbcTemplate.queryForList(sql, paramMap);
+        if(!org.springframework.util.CollectionUtils.isEmpty(result)){
+            List<Map<String, Object>> subResult = null;
+            for(Map<String, Object> subMap : result){
+                subResult = findAllNode(sql, subMap.get(treeVo.getIdKey()), treeVo);
+                if(!org.springframework.util.CollectionUtils.isEmpty(subResult))
+                    queryResult.addAll(subResult);
+            }
+            queryResult.addAll(result);
+        }
+        return queryResult;
     }
 
     @Override

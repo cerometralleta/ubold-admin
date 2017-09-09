@@ -13,7 +13,16 @@ public class BootstrapSearchParam implements Serializable{
     private String searchText;
     private String sortName;
     private String sortOrder;
+    private TreeOptionsParam treeOptions;
     private List<ConditionParam> searchArray;
+
+    public TreeOptionsParam getTreeOptions() {
+        return treeOptions;
+    }
+
+    public void setTreeOptions(TreeOptionsParam treeOptions) {
+        this.treeOptions = treeOptions;
+    }
 
     public List<ConditionParam> getSearchArray() {
         return searchArray;

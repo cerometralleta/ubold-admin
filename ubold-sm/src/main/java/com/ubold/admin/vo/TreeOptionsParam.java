@@ -12,6 +12,15 @@ public class TreeOptionsParam {
     private String scope;
     private String width;
     private boolean enable;
+    private String nodeValue;
+
+    public String getNodeValue() {
+        return nodeValue;
+    }
+
+    public void setNodeValue(String nodeValue) {
+        this.nodeValue = nodeValue;
+    }
 
     public boolean isEnable() {
         return enable;

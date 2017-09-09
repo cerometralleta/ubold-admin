@@ -10,6 +10,14 @@ public class ConditionParam implements Serializable{
     private String field;
     private String expression;
     private String title;
+    private String sortOrder;
+    public String getSortOrder() {
+        return sortOrder;
+    }
+
+    public void setSortOrder(String sortOrder) {
+        this.sortOrder = sortOrder;
+    }
 
     public String getValue() {
         return value;
