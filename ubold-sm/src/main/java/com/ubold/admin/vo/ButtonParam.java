@@ -6,13 +6,21 @@ package com.ubold.admin.vo;
 public class ButtonParam {
     private String id;
     private String option;//0:接口,1:弹窗,2:新窗口
-    private String window;
+    private String modal;
     private String size;//窗口大小
     private String icon;
     private String title;
     private String url;
     private String location;//导航按钮 1:导航按钮,0:行内按钮
     private String sort;
+
+    public String getModal() {
+        return modal;
+    }
+
+    public void setModal(String modal) {
+        this.modal = modal;
+    }
 
     public String getId() {
         return id;
@@ -28,14 +36,6 @@ public class ButtonParam {
 
     public void setOption(String option) {
         this.option = option;
-    }
-
-    public String getWindow() {
-        return window;
-    }
-
-    public void setWindow(String window) {
-        this.window = window;
     }
 
     public String getSize() {
