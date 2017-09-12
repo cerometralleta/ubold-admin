@@ -33,7 +33,7 @@ public class ColumnParam implements Serializable{
     private boolean cardVisible;
     private boolean switchable;
     private boolean clickToSelect;
-//    private String formatter;
+    private String formatter;
 //    private String footerFormatter;
 //    private String events;
 //    private String sorter;
@@ -283,5 +283,13 @@ public class ColumnParam implements Serializable{
 
     public void setEscape(boolean escape) {
         this.escape = escape;
+    }
+
+    public String getFormatter() {
+        return formatter;
+    }
+
+    public void setFormatter(String formatter) {
+        this.formatter = formatter;
     }
 }
