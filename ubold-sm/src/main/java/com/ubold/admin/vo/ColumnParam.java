@@ -42,6 +42,15 @@ public class ColumnParam implements Serializable{
     private boolean searchable;
     private boolean searchFormatter;
     private boolean escape;
+    private String pattern;
+
+    public String getPattern() {
+        return pattern;
+    }
+
+    public void setPattern(String pattern) {
+        this.pattern = pattern;
+    }
 
     public boolean isInsert() {
         return insert;

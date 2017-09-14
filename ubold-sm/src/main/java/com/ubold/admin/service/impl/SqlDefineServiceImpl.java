@@ -204,7 +204,7 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
                 .append("= :").append(sqlDefine.getMasterTableId());
         paramMap.put(sqlDefine.getMasterTableId(),row.get(sqlDefine.getMasterTableId()));
         if(namedParameterJdbcTemplate.update(modifySQL.toString(), paramMap) < 1){
-          Response.FAILURE(modifySQL);
+          return Response.FAILURE(modifySQL);
         }
         return Response.SUCCESS();
     }
