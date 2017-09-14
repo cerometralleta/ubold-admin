@@ -112,7 +112,7 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
 
                 //修改类型
                 field.setUpdateType(SqlDefineConstant.MODIFTY_HIDE);
-                field.setInset(true);
+                field.setInsert(true);
                 field.setVisible(true);
                 field.setCardVisible(true);
                 field.setSwitchable(true);
@@ -123,7 +123,7 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
                         field.getField().equalsIgnoreCase(sqlDefine.getMasterTableId()))||
                         SqlDefineConstant.VERSION.equals(field.getField().toUpperCase())
                         ){
-                    field.setInset(false);
+                    field.setInsert(false);
                     field.setUpdateType(SqlDefineConstant.MODIFTY_HIDE);
                 }
             }
@@ -237,7 +237,7 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
         //参数
         Map<String,Object> paramMap = new HashMap<>();
         for(ColumnParam field : dataViewFields){
-            if(field.isInset()){
+            if(field.isInsert()){
                 insertSQL.append(field.getField()).append(",");
                 values.append(":").append(field.getField()).append(",");
                 paramMap.put(field.getField(), row.get(field.getField()));
