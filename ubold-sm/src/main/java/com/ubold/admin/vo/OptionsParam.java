@@ -89,6 +89,14 @@ public class OptionsParam implements Serializable{
 //    private String footerStyle;
     private boolean showExport;
     private String exportDataType;
+    private String version;
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
 
     public String getExportDataType() {
         return exportDataType;
