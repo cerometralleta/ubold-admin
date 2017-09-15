@@ -21,7 +21,15 @@ public class SqlDefineConstant {
 	public static final String MODIFTY_HIDE = "hide";
 	public static final String MODIFTY_ENABLE = "enable";
 	public static final String MODIFTY_DISABLE = "disable";
-	
+
+	public static final String align_center = "center";
+	public static final String align_left = "left";
+	public static final String align_right = "right";
+
+	public static final String valign_middle = "middle";
+	public static final String valign_top = "top";
+	public static final String valign_bottom = "bottom";
+
 	/**
 	 * 导航按钮
 	 */

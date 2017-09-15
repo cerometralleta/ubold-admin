@@ -99,12 +99,21 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
             field.setMaxlength(srsmd.getPrecision(i));
             field.setDataType(srsmd.getColumnTypeName(i));
             field.setFieldType(ComponentType.TEXT.getValue());
+            field.setAlign(SqlDefineConstant.align_center);
+            field.setHalign(SqlDefineConstant.align_center);
+            field.setValign(SqlDefineConstant.valign_middle);
+            field.setFalign(SqlDefineConstant.valign_middle);
+
             //判断是否是日期类型
             if (SimpleUtils.getDataType(field.getDataType()).equals(SqlDefineConstant.COLUMNTYPE_DATE)) {
                 field.setFieldType(ComponentType.DATEPICKER.getValue());
             }
             if (SimpleUtils.getDataType(field.getDataType()).equals(SqlDefineConstant.COLUMNTYPE_TEXT)) {
                 field.setFieldType(ComponentType.TEXTAREA.getValue());
+            }
+
+            if (SimpleUtils.getDataType(field.getDataType()).equals(SqlDefineConstant.COLUMNTYPE_NUMBER)) {
+                field.setAlign(SqlDefineConstant.align_right);
             }
 
             field.setIdx(i-1);

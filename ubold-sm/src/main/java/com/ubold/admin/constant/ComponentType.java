@@ -12,11 +12,11 @@ public enum ComponentType {
 	 
 	 SELECTOR("selector", "选择器"),
 	 
-	 GENERATECODE("code", "自动编码"),
+	 GENERATECODE("coder", "自动编码"),
 	 
 	 CHECKBOX("checkbox", "单选框"),
 	 
-	 DATEPICKER("datepicker", "日期"),
+	 DATEPICKER("datetimepicker", "日期"),
 	 
 	 TEXTAREA("textarea", "文本域");
 	
