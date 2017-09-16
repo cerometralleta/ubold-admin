@@ -32,7 +32,7 @@ public class FormViewController {
     @ResponseBody
     @RequestMapping(value="/persistent",method= RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public Response persistent(@RequestBody @Valid FormViewRequest request) {
-        logger.info(JSON.toJSONString(request));
+//        logger.info(JSON.toJSONString(request));
         return formViewService.persistent(request);
     }
 

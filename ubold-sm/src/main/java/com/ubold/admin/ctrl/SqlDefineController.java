@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -128,6 +130,12 @@ public class SqlDefineController {
         return Response.FAILURE();
     }
 
+    @ResponseBody
+    @RequestMapping(value="/getCode/{prefix}",method= RequestMethod.POST)
+    public Response getCode(@PathVariable String prefix) {
+        String sdf = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        return Response.SUCCESS(prefix + sdf);
+    }
 //    StringBuilder sb = new StringBuilder();
 //        try(BufferedReader reader = httpServletRequest.getReader();) {
 //        char[]buff = new char[1024];

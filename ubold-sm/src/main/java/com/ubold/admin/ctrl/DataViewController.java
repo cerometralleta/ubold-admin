@@ -31,7 +31,7 @@ public class DataViewController{
     @ResponseBody
     @RequestMapping(value="/persistent",method= RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public Response persistent(@RequestBody DataViewCreateRequest request) {
-        logger.info(JSON.toJSONString(request));
+//        logger.info(JSON.toJSONString(request));
         return dataViewService.persistent(request);
     }
 
