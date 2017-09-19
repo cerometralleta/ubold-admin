@@ -13,6 +13,24 @@ public class ButtonParam {
     private String url;
     private String location;//导航按钮 1:导航按钮,0:行内按钮
     private String sort;
+    private String btnsize;
+    private String color;
+
+    public String getBtnsize() {
+        return btnsize;
+    }
+
+    public void setBtnsize(String btnsize) {
+        this.btnsize = btnsize;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
 
     public String getModal() {
         return modal;
