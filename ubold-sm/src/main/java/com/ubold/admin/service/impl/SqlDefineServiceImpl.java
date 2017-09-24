@@ -243,7 +243,7 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
         }else{
             checkSql.append(" t where t.") .append( sqlDefine.getMasterTableId())
             .append(" <> :").append(sqlDefine.getMasterTableId())
-            .append(" t.").append(field.getField()).append(" = :").append(field.getField());
+            .append(" and t.").append(field.getField()).append(" = :").append(field.getField());
             checkParams.put(sqlDefine.getMasterTableId(),row.get(sqlDefine.getMasterTableId()));
             checkParams.put(field.getField(),row.get(field.getField()));
         }
