@@ -178,6 +178,8 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
             return Response.FAILURE();
         }
         DataView dataView = dataViewList.get(0);
+        //获取参数配置
+        OptionsParam optionsParam = JSON.parseObject(dataView.getOptions(), OptionsParam.class);
 
         //获取sqlDefine
         SqlDefine sqlDefine = getRepository().findBySqlId(dataView.getSqlId());
@@ -199,7 +201,6 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
                 if(this.uniqueCheck(field,sqlDefine,row,false)){
                     return Response.FAILURE(field.getTitle() + "数据重复");
                 }
-
                 modifySQL.append(field.getField()).append("= :")
                         .append(field.getField())
                         .append(",");
@@ -215,6 +216,12 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
         modifySQL.append(" WHERE ")
                 .append(sqlDefine.getMasterTableId())
                 .append("= :").append(sqlDefine.getMasterTableId());
+
+        //根据版本号更新
+        if(StringUtils.isNotBlank(optionsParam.getVersion())){
+            modifySQL .append(" and ").append(optionsParam.getVersion()).append("  = :").append(optionsParam.getVersion());
+            paramMap.put(optionsParam.getVersion(),row.get(optionsParam.getVersion()));
+        }
         paramMap.put(sqlDefine.getMasterTableId(),row.get(sqlDefine.getMasterTableId()));
         if(namedParameterJdbcTemplate.update(modifySQL.toString(), paramMap) < 1){
           return Response.FAILURE(modifySQL);
