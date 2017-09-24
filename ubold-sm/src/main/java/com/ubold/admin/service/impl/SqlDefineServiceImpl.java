@@ -103,7 +103,7 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
             field.setHalign(SqlDefineConstant.align_center);
             field.setValign(SqlDefineConstant.valign_middle);
             field.setFalign(SqlDefineConstant.valign_middle);
-
+            field.setUniqueCheck(false);
             //判断是否是日期类型
             if (SimpleUtils.getDataType(field.getDataType()).equals(SqlDefineConstant.COLUMNTYPE_DATE)) {
                 field.setFieldType(ComponentType.DATEPICKER.getValue());
@@ -196,6 +196,10 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
         Map<String,Object> paramMap = new HashMap<>();
         for(ColumnParam field : dataViewFields){
             if(SqlDefineConstant.MODIFTY_ENABLE.equals(field.getUpdateType())){
+                if(this.uniqueCheck(field,sqlDefine,row,false)){
+                    return Response.FAILURE(field.getTitle() + "数据重复");
+                }
+
                 modifySQL.append(field.getField()).append("= :")
                         .append(field.getField())
                         .append(",");
@@ -216,6 +220,34 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
           return Response.FAILURE(modifySQL);
         }
         return Response.SUCCESS();
+    }
+
+    /**
+     * 数据唯一校验
+     * @param field
+     * @param sqlDefine
+     * @param row
+     * @param insert
+     * @return
+     */
+    private boolean uniqueCheck(ColumnParam field,SqlDefine sqlDefine,JSONObject row,boolean insert){
+        if(!field.isUniqueCheck()){
+            return false;
+        }
+        Map<String,Object> checkParams = new HashedMap();
+        StringBuffer checkSql = new StringBuffer("select count(1) from ") .append(sqlDefine.getMasterTable());
+        if(insert){
+            checkSql.append(" t where ")
+                    .append(" t.").append(field.getField()).append(" = :").append(field.getField());
+            checkParams.put(field.getField(),row.get(field.getField()));
+        }else{
+            checkSql.append(" t where t.") .append( sqlDefine.getMasterTableId())
+            .append(" <> :").append(sqlDefine.getMasterTableId())
+            .append(" t.").append(field.getField()).append(" = :").append(field.getField());
+            checkParams.put(sqlDefine.getMasterTableId(),row.get(sqlDefine.getMasterTableId()));
+            checkParams.put(field.getField(),row.get(field.getField()));
+        }
+        return namedParameterJdbcTemplate.queryForObject(checkSql.toString(),checkParams,Long.class) > 0;
     }
 
     @Override
@@ -247,6 +279,10 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
         Map<String,Object> paramMap = new HashMap<>();
         for(ColumnParam field : dataViewFields){
             if(field.isInsert()){
+                if(this.uniqueCheck(field,sqlDefine,row,true)){
+                    return Response.FAILURE(field.getTitle() + "数据重复");
+                }
+
                 insertSQL.append(field.getField()).append(",");
                 values.append(":").append(field.getField()).append(",");
                 paramMap.put(field.getField(), row.get(field.getField()));

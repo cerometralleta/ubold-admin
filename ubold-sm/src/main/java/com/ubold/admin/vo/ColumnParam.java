@@ -32,6 +32,7 @@ public class ColumnParam implements Serializable{
     private String order;
     private boolean cardVisible;
     private boolean switchable;
+    private boolean uniqueCheck;
     private boolean clickToSelect;
     private String formatter;
 //    private String footerFormatter;
@@ -43,6 +44,14 @@ public class ColumnParam implements Serializable{
     private boolean searchFormatter;
     private boolean escape;
     private String pattern;
+
+    public boolean isUniqueCheck() {
+        return uniqueCheck;
+    }
+
+    public void setUniqueCheck(boolean uniqueCheck) {
+        this.uniqueCheck = uniqueCheck;
+    }
 
     public String getPattern() {
         return pattern;
