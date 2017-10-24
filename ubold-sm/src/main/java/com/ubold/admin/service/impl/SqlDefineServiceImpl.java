@@ -433,7 +433,7 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
                 break;
         }
         ConditionParam conditionDto = new ConditionParam();
-        conditionDto.setField(treeOptionsParam.getRelationField());
+        conditionDto.setField(treeOptionsParam.getForeignKey());
         conditionDto.setExpression(SqlExpression.IN);
         //TODO 换成in语句
         conditionDto.setValue(appendIds(result,treeOptionsParam.getIdKey()));

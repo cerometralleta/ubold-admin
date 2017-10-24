@@ -11,8 +11,25 @@ public class TreeOptionsParam {
     private String pIdKey;
     private String scope;
     private String width;
-    private boolean enable;
+    private boolean enable; //是否异步
     private String nodeValue;
+    private String foreignKey;
+
+    public boolean isShow() {
+        return isShow;
+    }
+
+    public void setShow(boolean show) {
+        isShow = show;
+    }
+
+    public String getForeignKey() {
+        return foreignKey;
+    }
+
+    public void setForeignKey(String foreignKey) {
+        this.foreignKey = foreignKey;
+    }
 
     public String getNodeValue() {
         return nodeValue;
@@ -28,14 +45,6 @@ public class TreeOptionsParam {
 
     public void setEnable(boolean enable) {
         this.enable = enable;
-    }
-
-    public boolean isShow() {
-        return isShow;
-    }
-
-    public void setShow(boolean show) {
-        isShow = show;
     }
 
     public String getSqlId() {
@@ -85,15 +94,4 @@ public class TreeOptionsParam {
     public void setWidth(String width) {
         this.width = width;
     }
-
-    public String getRelationField() {
-        return relationField;
-    }
-
-    public void setRelationField(String relationField) {
-        this.relationField = relationField;
-    }
-
-    private String relationField
-            ;
 }
