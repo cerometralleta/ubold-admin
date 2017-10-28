@@ -14,7 +14,6 @@ public class ColumnParam implements Serializable{
     private boolean visible;
     private String dataType;
     private String fieldType;
-    private String rule;
     private int maxlength;
     private int idx;
     private boolean radio;
@@ -125,15 +124,6 @@ public class ColumnParam implements Serializable{
     public void setFieldType(String fieldType) {
         this.fieldType = fieldType;
     }
-
-    public String getRule() {
-        return rule;
-    }
-
-    public void setRule(String rule) {
-        this.rule = rule;
-    }
-
     public int getMaxlength() {
         return maxlength;
     }
