@@ -8,11 +8,11 @@ public enum ComponentType {
 	
 	 TEXT("text", "文本框"),
 	 
-	 SELECT("select", "下拉框"),
+	 SELECT("dropdown", "下拉框"),
 	 
 	 SELECTOR("selector", "选择器"),
 	 
-	 GENERATECODE("coder", "自动编码"),
+	 GENERATECODE("code", "自动编码"),
 	 
 	 CHECKBOX("checkbox", "单选框"),
 	 

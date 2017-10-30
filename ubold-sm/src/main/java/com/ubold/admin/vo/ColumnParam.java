@@ -43,6 +43,15 @@ public class ColumnParam implements Serializable{
     private boolean searchFormatter;
     private boolean escape;
     private String pattern;
+    private String dataFormat;
+
+    public String getDataFormat() {
+        return dataFormat;
+    }
+
+    public void setDataFormat(String dataFormat) {
+        this.dataFormat = dataFormat;
+    }
 
     public boolean isUniqueCheck() {
         return uniqueCheck;
