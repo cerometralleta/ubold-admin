@@ -1,6 +1,7 @@
 package com.ubold.admin.ctrl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.ubold.admin.request.SqlDefineRequest;
 import com.ubold.admin.request.ZtreeParamsRequest;
 import com.ubold.admin.response.Response;
 import com.ubold.admin.service.SqlDefineService;
@@ -38,8 +39,8 @@ public class SqlDefineController {
 
     @ResponseBody
     @RequestMapping(value="/persistent",method= RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Response persistent(@RequestBody @Valid JSONObject paramJson) {
-        return sqlDefineService.persistent(paramJson);
+    public Response persistent(@RequestBody @Valid SqlDefineRequest sqlDefineRequest) {
+        return sqlDefineService.persistent(sqlDefineRequest);
     }
 
     @ResponseBody
@@ -51,7 +52,7 @@ public class SqlDefineController {
 
     /**
      * 保存SQLVIEW记录
-     * @param param
+     * @param formParam
      * @return
      */
     @ResponseBody
@@ -75,8 +76,6 @@ public class SqlDefineController {
 
     /**
      * 删除视图的数据
-     * @param code
-     * @param id
      * @return
      */
     @ResponseBody
@@ -94,8 +93,6 @@ public class SqlDefineController {
 
     /**
      * Ztree
-     * @param param
-     * @param sqlId
      * @return
      */
     @ResponseBody

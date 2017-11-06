@@ -10,6 +10,7 @@ import com.ubold.admin.domain.DataView;
 import com.ubold.admin.domain.SqlDefine;
 import com.ubold.admin.repository.SqlDefineRepository;
 import com.ubold.admin.repository.impl.JpaRepositoryImpl;
+import com.ubold.admin.request.SqlDefineRequest;
 import com.ubold.admin.request.ZtreeParamsRequest;
 import com.ubold.admin.response.Response;
 import com.ubold.admin.service.DataViewService;
@@ -49,25 +50,23 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
     DataViewService dataViewService;
 
     @Override
-    public Response persistent(JSONObject paramJson) {
+    public Response persistent(SqlDefineRequest sqlDefineRequest) {
         SqlDefine sqlDefine = new SqlDefine();
-        String sqlId  = paramJson.getString("sqlId");
-        String id = paramJson.getString("id");
+        String sqlId  = sqlDefineRequest.getSqlId();
+        String id = sqlDefineRequest.getId();
         if(StringUtils.isBlank(id)){
             sqlDefine.setId(GUID.nextId());
             if(null != this.getRepository().findBySqlId(sqlId)){
                 return Response.FAILURE("SQLID重复");
             }
-        }else{
-            if(CollectionUtils.isNotEmpty(this.getRepository().findBySqlIdAndIdNot(sqlId,id))){
+        }else if(CollectionUtils.isNotEmpty(this.getRepository().findBySqlIdAndIdNot(sqlId,id))){
                 return Response.FAILURE("SQLID重复");
-            }
         }
         sqlDefine.setSqlId(sqlId);
-        sqlDefine.setSqlName(paramJson.getString("sqlName"));
-        sqlDefine.setMasterTable(paramJson.getString("masterTable"));
-        sqlDefine.setMasterTableId(paramJson.getString("masterTableId"));
-        sqlDefine.setSelectSql(paramJson.getString("selectSql"));
+        sqlDefine.setSqlName(sqlDefineRequest.getSqlName());
+        sqlDefine.setMasterTable(sqlDefineRequest.getMasterTable());
+        sqlDefine.setMasterTableId(sqlDefineRequest.getMasterTableId());
+        sqlDefine.setSelectSql(sqlDefineRequest.getSelectSql());
         this.getRepository().save(sqlDefine);
         return Response.SUCCESS();
     }

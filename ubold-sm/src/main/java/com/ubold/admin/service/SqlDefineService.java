@@ -3,6 +3,7 @@ package com.ubold.admin.service;
 import com.alibaba.fastjson.JSONObject;
 import com.ubold.admin.repository.JpaRepository;
 import com.ubold.admin.repository.SqlDefineRepository;
+import com.ubold.admin.request.SqlDefineRequest;
 import com.ubold.admin.request.ZtreeParamsRequest;
 import com.ubold.admin.response.Response;
 import com.ubold.admin.vo.*;
@@ -19,7 +20,7 @@ public interface SqlDefineService  extends JpaRepository<SqlDefineRepository> {
      * @param paramJson
      * @return
      */
-    Response persistent(JSONObject paramJson);
+    Response persistent(SqlDefineRequest sqlDefineRequest);
 
     /**
      * 根据SQLID获取所有列信息
