@@ -30,8 +30,11 @@ public class DataViewServiceImpl  extends JpaRepositoryImpl<DataViewRepository> 
             dataViewList = this.getRepository().findByDataViewCode(request.getDataViewCode());
             dataView.setId(GUID.nextId());
         }else{
-            dataViewList = this.getRepository().findByDataViewCodeAndIdNot(request.getDataViewCode(),request.getId());
             dataView = this.getRepository().findOne(request.getId());
+            if(null == dataView){
+                return Response.FAILURE("错误数据id:"+ request.getId());
+            }
+            dataViewList = this.getRepository().findByDataViewCodeAndIdNot(request.getDataViewCode(),request.getId());
         }
         if(CollectionUtils.isNotEmpty(dataViewList)){
             return Response.FAILURE("已存在视图编号:"+ request.getDataViewCode());
