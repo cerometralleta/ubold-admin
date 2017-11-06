@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 /**
  * 视图服务
  * Created by lenovo on 2017/8/13.
@@ -30,7 +32,7 @@ public class DataViewController{
      */
     @ResponseBody
     @RequestMapping(value="/persistent",method= RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Response persistent(@RequestBody DataViewCreateRequest request) {
+    public Response persistent(@RequestBody @Valid  DataViewCreateRequest request) {
 //        logger.info(JSON.toJSONString(request));
         return dataViewService.persistent(request);
     }

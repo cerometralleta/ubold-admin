@@ -23,24 +23,29 @@ public class DataViewServiceImpl  extends JpaRepositoryImpl<DataViewRepository> 
 
     @Override
     public Response persistent(DataViewCreateRequest request) {
-        DataView dataView = this.createDataView(request);
-
-//        数据校验
-        Response response = this.checkRequest(dataView);
-        if(!response.checkSuccess()){
-            return response;
-        }
         // 编码是否重复
         List<DataView> dataViewList;
-        if(StringUtils.isBlank(dataView.getId())){
-            dataViewList = this.getRepository().findByDataViewCode(dataView.getDataViewCode());
+        DataView dataView = new DataView();
+        if(StringUtils.isBlank(request.getId())){
+            dataViewList = this.getRepository().findByDataViewCode(request.getDataViewCode());
             dataView.setId(GUID.nextId());
         }else{
-            dataViewList = this.getRepository().findByDataViewCodeAndIdNot(dataView.getDataViewCode(),dataView.getId());
+            dataViewList = this.getRepository().findByDataViewCodeAndIdNot(request.getDataViewCode(),request.getId());
+            dataView = this.getRepository().findOne(request.getId());
         }
         if(CollectionUtils.isNotEmpty(dataViewList)){
             return Response.FAILURE("已存在视图编号:"+ dataView.getDataViewCode());
         }
+        dataView.setSqlId(request.getSqlId());
+        dataView.setRemark(request.getRemark());
+        dataView.setDataViewCode(request.getDataViewCode());
+        dataView.setDataViewName(request.getDataViewName());
+        dataView.setButtons(JSON.toJSONString(request.getButtons()));
+        dataView.setColumns(JSON.toJSONString(request.getColumns()));
+        dataView.setDataFilters(JSON.toJSONString(request.getDataFilters()));
+        dataView.setOptions(JSON.toJSONString(request.getOptions()));
+        dataView.setTreeOptions(JSON.toJSONString(request.getTreeOptions()));
+        dataView.setVersion(request.getVersion());
         this.getRepository().save(dataView);
         return Response.SUCCESS();
     }
@@ -64,16 +69,6 @@ public class DataViewServiceImpl  extends JpaRepositoryImpl<DataViewRepository> 
         dataView.setTreeOptions(JSON.toJSONString(request.getTreeOptions()));
         dataView.setVersion(request.getVersion());
         return dataView;
-    }
-
-    /**
-     * 校验视图数据
-     * @param dataView
-     * @return
-     */
-    private Response  checkRequest(DataView dataView){
-        //TODO 各数据校验
-        return Response.SUCCESS();
     }
 
     @Override
