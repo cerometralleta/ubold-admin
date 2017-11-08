@@ -40,10 +40,10 @@ public class SqlDefineConstant {
 	public static final Integer BUTTON_TABLE = 0;
 	
 	public static final String VERSION	  = "VERSION";
-	public static final String CREATE_TIME	  = "CREATETIME";
-	public static final String CREATE_USER	  = "CREATEUSER";
-	public static final String LAST_UPDATE_TIME	  = "LASTUPDATETIME";
-	public static final String LAST_UPDATE_USER	  = "LASTUPDATEUSER";
+	public static final String CREATE_TIME	  = "CREATE_TIME";
+	public static final String CREATE_USER	  = "CREATE_USER";
+	public static final String LAST_UPDATE_TIME	  = "LAST_UPDATE_TIME";
+	public static final String LAST_UPDATE_USER	  = "LAST_UPDATE_USER";
 	
 	/**
 	 * 所有root节点统一上级为0

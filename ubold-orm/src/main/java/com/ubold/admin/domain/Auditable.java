@@ -19,18 +19,10 @@ public class Auditable implements Serializable {
     @Version
     private long version;
 
-    @Column(name = "createuser")
     private String createUser;
-
-    @Column(name = "createtime")
     private Date createTime;
-
-    @Column(name = "lastupdateuser")
     private String lastUpdateUser;
-
-    @Column(name = "lastupdatetime")
     private Date lastUpdateTime;
-
     public Date getLastUpdateTime() {
         return lastUpdateTime;
     }
