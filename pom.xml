@@ -21,10 +21,10 @@
     </properties>
 
     <modules>
-        <module>ubold-orm</module>
         <module>ubold-framework</module>
+        <module>ubold-orm</module>
         <module>ubold-sm</module>
-        <module>ubold-web</module>
         <module>ubold-rabc</module>
+        <module>ubold-web</module>
     </modules>
 </project>

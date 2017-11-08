@@ -1,7 +1,6 @@
 package com.ubold.admin.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -97,9 +96,9 @@ public class Auditable implements Serializable {
     
     @JsonIgnore
     private String getUserName() {
-        String username;
+        String username = null;
         try {
-            username = SecurityContextHolder.getContext().getAuthentication().getName();
+//            username = SecurityContextHolder.getContext().getAuthentication().getName();
         } catch (Exception e) {
             username = null;
         }

@@ -1,10 +1,8 @@
 package com.ubold.admin.ctrl;
 
-import com.alibaba.fastjson.JSON;
 import com.ubold.admin.request.DataViewCreateRequest;
 import com.ubold.admin.response.Response;
 import com.ubold.admin.service.DataViewService;
-import net.minidev.json.JSONUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
