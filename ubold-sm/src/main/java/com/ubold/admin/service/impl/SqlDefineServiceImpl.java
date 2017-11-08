@@ -9,7 +9,6 @@ import com.ubold.admin.constant.TreeNodeHandleType;
 import com.ubold.admin.domain.DataView;
 import com.ubold.admin.domain.SqlDefine;
 import com.ubold.admin.repository.SqlDefineRepository;
-import com.ubold.admin.repository.impl.JpaRepositoryImpl;
 import com.ubold.admin.request.SqlDefineRequest;
 import com.ubold.admin.request.ZtreeParamsRequest;
 import com.ubold.admin.response.Response;
@@ -38,7 +37,7 @@ import java.util.Map;
  * Created by lenovo on 2017/8/30.
  */
 @Service
-public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository> implements SqlDefineService {
+public class SqlDefineServiceImpl implements SqlDefineService {
 
     @Autowired
     FormViewService formViewService;
@@ -49,6 +48,10 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
     @Autowired
     DataViewService dataViewService;
 
+    @Autowired
+    SqlDefineRepository sqlDefineRepository;
+
+
     @Override
     public Response persistent(SqlDefineRequest sqlDefineRequest) {
         SqlDefine sqlDefine = new SqlDefine();
@@ -56,10 +59,10 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
         String id = sqlDefineRequest.getId();
         if(StringUtils.isBlank(id)){
             sqlDefine.setId(GUID.nextId());
-            if(null != this.getRepository().findBySqlId(sqlId)){
+            if(null != sqlDefineRepository.findBySqlId(sqlId)){
                 return Response.FAILURE("SQLID重复");
             }
-        }else if(CollectionUtils.isNotEmpty(this.getRepository().findBySqlIdAndIdNot(sqlId,id))){
+        }else if(CollectionUtils.isNotEmpty(sqlDefineRepository.findBySqlIdAndIdNot(sqlId,id))){
                 return Response.FAILURE("SQLID重复");
         }
         sqlDefine.setSqlId(sqlId);
@@ -67,14 +70,14 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
         sqlDefine.setMasterTable(sqlDefineRequest.getMasterTable());
         sqlDefine.setMasterTableId(sqlDefineRequest.getMasterTableId());
         sqlDefine.setSelectSql(sqlDefineRequest.getSelectSql());
-        this.getRepository().save(sqlDefine);
+        sqlDefineRepository.save(sqlDefine);
         return Response.SUCCESS();
     }
 
     @Override
     public List<ColumnParam> getColumnsBySqlId(String sqlId) {
         List<ColumnParam> list = new ArrayList<ColumnParam>();
-        SqlDefine sqlDefine = this.getRepository().findBySqlId(sqlId);
+        SqlDefine sqlDefine = sqlDefineRepository.findBySqlId(sqlId);
 
         //获取主表实际列用来过滤
         String masterSql = "SELECT * FROM " + sqlDefine.getMasterTable() + " T WHERE 1=2 " ;
@@ -143,13 +146,13 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
 
     @Override
     public Response deleteByDataViewCode(String code,JSONObject row){
-        List<DataView> dataViewList = dataViewService.getRepository().findByDataViewCode(code);
+        List<DataView> dataViewList = dataViewService.getByDataViewCode(code);
         if(CollectionUtils.isEmpty(dataViewList)){
             return Response.FAILURE();
         }
         DataView dataView = dataViewList.get(0);
         //获取sqlDefine
-        SqlDefine sqlDefine = getRepository().findBySqlId(dataView.getSqlId());
+        SqlDefine sqlDefine = sqlDefineRepository.findBySqlId(dataView.getSqlId());
         if(StringUtils.isEmpty(sqlDefine.getMasterTableId())){
             return Response.FAILURE("未配置主键");
         }
@@ -172,7 +175,7 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
 
     @Override
     public Response modifyByDataViewCode(String code,JSONObject row){
-        List<DataView> dataViewList = dataViewService.getRepository().findByDataViewCode(code);
+        List<DataView> dataViewList = dataViewService.getByDataViewCode(code);
         if(CollectionUtils.isEmpty(dataViewList)){
             return Response.FAILURE();
         }
@@ -181,7 +184,7 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
         OptionsParam optionsParam = JSON.parseObject(dataView.getOptions(), OptionsParam.class);
 
         //获取sqlDefine
-        SqlDefine sqlDefine = getRepository().findBySqlId(dataView.getSqlId());
+        SqlDefine sqlDefine = sqlDefineRepository.findBySqlId(dataView.getSqlId());
         //获取修改列
         List<ColumnParam> dataViewFields = JSON.parseArray(dataView.getColumns(),ColumnParam.class);
         if(CollectionUtils.isEmpty(dataViewFields)){
@@ -258,14 +261,14 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
 
     @Override
     public Response createByDataViewCode(String code,JSONObject row){
-        List<DataView> dataViewList = dataViewService.getRepository().findByDataViewCode(code);
+        List<DataView> dataViewList = dataViewService.getByDataViewCode(code);
         if(CollectionUtils.isEmpty(dataViewList)){
             return Response.FAILURE();
         }
         DataView dataView = dataViewList.get(0);
 
         //获取sqlDefine
-        SqlDefine sqlDefine = getRepository().findBySqlId(dataView.getSqlId());
+        SqlDefine sqlDefine = sqlDefineRepository.findBySqlId(dataView.getSqlId());
 
         //获取修改列
         List<ColumnParam> dataViewFields = JSON.parseArray(dataView.getColumns(),ColumnParam.class);
@@ -315,7 +318,7 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
     @Override
     public Response fetch(SqlDefineFetchParam sqlDefineFetchParam) {
         //根据SQLid获取查询语句
-        SqlDefine sqlDefine = this.getRepository().findBySqlId(sqlDefineFetchParam.getSqlId());
+        SqlDefine sqlDefine = sqlDefineRepository.findBySqlId(sqlDefineFetchParam.getSqlId());
         StringBuilder sqlBuilder = new StringBuilder("select t.* from (")
                 .append(sqlDefine.getSelectSql()).append(") t ")
                 .append(" where ")
@@ -375,7 +378,7 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
                                                                    String sortName, String sortOrder, String sqlId,
                                                                    BootstrapSearchParam bootstrapSearchParam) {
         BootstrapPageResult pageResultForBootstrap = new BootstrapPageResult();
-        SqlDefine sqlDefine = this.getRepository().findBySqlId(sqlId);
+        SqlDefine sqlDefine = sqlDefineRepository.findBySqlId(sqlId);
         DataFilter dataFilter = DataFilter.getInstance();
         dataFilter.setQuerySql(sqlDefine.getSelectSql());
         dataFilter.setSortName(sortName);
@@ -412,7 +415,7 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
             return null;
         }
         //获取sqlDefine
-        SqlDefine sqlDefine = this.getRepository().findBySqlId(treeOptionsParam.getSqlId());
+        SqlDefine sqlDefine = sqlDefineRepository.findBySqlId(treeOptionsParam.getSqlId());
         Map<String,Object> paramMap = new HashMap<String, Object>();
 
         //默认是空字符串
@@ -490,7 +493,7 @@ public class SqlDefineServiceImpl extends JpaRepositoryImpl<SqlDefineRepository>
 
     @Override
     public Response ztree(ZtreeParamsRequest ztreeParamsRequest) {
-        SqlDefine sqlDefine = this.getRepository().findBySqlId(ztreeParamsRequest.getSqlId());
+        SqlDefine sqlDefine = sqlDefineRepository.findBySqlId(ztreeParamsRequest.getSqlId());
         StringBuilder stringBuilder = new StringBuilder("select t.* from (");
         stringBuilder.append(sqlDefine.getSelectSql()).append(") t ");
         Map<String,Object> paraMap = new HashedMap();

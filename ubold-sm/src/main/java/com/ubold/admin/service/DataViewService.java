@@ -1,16 +1,16 @@
 package com.ubold.admin.service;
 
 import com.ubold.admin.domain.DataView;
-import com.ubold.admin.repository.DataViewRepository;
-import com.ubold.admin.repository.JpaRepository;
 import com.ubold.admin.request.DataViewCreateRequest;
 import com.ubold.admin.response.Response;
+
+import java.util.List;
 
 /**
  * 数据视图服务
  * Created by zkning on 2017/8/13.
  */
-public interface DataViewService extends JpaRepository<DataViewRepository> {
+public interface DataViewService {
 
     Response persistent(DataViewCreateRequest request);
 
@@ -21,5 +21,5 @@ public interface DataViewService extends JpaRepository<DataViewRepository> {
      * @return
      */
     Response<DataView> findByDataViewCode(String dataViewCode);
-
+    List<DataView> getByDataViewCode(String code);
 }

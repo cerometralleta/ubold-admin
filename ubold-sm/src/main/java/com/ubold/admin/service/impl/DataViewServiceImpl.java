@@ -11,6 +11,7 @@ import com.ubold.admin.util.GUID;
 import com.ubold.admin.vo.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,7 +20,10 @@ import java.util.List;
  * Created by zkning on 20da't17/8/13.
  */
 @Service
-public class DataViewServiceImpl  extends JpaRepositoryImpl<DataViewRepository> implements DataViewService {
+public class DataViewServiceImpl implements DataViewService {
+
+    @Autowired
+    DataViewRepository dataViewRepository;
 
     @Override
     public Response persistent(DataViewCreateRequest request) {
@@ -27,14 +31,14 @@ public class DataViewServiceImpl  extends JpaRepositoryImpl<DataViewRepository> 
         List<DataView> dataViewList;
         DataView dataView = new DataView();
         if(StringUtils.isBlank(request.getId())){
-            dataViewList = this.getRepository().findByDataViewCode(request.getDataViewCode());
+            dataViewList = dataViewRepository.findByDataViewCode(request.getDataViewCode());
             dataView.setId(GUID.nextId());
         }else{
-            dataView = this.getRepository().findOne(request.getId());
+            dataView = dataViewRepository.findOne(request.getId());
             if(null == dataView){
                 return Response.FAILURE("错误数据id:"+ request.getId());
             }
-            dataViewList = this.getRepository().findByDataViewCodeAndIdNot(request.getDataViewCode(),request.getId());
+            dataViewList = dataViewRepository.findByDataViewCodeAndIdNot(request.getDataViewCode(),request.getId());
         }
         if(CollectionUtils.isNotEmpty(dataViewList)){
             return Response.FAILURE("已存在视图编号:"+ request.getDataViewCode());
@@ -49,7 +53,7 @@ public class DataViewServiceImpl  extends JpaRepositoryImpl<DataViewRepository> 
         dataView.setOptions(JSON.toJSONString(request.getOptions()));
         dataView.setTreeOptions(JSON.toJSONString(request.getTreeOptions()));
         dataView.setVersion(request.getVersion());
-        this.getRepository().save(dataView);
+        dataViewRepository.save(dataView);
         return Response.SUCCESS();
     }
 
@@ -76,12 +80,17 @@ public class DataViewServiceImpl  extends JpaRepositoryImpl<DataViewRepository> 
 
     @Override
     public Response<DataView> findByDataViewCode(String dataViewCode) {
-        List<DataView> dataViewList = this.getRepository().findByDataViewCode(dataViewCode);
+        List<DataView> dataViewList = dataViewRepository.findByDataViewCode(dataViewCode);
         if(CollectionUtils.isEmpty(dataViewList)){
             return Response.FAILURE("视图未定义,视图编号:"+dataViewCode);
         }
         DataView dataView = dataViewList.get(0);
         return Response.SUCCESS(this.parseResult(dataView));
+    }
+
+    @Override
+    public List<DataView> getByDataViewCode(String code) {
+        return dataViewRepository.findByDataViewCode(code);
     }
 
     /**

@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Created by lenovo on 2017/8/30.
  */
-public interface SqlDefineService  extends JpaRepository<SqlDefineRepository> {
+public interface SqlDefineService {
 
     /**
      * 保存SQL

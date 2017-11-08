@@ -8,7 +8,7 @@ import com.ubold.admin.response.Response;
 /**
  * Created by lenovo on 2017/8/28.
  */
-public interface FormViewService extends JpaRepository<FormViewRepository> {
+public interface FormViewService{
 
     /**
      * 保存

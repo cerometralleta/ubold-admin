@@ -11,6 +11,7 @@ import com.ubold.admin.util.GUID;
 import com.ubold.admin.vo.FieldParam;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,17 +20,20 @@ import java.util.List;
  * Created by lenovo on 2017/8/28.
  */
 @Service
-public class FormViewServiceImpl  extends JpaRepositoryImpl<FormViewRepository> implements FormViewService{
+public class FormViewServiceImpl implements FormViewService{
+
+    @Autowired
+    FormViewRepository formViewRepository;
 
     @Override
     public Response persistent(FormViewRequest request) {
         FormView formView = new FormView();
         List<FormView> formViewList;
         if(StringUtils.isBlank(request.getId())){
-            formViewList = this.getRepository().findByCode(request.getCode());
+            formViewList = formViewRepository.findByCode(request.getCode());
             formView.setId(GUID.nextId());
         }else{
-            formViewList = this.getRepository().findByCodeAndIdNot(request.getCode(),request.getId());
+            formViewList = formViewRepository.findByCodeAndIdNot(request.getCode(),request.getId());
         }
         if(CollectionUtils.isNotEmpty(formViewList)){
             return Response.FAILURE("编号重复:"+request.getCode());
@@ -40,13 +44,13 @@ public class FormViewServiceImpl  extends JpaRepositoryImpl<FormViewRepository> 
         formView.setRemark(request.getRemark());
         formView.setUrl(request.getUrl());
         formView.setVersion(request.getVersion());
-        this.getRepository().save(formView);
+        formViewRepository.save(formView);
         return null;
     }
 
     @Override
     public Response findByCode(String code) {
-        List<FormView> dataViewList = this.getRepository().findByCode(code);
+        List<FormView> dataViewList = formViewRepository.findByCode(code);
         if(CollectionUtils.isEmpty(dataViewList)){
             return Response.FAILURE("表单未定义,编号:" + code);
         }
