@@ -1,5 +1,8 @@
 package com.ubold.admin.config;
 
+import com.ubold.admin.service.impl.UboldAuthenticationProvider;
+import com.ubold.admin.service.impl.UboldUserDetailsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -13,6 +16,12 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @Configuration
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    UboldUserDetailsService uboldUserDetailsService;
+
+    @Autowired
+    private UboldAuthenticationProvider authenticationProvider;//自定义验证
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -36,11 +45,12 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication().withUser("admin").password("admin").roles("ADMIN");
+        auth.userDetailsService(uboldUserDetailsService);
+        auth.authenticationProvider(authenticationProvider);
     }
     
     @Override
     public void configure(WebSecurity web) throws Exception {
     	web.ignoring().antMatchers("/static/**");
     }
-
 }
