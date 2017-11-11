@@ -1,8 +1,6 @@
 package com.ubold.admin.service;
 
 import com.alibaba.fastjson.JSONObject;
-import com.ubold.admin.repository.JpaRepository;
-import com.ubold.admin.repository.SqlDefineRepository;
 import com.ubold.admin.request.SqlDefineRequest;
 import com.ubold.admin.request.ZtreeParamsRequest;
 import com.ubold.admin.response.Response;

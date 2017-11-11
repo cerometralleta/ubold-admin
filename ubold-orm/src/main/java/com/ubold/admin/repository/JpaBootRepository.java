@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * Created by ningzuokun on 2017/5/15.
  */
-public interface JpaRepository<I extends Repository<?, ?>> extends Serializable {
+public interface JpaBootRepository<I extends Repository<?, ?>> extends Serializable {
 
     I getRepository();
 }

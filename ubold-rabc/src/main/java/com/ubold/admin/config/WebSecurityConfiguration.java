@@ -21,23 +21,29 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     UboldUserDetailsService uboldUserDetailsService;
 
     @Autowired
-    private UboldAuthenticationProvider authenticationProvider;//自定义验证
+    private UboldAuthenticationProvider uboldAuthenticationProvider;//自定义验证
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("/api/**").permitAll()
+        http.authorizeRequests().antMatchers("/api/permit/**").permitAll()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/hello").permitAll()
                 .antMatchers("/webjars/**").permitAll()
                 .antMatchers("/**").authenticated();
-        
-        	http.sessionManagement()
+
+        http.sessionManagement()
                 .maximumSessions(1)
                 .expiredUrl("/login?expired");
-        http.formLogin().loginPage("/login").defaultSuccessUrl("/", true).failureUrl("/login?error");
+
+        http.formLogin().loginPage("/login")
+                .usernameParameter("username")
+                .passwordParameter("password")
+                .defaultSuccessUrl("/", true)
+                .failureUrl("/login?error");
 //      http.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessHandler(new LogoutHandler());
+
         http.csrf().disable();
-        
+
         //允许同域iframe
         http.headers().frameOptions().sameOrigin();
     }
@@ -46,11 +52,11 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication().withUser("admin").password("admin").roles("ADMIN");
         auth.userDetailsService(uboldUserDetailsService);
-        auth.authenticationProvider(authenticationProvider);
+        auth.authenticationProvider(uboldAuthenticationProvider);
     }
-    
+
     @Override
     public void configure(WebSecurity web) throws Exception {
-    	web.ignoring().antMatchers("/static/**");
+        web.ignoring().antMatchers("/static/**");
     }
 }

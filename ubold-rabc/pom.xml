@@ -7,7 +7,6 @@
     <groupId>com.ubold.admin</groupId>
     <artifactId>ubold-rabc</artifactId>
     <version>1.0.0</version>
-
     <dependencies>
         <dependency>
             <groupId>com.ubold.admin</groupId>
@@ -20,6 +19,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
             <version>1.5.3.RELEASE</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-web</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
     </dependencies>

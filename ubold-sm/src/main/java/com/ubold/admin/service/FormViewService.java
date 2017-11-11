@@ -1,7 +1,5 @@
 package com.ubold.admin.service;
 
-import com.ubold.admin.repository.FormViewRepository;
-import com.ubold.admin.repository.JpaRepository;
 import com.ubold.admin.request.FormViewRequest;
 import com.ubold.admin.response.Response;
 

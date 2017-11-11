@@ -9,11 +9,11 @@
     <version>1.0.0</version>
 
     <dependencies>
-        <!--<dependency>-->
-            <!--<groupId>com.ubold.admin</groupId>-->
-            <!--<artifactId>ubold-rabc</artifactId>-->
-            <!--<version>1.0.0</version>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>com.ubold.admin</groupId>
+            <artifactId>ubold-rabc</artifactId>
+            <version>1.0.0</version>
+        </dependency>
         <dependency>
             <groupId>com.ubold.admin</groupId>
             <artifactId>ubold-sm</artifactId>
