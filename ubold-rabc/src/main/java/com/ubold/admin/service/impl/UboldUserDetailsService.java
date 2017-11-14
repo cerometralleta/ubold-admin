@@ -2,7 +2,7 @@ package com.ubold.admin.service.impl;
 
 import com.ubold.admin.domain.Permission;
 import com.ubold.admin.domain.User;
-import com.ubold.admin.domain.UserSessionContext;
+import com.ubold.admin.domain.UserDetailContext;
 import com.ubold.admin.service.PermissionService;
 import com.ubold.admin.service.UserService;
 import org.apache.commons.collections.CollectionUtils;
@@ -38,16 +38,16 @@ public class UboldUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        logger.info("loadUserByUsername --> [{}]",username);
+        logger.info("UboldUserDetailsService::loadUserByUsername= {}",username);
 
         //查询用户是否存在
-        List<User> users = userService.findByUserName(username);
-        if(CollectionUtils.isEmpty(users)){
-            throw new UsernameNotFoundException("username not found.");
-        }
-        User curUser = users.get(0);
+//        List<User> users = userService.findByUserName(username);
+//        if(CollectionUtils.isEmpty(users)){
+//            throw new UsernameNotFoundException("username not found.");
+//        }
+//        User curUser = users.get(0);
         //用户权限
-        List<Permission>  permissions = permissionService.findAllPermissionByUser(curUser);
+//        List<Permission>  permissions = permissionService.findAllPermissionByUser(curUser);
         List<GrantedAuthority> grantedAuthorities = Lists.newArrayList();
 //        List<String> links = permissionService.findAllPermissionLink(permissions);
 //        if(CollectionUtils.isNotEmpty(links)){
@@ -55,13 +55,13 @@ public class UboldUserDetailsService implements UserDetailsService {
 //                grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_"+ link));//必须ROLE_为前缀
 //            });
 //        }
-        if(CollectionUtils.isNotEmpty(permissions)){
-            for(Permission permission:permissions){
-                grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_"+ permission.getCode()));//必须ROLE_为前缀
-            }
-        }
-        logger.info("grantedAuthorities --> {}", grantedAuthorities);
-        return new UserSessionContext(username, curUser.getPassword(),
+//        if(CollectionUtils.isNotEmpty(permissions)){
+//            for(Permission permission:permissions){
+//                grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_"+ permission.getCode()));//必须ROLE_为前缀
+//            }
+//        }
+        logger.info("UboldUserDetailsService::grantedAuthorities = {}", grantedAuthorities);
+        return new UserDetailContext(username, "11111111111",
                 true, true,
                 true, true,
                 grantedAuthorities);

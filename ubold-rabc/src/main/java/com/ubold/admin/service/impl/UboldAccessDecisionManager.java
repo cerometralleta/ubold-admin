@@ -1,19 +1,24 @@
 package com.ubold.admin.service.impl;
 
+import com.ubold.admin.domain.Role;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.ConfigAttribute;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.web.FilterInvocation;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.*;
+
+import static com.sun.xml.internal.ws.spi.db.BindingContextFactory.LOGGER;
 
 /**
  * 为 Web 或方法的安全提供访问决策。
@@ -33,10 +38,10 @@ public class UboldAccessDecisionManager implements AccessDecisionManager {
      *
      */
     @Override
-    public void decide(Authentication authentication, Object o, Collection<ConfigAttribute> collection) throws AccessDeniedException, InsufficientAuthenticationException {
+    public void decide(Authentication authentication, Object object, Collection<ConfigAttribute> collection) throws AccessDeniedException, InsufficientAuthenticationException {
         //获取用户所有权限
         Collection<GrantedAuthority> userHasRoles = (Collection<GrantedAuthority>) authentication.getAuthorities();
-        logger.info("CurrentUser={} CurrentHasRoles = {}", authentication.getName(), Arrays.asList(userHasRoles));
+        logger.info("UboldAccessDecisionManager::decide::CurrentUser={} CurrentHasRoles = {}", authentication.getName(), Arrays.asList(userHasRoles));
         //放行[超级管理员]角色
         Iterator<GrantedAuthority> iterator = userHasRoles.iterator();
         while (iterator.hasNext()){
@@ -45,7 +50,34 @@ public class UboldAccessDecisionManager implements AccessDecisionManager {
                 return;
             }
         }
+        Collection<GrantedAuthority> uriHasRoles = getGrantedAuthoritys(object);
+//        if (CollectionUtils.isNotEmpty(uriHasRoles)) {
+        if(true){
+            return;
+        }
+        throw new AccessDeniedException("Access Denied.");
+    }
 
+    private Collection<GrantedAuthority> getGrantedAuthoritys(Object object) {
+        FilterInvocation filterInvocation = (FilterInvocation) object;
+        String uri = new StringBuilder(filterInvocation.getRequestUrl()).deleteCharAt(0).toString();
+        if("".equals(uri)){
+            return null;
+        }
+//        List<Role> uriHasRoles = roleService.selectByResourceURI(uri);
+        logger.info("fullRequestUrl={}, requestUrl={}, uriHasRoles={}",
+                filterInvocation.getFullRequestUrl(),
+                filterInvocation.getRequestUrl(),
+                null);
+//        if (uriHasRoles == null || uriHasRoles.size() == 0) {
+//            return null;
+//        }
+        Collection<GrantedAuthority> grantedAuthorities = new ArrayList<>();
+//        uriHasRoles.forEach(item -> {
+//            GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(item.getName());
+//            grantedAuthorities.add(grantedAuthority);
+//        });
+        return grantedAuthorities;
     }
 
     /**
