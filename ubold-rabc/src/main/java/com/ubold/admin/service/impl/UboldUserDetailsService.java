@@ -61,7 +61,7 @@ public class UboldUserDetailsService implements UserDetailsService {
 //            }
 //        }
         logger.info("UboldUserDetailsService::grantedAuthorities = {}", grantedAuthorities);
-        return new UserDetailContext(username, "11111111111",
+        return new UserDetailContext(username, "$2a$10$qaHl0WiEy/vEsOcC5KhdEuBBK5GYJmiZxnD/NK5aFBChu99xwk6t2",
                 true, true,
                 true, true,
                 grantedAuthorities);

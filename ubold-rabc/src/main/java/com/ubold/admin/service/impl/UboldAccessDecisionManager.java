@@ -16,6 +16,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 import static com.sun.xml.internal.ws.spi.db.BindingContextFactory.LOGGER;
@@ -94,5 +96,38 @@ public class UboldAccessDecisionManager implements AccessDecisionManager {
     @Override
     public boolean supports(Class<?> aClass) {
         return true;
+    }
+
+
+    /**
+     * Cast request into HttpServletRequest.
+     *
+     * @param request ServletRequest
+     * @return HttpServletRequest
+     */
+    private HttpServletRequest getAsHttpRequest(ServletRequest request) {
+        if (!(request instanceof HttpServletRequest)) {
+            throw new RuntimeException("Expecting an HTTP Request.");
+        }
+
+        return (HttpServletRequest) request;
+    }
+
+    /**
+     * Extract authToken from supplied request.
+     *
+     * @param httpRequest HttpServletRequest
+     * @return String authToken extracted from httpRequest
+     */
+    private String extractAuthTokenFromRequest(HttpServletRequest httpRequest) {
+        // Get token from Header
+        String authToken = httpRequest.getHeader("X-Auth-Token");
+
+        // If token can't be found than get it from the request parameter
+        if (authToken == null) {
+            authToken = httpRequest.getParameter("auth_token");
+        }
+
+        return authToken;
     }
 }
