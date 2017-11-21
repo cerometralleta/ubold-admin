@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by lenovo on 2017/11/11.
  */
-public class UserDetailContext implements UserDetails{
+public class JwtUser implements UserDetails{
     Collection<? extends GrantedAuthority> getAuthorities;
     String password;
     String username;
@@ -21,12 +21,12 @@ public class UserDetailContext implements UserDetails{
     Date authTokenThru;
     String authToken;
 
-    public UserDetailContext(String username, String password,
-                             boolean isAccountNonExpired,
-                             boolean isAccountNonLocked,
-                             boolean isCredentialsNonExpired,
-                             boolean isEnabled,
-                             List<GrantedAuthority> getAuthorities){
+    public JwtUser(String username, String password,
+                   boolean isAccountNonExpired,
+                   boolean isAccountNonLocked,
+                   boolean isCredentialsNonExpired,
+                   boolean isEnabled,
+                   List<GrantedAuthority> getAuthorities){
         this.username = username;
         this.password = password;
         this.isAccountNonExpired = isAccountNonExpired;

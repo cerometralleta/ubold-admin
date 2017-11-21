@@ -41,9 +41,11 @@ public class UboldAccessDecisionManager implements AccessDecisionManager {
      */
     @Override
     public void decide(Authentication authentication, Object object, Collection<ConfigAttribute> collection) throws AccessDeniedException, InsufficientAuthenticationException {
+
         //获取用户所有权限
         Collection<GrantedAuthority> userHasRoles = (Collection<GrantedAuthority>) authentication.getAuthorities();
         logger.info("UboldAccessDecisionManager::decide::CurrentUser={} CurrentHasRoles = {}", authentication.getName(), Arrays.asList(userHasRoles));
+
         //放行[超级管理员]角色
         Iterator<GrantedAuthority> iterator = userHasRoles.iterator();
         while (iterator.hasNext()){

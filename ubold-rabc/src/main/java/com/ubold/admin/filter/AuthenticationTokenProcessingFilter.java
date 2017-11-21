@@ -1,12 +1,11 @@
 package com.ubold.admin.filter;
 
-import com.ubold.admin.domain.UserDetailContext;
+import com.ubold.admin.domain.JwtUser;
 import com.ubold.admin.utils.AuthTokenUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.FilterChain;
@@ -19,7 +18,7 @@ import java.io.IOException;
 /**
  * Created by ningzuokun on 2017/11/14.
  */
-@Component
+//@Component
 public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
     protected Logger logger = LoggerFactory.getLogger(getClass());
     /**
@@ -39,7 +38,7 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
         String username = httpRequest.getParameter("username");
         logger.info("System.out-AuthenticationTokenProcessingFilter::doFilter::authToken={},username={}" , authToken,username);
         // load user with supplied username
-        UserDetailContext userSessionContext = null;
+        JwtUser userSessionContext = null;
         // Challenge supplied token with actual token in userDetails. Halt if it isn't valid
         if(!AuthTokenUtils.validateToken(authToken,userSessionContext)){
 

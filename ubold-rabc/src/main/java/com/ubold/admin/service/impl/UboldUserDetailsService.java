@@ -1,17 +1,13 @@
 package com.ubold.admin.service.impl;
 
-import com.ubold.admin.domain.Permission;
-import com.ubold.admin.domain.User;
-import com.ubold.admin.domain.UserDetailContext;
+import com.ubold.admin.domain.JwtUser;
 import com.ubold.admin.service.PermissionService;
 import com.ubold.admin.service.UserService;
-import org.apache.commons.collections.CollectionUtils;
 import org.assertj.core.util.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserCache;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -61,7 +57,7 @@ public class UboldUserDetailsService implements UserDetailsService {
 //            }
 //        }
         logger.info("UboldUserDetailsService::grantedAuthorities = {}", grantedAuthorities);
-        return new UserDetailContext(username, "$2a$10$qaHl0WiEy/vEsOcC5KhdEuBBK5GYJmiZxnD/NK5aFBChu99xwk6t2",
+        return new JwtUser(username, "$2a$10$qaHl0WiEy/vEsOcC5KhdEuBBK5GYJmiZxnD/NK5aFBChu99xwk6t2",
                 true, true,
                 true, true,
                 grantedAuthorities);

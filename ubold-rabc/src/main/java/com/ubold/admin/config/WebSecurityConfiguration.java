@@ -48,37 +48,17 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http.headers().frameOptions().sameOrigin().disable()
-                .authorizeRequests()
-                .antMatchers("/api/permit/**").permitAll()
+        http.authorizeRequests()
+                .antMatchers("/api/**").permitAll()
                 .accessDecisionManager(uboldAccessDecisionManager)
-                .anyRequest().fullyAuthenticated() //其他url需要鉴权
-        .and().formLogin()
-                .loginProcessingUrl("/login").permitAll()
-                .failureHandler(new AuthenticationFailureHandler(){
-
-                    @Override
-                    public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
-                        httpServletResponse.setContentType(ContentType.APPLICATION_JSON.toString());
-                        httpServletResponse.getWriter().print(JSONObject.toJSONString(Response.FAILURE()));
-                    }
-                })
-                .successHandler(new AuthenticationSuccessHandler(){
-
-                    @Override
-                    public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
-                        httpServletResponse.setContentType(ContentType.APPLICATION_JSON.toString());
-                        httpServletResponse.getWriter().print(JSONObject.toJSONString(Response.SUCCESS()));
-                    }
-                })
-        .and().logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .anyRequest().fullyAuthenticated()//其他url需要鉴权
         .and().csrf().disable() //disable csrf
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)//无状态的web调用的stateless authentication
-        .and()
-                .addFilterAt(this.uboldUsernamePasswordAuthenticationFilter(),UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling().authenticationEntryPoint(new ServiceUnauthorizedEntryPoint());
+        .and().addFilterAt(this.uboldUsernamePasswordAuthenticationFilter(),UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling().authenticationEntryPoint(new ServiceUnauthorizedEntryPoint())
+        .and().headers().cacheControl()
+        .and().frameOptions().sameOrigin().disable();//禁用缓存
     }
 
     @Override
