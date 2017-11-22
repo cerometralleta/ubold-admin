@@ -13,6 +13,6 @@ import java.util.List;
 @Repository
 public interface FunctionalRepository extends JpaRepository<Functional,String> {
 
-    @Query(value = "${findFunctionalByPermissions}",nativeQuery = true)
+    @Query(value = "select rf.* from tb_rbac_func rf ,tb_rbac_permission_func rpf where rf.id = rpf.func_id and rpf.permission_id in (?1);",nativeQuery = true)
     List<Functional> findFunctionalByPermissions(String permissions);
 }

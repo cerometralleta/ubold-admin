@@ -1,14 +1,20 @@
 package com.ubold.admin.config;
 
-import com.ubold.admin.service.impl.UboldAuthenticationProvider;
-import com.ubold.admin.service.impl.UboldUserDetailsService;
+import com.ubold.admin.constant.CtrlConstant;
+import com.ubold.admin.filter.ServiceUnauthorizedEntryPoint;
+import com.ubold.admin.security.UboldAccessDecisionManager;
+import com.ubold.admin.security.UboldAuthenticationProvider;
+import com.ubold.admin.security.UboldUserDetailsService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
  * Created by Kim on 2015/9/14.
@@ -16,47 +22,36 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @Configuration
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
-
+    protected Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired
     UboldUserDetailsService uboldUserDetailsService;
 
     @Autowired
-    private UboldAuthenticationProvider uboldAuthenticationProvider;//自定义验证
+    UboldAccessDecisionManager uboldAccessDecisionManager;
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("/api/permit/**").permitAll()
-                .antMatchers("/login").permitAll()
-                .antMatchers("/hello").permitAll()
-                .antMatchers("/webjars/**").permitAll()
-                .antMatchers("/**").authenticated();
 
-        http.sessionManagement()
-                .maximumSessions(1)
-                .expiredUrl("/login?expired");
-
-        http.formLogin().loginPage("/login")
-                .usernameParameter("username")
-                .passwordParameter("password")
-                .defaultSuccessUrl("/", true)
-                .failureUrl("/login?error");
-//      http.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessHandler(new LogoutHandler());
-
-        http.csrf().disable();
-
-        //允许同域iframe
-        http.headers().frameOptions().sameOrigin();
+        http.authorizeRequests()
+                .antMatchers(CtrlConstant.api_permit +"/**").permitAll()
+                .accessDecisionManager(uboldAccessDecisionManager)
+                .anyRequest().fullyAuthenticated()//其他url需要鉴权
+        .and().csrf().disable() //disable csrf
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)//无状态的web调用的stateless authentication
+        .and()
+//                .addFilterAt(this.uboldUsernamePasswordAuthenticationFilter(),UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling().authenticationEntryPoint(new ServiceUnauthorizedEntryPoint())
+        .and().headers().cacheControl()//禁用缓存
+        .and().frameOptions().sameOrigin().disable();
     }
 
-    @Override
+    @Autowired
     protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().withUser("admin").password("admin").roles("ADMIN");
-        auth.userDetailsService(uboldUserDetailsService);
+        UboldAuthenticationProvider uboldAuthenticationProvider = new UboldAuthenticationProvider();
+        uboldAuthenticationProvider.setUserDetailsService(uboldUserDetailsService);
+        uboldAuthenticationProvider.setPasswordEncoder(new BCryptPasswordEncoder());
         auth.authenticationProvider(uboldAuthenticationProvider);
-    }
-
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/static/**");
     }
 }

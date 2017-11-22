@@ -1,8 +1,8 @@
-package com.ubold.admin.service.impl;
+package com.ubold.admin.security;
 
+import com.ubold.admin.domain.JwtUser;
 import com.ubold.admin.domain.Permission;
 import com.ubold.admin.domain.User;
-import com.ubold.admin.domain.UserSessionContext;
 import com.ubold.admin.service.PermissionService;
 import com.ubold.admin.service.UserService;
 import org.apache.commons.collections.CollectionUtils;
@@ -36,9 +36,12 @@ public class UboldUserDetailsService implements UserDetailsService {
     @Autowired
     PermissionService permissionService;
 
+    @Autowired
+    JwtTokenUtil jwtTokenUtil;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        logger.info("loadUserByUsername --> [{}]",username);
+        logger.info("UboldUserDetailsService::loadUserByUsername= {}",username);
 
         //查询用户是否存在
         List<User> users = userService.findByUserName(username);
@@ -47,24 +50,26 @@ public class UboldUserDetailsService implements UserDetailsService {
         }
         User curUser = users.get(0);
         //用户权限
-        List<Permission>  permissions = permissionService.findAllPermissionByUser(curUser);
+        List<Permission>  permissions = permissionService.findAllPermissionByUser(curUser.getId());
         List<GrantedAuthority> grantedAuthorities = Lists.newArrayList();
-//        List<String> links = permissionService.findAllPermissionLink(permissions);
-//        if(CollectionUtils.isNotEmpty(links)){
-//            links.forEach(link ->{
-//                grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_"+ link));//必须ROLE_为前缀
-//            });
-//        }
-        if(CollectionUtils.isNotEmpty(permissions)){
-            for(Permission permission:permissions){
-                grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_"+ permission.getCode()));//必须ROLE_为前缀
+        List<String> links = permissionService.findAllPermissionLink(permissions);
+        if(CollectionUtils.isNotEmpty(links)){
+            for(String link : links){
+                grantedAuthorities.add(new SimpleGrantedAuthority(link));
             }
         }
-        logger.info("grantedAuthorities --> {}", grantedAuthorities);
-        return new UserSessionContext(username, curUser.getPassword(),
+//        if(CollectionUtils.isNotEmpty(permissions)){
+//            for(Permission permission:permissions){
+//                grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_"+ permission.getCode()));//必须ROLE_为前缀
+//            }
+//        }
+        //获取用户权限
+        logger.info("UboldUserDetailsService::grantedAuthorities = {}", grantedAuthorities);
+        JwtUser jwtUser = new JwtUser(username, curUser.getPassword(),
                 true, true,
-                true, true,
-                grantedAuthorities);
+                true, true,grantedAuthorities);
+        jwtUser.setAuthToken(jwtTokenUtil.generateToken(jwtUser));
+        return jwtUser;
     }
 
     public UserCache getUserCache() {

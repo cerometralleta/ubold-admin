@@ -16,7 +16,7 @@ public interface PermissionService {
      * @param user
      * @return
      */
-    List<Permission> findAllPermissionByUser(User user);
+    List<Permission> findAllPermissionByUser(String userId);
 
     /**
      * 获取所有权限link
