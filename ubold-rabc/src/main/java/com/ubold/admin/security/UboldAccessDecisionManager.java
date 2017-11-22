@@ -1,4 +1,4 @@
-package com.ubold.admin.service.impl;
+package com.ubold.admin.security;
 
 import com.ubold.admin.domain.Role;
 import org.apache.commons.collections.CollectionUtils;
@@ -14,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.web.FilterInvocation;
+import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletRequest;
@@ -41,7 +42,6 @@ public class UboldAccessDecisionManager implements AccessDecisionManager {
      */
     @Override
     public void decide(Authentication authentication, Object object, Collection<ConfigAttribute> collection) throws AccessDeniedException, InsufficientAuthenticationException {
-
         //获取用户所有权限
         Collection<GrantedAuthority> userHasRoles = (Collection<GrantedAuthority>) authentication.getAuthorities();
         logger.info("UboldAccessDecisionManager::decide::CurrentUser={} CurrentHasRoles = {}", authentication.getName(), Arrays.asList(userHasRoles));

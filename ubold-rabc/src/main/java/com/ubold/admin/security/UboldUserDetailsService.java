@@ -1,4 +1,4 @@
-package com.ubold.admin.service.impl;
+package com.ubold.admin.security;
 
 import com.ubold.admin.domain.JwtUser;
 import com.ubold.admin.service.PermissionService;
@@ -32,6 +32,9 @@ public class UboldUserDetailsService implements UserDetailsService {
     @Autowired
     PermissionService permissionService;
 
+    @Autowired
+    JwtTokenUtil jwtTokenUtil;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         logger.info("UboldUserDetailsService::loadUserByUsername= {}",username);
@@ -56,11 +59,13 @@ public class UboldUserDetailsService implements UserDetailsService {
 //                grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_"+ permission.getCode()));//必须ROLE_为前缀
 //            }
 //        }
+        //获取用户权限
         logger.info("UboldUserDetailsService::grantedAuthorities = {}", grantedAuthorities);
-        return new JwtUser(username, "$2a$10$qaHl0WiEy/vEsOcC5KhdEuBBK5GYJmiZxnD/NK5aFBChu99xwk6t2",
+        JwtUser jwtUser = new JwtUser(username, "$2a$10$bFnRuIzRSOvkxhiwOamacumwypMWcNgEWu5r2DSHG93b9SpubZMmq",
                 true, true,
-                true, true,
-                grantedAuthorities);
+                true, true,grantedAuthorities);
+        jwtUser.setAuthToken(jwtTokenUtil.generateToken(jwtUser));
+        return jwtUser;
     }
 
     public UserCache getUserCache() {

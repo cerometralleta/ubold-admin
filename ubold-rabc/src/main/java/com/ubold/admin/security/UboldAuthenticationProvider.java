@@ -1,5 +1,7 @@
-package com.ubold.admin.service.impl;
+package com.ubold.admin.security;
 
+import com.ubold.admin.domain.JwtUser;
+import org.assertj.core.util.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * AuthenticationManager 是通过它来认证用户的。
@@ -25,9 +28,10 @@ import java.util.Collection;
 public class UboldAuthenticationProvider extends DaoAuthenticationProvider {
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
+
+
     @Override
     protected Authentication createSuccessAuthentication(Object principal, Authentication authentication, UserDetails user) {
-        //获取用户权限
 
         return super.createSuccessAuthentication(principal, authentication, user);
     }

@@ -1,5 +1,7 @@
 package com.ubold.admin.domain;
 
+import lombok.Data;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -10,6 +12,7 @@ import java.util.List;
 /**
  * Created by lenovo on 2017/11/11.
  */
+@Data
 public class JwtUser implements UserDetails{
     Collection<? extends GrantedAuthority> getAuthorities;
     String password;
@@ -20,6 +23,8 @@ public class JwtUser implements UserDetails{
     boolean isEnabled;
     Date authTokenThru;
     String authToken;
+    Date lastPasswordResetDate;
+    String userId;
 
     public JwtUser(String username, String password,
                    boolean isAccountNonExpired,
@@ -83,5 +88,13 @@ public class JwtUser implements UserDetails{
 
     public void setAuthToken(String authToken) {
         this.authToken = authToken;
+    }
+
+    public Date getLastPasswordResetDate() {
+        return lastPasswordResetDate;
+    }
+
+    public void setLastPasswordResetDate(Date lastPasswordResetDate) {
+        this.lastPasswordResetDate = lastPasswordResetDate;
     }
 }

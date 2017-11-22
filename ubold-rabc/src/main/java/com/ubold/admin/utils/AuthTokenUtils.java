@@ -64,6 +64,6 @@ public class AuthTokenUtils {
 //            }
 //        }
 //        return authToken.equals(user.getAuthToken());
-        return true;
+        return false;
     }
 }

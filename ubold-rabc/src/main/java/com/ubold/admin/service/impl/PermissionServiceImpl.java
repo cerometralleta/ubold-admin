@@ -31,15 +31,15 @@ public class PermissionServiceImpl implements PermissionService {
     FunctionalService functionalService;
 
     @Override
-    public List<Permission> findAllPermissionByUser(User user) {
+    public List<Permission> findAllPermissionByUser(String userId) {
         List<Permission> permissionAll = Lists.newArrayList();
         // 根据用户查询角色关联的所有权限
-        List<Permission> permissions = permissionRepository.findPermissionByRoleUserId(user.getId());
+        List<Permission> permissions = permissionRepository.findPermissionByRoleUserId(userId);
         if(CollectionUtils.isNotEmpty(permissions)) {
             permissionAll.addAll(permissions);
         }
         //根据用户查询所有关联权限
-        List<Permission> permissions1 = permissionRepository.findPermissionByUserId(user.getId());
+        List<Permission> permissions1 = permissionRepository.findPermissionByUserId(userId);
         if(CollectionUtils.isNotEmpty(permissions1)){
              permissionAll.addAll(permissions1);
         }
