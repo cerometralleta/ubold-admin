@@ -1,8 +1,6 @@
 package com.ubold.admin.security;
 
 import com.ubold.admin.constant.PermitPrefixURI;
-import com.ubold.admin.domain.Role;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.util.Lists;
 import org.slf4j.Logger;
@@ -10,21 +8,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.ConfigAttribute;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
-import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.web.FilterInvocation;
-import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
-
-import static com.sun.xml.internal.ws.spi.db.BindingContextFactory.LOGGER;
 
 /**
  * 为 Web 或方法的安全提供访问决策。

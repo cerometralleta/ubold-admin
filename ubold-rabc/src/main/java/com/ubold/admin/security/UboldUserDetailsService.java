@@ -44,20 +44,21 @@ public class UboldUserDetailsService implements UserDetailsService {
         logger.info("UboldUserDetailsService::loadUserByUsername= {}",username);
 
         //查询用户是否存在
-        List<User> users = userService.findByUserName(username);
-        if(CollectionUtils.isEmpty(users)){
-            throw new UsernameNotFoundException("username not found.");
-        }
-        User curUser = users.get(0);
-        //用户权限
-        List<Permission>  permissions = permissionService.findAllPermissionByUser(curUser.getId());
+//        List<User> users = userService.findByUserName(username);
+//        if(CollectionUtils.isEmpty(users)){
+//            throw new UsernameNotFoundException("username not found.");
+//        }
+//        User curUser = users.get(0);
+        User curUser = new User();
+//        //用户权限
+//        List<Permission>  permissions = permissionService.findAllPermissionByUser(curUser.getId());
         List<GrantedAuthority> grantedAuthorities = Lists.newArrayList();
-        List<String> links = permissionService.findAllPermissionLink(permissions);
-        if(CollectionUtils.isNotEmpty(links)){
-            for(String link : links){
-                grantedAuthorities.add(new SimpleGrantedAuthority(link));
-            }
-        }
+//        List<String> links = permissionService.findAllPermissionLink(permissions);
+//        if(CollectionUtils.isNotEmpty(links)){
+//            for(String link : links){
+//                grantedAuthorities.add(new SimpleGrantedAuthority(link));
+//            }
+//        }
 //        if(CollectionUtils.isNotEmpty(permissions)){
 //            for(Permission permission:permissions){
 //                grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_"+ permission.getCode()));//必须ROLE_为前缀
