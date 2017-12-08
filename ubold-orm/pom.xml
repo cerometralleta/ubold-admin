@@ -8,6 +8,13 @@
     <artifactId>ubold-orm</artifactId>
     <version>1.0.0</version>
 
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.5.2.RELEASE</version>
+        <relativePath /> <!-- lookup parent from repository -->
+    </parent>
+
     <dependencies>
         <dependency>
             <groupId>com.ubold.admin</groupId>
@@ -17,7 +24,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
-            <version>1.5.3.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
@@ -27,7 +33,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
-            <version>1.5.3.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>

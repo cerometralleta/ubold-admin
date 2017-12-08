@@ -1,6 +1,6 @@
 package com.ubold.admin.utils;
 
-import com.ubold.admin.domain.JwtUser;
+import com.ubold.admin.security.SecurityUser;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.codec.Hex;
 
@@ -57,7 +57,7 @@ public class AuthTokenUtils {
      * @param user Object that stores user information
      * @return boolean true if supplied authToken is valid against actual userDetails
      */
-    public static boolean validateToken(String authToken, JwtUser userSessionContext) {
+    public static boolean validateToken(String authToken, SecurityUser userSessionContext) {
 //        if (user.getAuthTokenValidThru() != null) {
 //            if (new Date().after(user.getAuthTokenValidThru())) {
 //                return false;

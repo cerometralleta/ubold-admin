@@ -1,6 +1,7 @@
 package com.ubold.admin.ctrl;
 
-import com.ubold.admin.constant.CtrlConstant;
+import com.ubold.admin.constant.PermitPrefixURI;
+import com.ubold.admin.domain.User;
 import com.ubold.admin.response.Response;
 import com.ubold.admin.service.AuthService;
 import com.ubold.admin.vo.LoginParam;
@@ -11,12 +12,13 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * Created by ningzuokun on 2017/11/22.
  */
 @RestController
-@RequestMapping
+@RequestMapping("/rabc/auth")
 public class AuthController {
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -28,18 +30,20 @@ public class AuthController {
      * @param request
      * @return
      */
-    @ResponseBody
-    @RequestMapping(value = CtrlConstant.api_permit + "/rabc/auth/login", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = PermitPrefixURI.api_permit + "/login", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public Response login(@RequestBody @Valid LoginParam loginParam) {
         return authService.login(loginParam);
     }
 
 
-    @ResponseBody
-    @RequestMapping(value = CtrlConstant.api + "/rabc/auth/index", method = RequestMethod.GET)
+    @RequestMapping(value = PermitPrefixURI.api + "/index", method = RequestMethod.GET)
     public Response index() {
         logger.info("AuthController::index");
         return Response.SUCCESS();
     }
 
+//    @RequestMapping(value = "/user/", method = RequestMethod.GET)
+//    public List<User> listAllUsers() {
+//        return null;
+//    }
 }

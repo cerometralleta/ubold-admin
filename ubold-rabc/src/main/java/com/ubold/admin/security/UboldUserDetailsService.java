@@ -1,17 +1,13 @@
 package com.ubold.admin.security;
 
-import com.ubold.admin.domain.JwtUser;
-import com.ubold.admin.domain.Permission;
 import com.ubold.admin.domain.User;
 import com.ubold.admin.service.PermissionService;
 import com.ubold.admin.service.UserService;
-import org.apache.commons.collections.CollectionUtils;
 import org.assertj.core.util.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserCache;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -35,9 +31,6 @@ public class UboldUserDetailsService implements UserDetailsService {
 
     @Autowired
     PermissionService permissionService;
-
-    @Autowired
-    JwtTokenUtil jwtTokenUtil;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -66,10 +59,9 @@ public class UboldUserDetailsService implements UserDetailsService {
 //        }
         //获取用户权限
         logger.info("UboldUserDetailsService::grantedAuthorities = {}", grantedAuthorities);
-        JwtUser jwtUser = new JwtUser(username, curUser.getPassword(),
+        SecurityUser jwtUser = new SecurityUser(username, curUser.getPassword(),
                 true, true,
                 true, true,grantedAuthorities);
-        jwtUser.setAuthToken(jwtTokenUtil.generateToken(jwtUser));
         return jwtUser;
     }
 
