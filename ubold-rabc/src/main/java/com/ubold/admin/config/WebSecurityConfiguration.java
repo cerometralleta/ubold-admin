@@ -1,6 +1,6 @@
 package com.ubold.admin.config;
 
-import com.ubold.admin.constant.CtrlConstant;
+import com.ubold.admin.constant.PermitPrefixURI;
 import com.ubold.admin.filter.ServiceUnauthorizedEntryPoint;
 import com.ubold.admin.security.UboldAccessDecisionManager;
 import com.ubold.admin.security.UboldAuthenticationProvider;
@@ -34,7 +34,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
-                .antMatchers(CtrlConstant.api_permit +"/**").permitAll()
+                .antMatchers(PermitPrefixURI.api_permit +"/**").permitAll()
                 .accessDecisionManager(uboldAccessDecisionManager)
                 .anyRequest().fullyAuthenticated()//其他url需要鉴权
         .and().csrf().disable() //disable csrf

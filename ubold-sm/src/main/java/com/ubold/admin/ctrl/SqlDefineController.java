@@ -1,6 +1,7 @@
 package com.ubold.admin.ctrl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.ubold.admin.constant.PermitPrefixURI;
 import com.ubold.admin.request.SqlDefineRequest;
 import com.ubold.admin.request.ZtreeParamsRequest;
 import com.ubold.admin.response.Response;
@@ -27,7 +28,7 @@ import java.util.List;
  * Created by lenovo on 2017/8/30.
  */
 @RestController
-@RequestMapping("/api/sm/sql")
+@RequestMapping("/sm/sql" + PermitPrefixURI.api)
 public class SqlDefineController {
     protected Logger logger = LoggerFactory.getLogger(getClass());
 

@@ -1,7 +1,10 @@
 package com.ubold.admin.security;
 
+import com.ubold.admin.constant.PermitPrefixURI;
 import com.ubold.admin.domain.Role;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.util.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDecisionManager;
@@ -31,6 +34,13 @@ import static com.sun.xml.internal.ws.spi.db.BindingContextFactory.LOGGER;
 @Component
 public class UboldAccessDecisionManager implements AccessDecisionManager {
     protected Logger logger = LoggerFactory.getLogger(getClass());
+
+    public static List<String> IGNORE_PATH = Lists.newArrayList();
+
+    static {
+        IGNORE_PATH.add("/rabc/auth/index");
+    }
+
     private static final String ADMINISTRATOR = "administrator";
     /**
      * 通过传递的参数来决定用户是否有访问对应受保护对象的权限
@@ -42,6 +52,18 @@ public class UboldAccessDecisionManager implements AccessDecisionManager {
      */
     @Override
     public void decide(Authentication authentication, Object object, Collection<ConfigAttribute> collection) throws AccessDeniedException, InsufficientAuthenticationException {
+        FilterInvocation filterInvocation = (FilterInvocation) object;
+        String uri = new StringBuilder(filterInvocation.getRequestUrl()).deleteCharAt(0).toString();
+        if(StringUtils.isBlank(uri)){
+            return;
+        }
+        if (uri.contains(PermitPrefixURI.api_permit)) {
+            return;
+        }
+        if (IGNORE_PATH.contains(uri)) {
+            return;
+        }
+
         //获取用户所有权限
         Collection<GrantedAuthority> userHasRoles = (Collection<GrantedAuthority>) authentication.getAuthorities();
         logger.info("UboldAccessDecisionManager::decide::CurrentUser={} CurrentHasRoles = {}", authentication.getName(), Arrays.asList(userHasRoles));

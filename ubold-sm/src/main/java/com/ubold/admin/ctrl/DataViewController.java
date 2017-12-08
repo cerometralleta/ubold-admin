@@ -1,5 +1,6 @@
 package com.ubold.admin.ctrl;
 
+import com.ubold.admin.constant.PermitPrefixURI;
 import com.ubold.admin.request.DataViewCreateRequest;
 import com.ubold.admin.response.Response;
 import com.ubold.admin.service.DataViewService;
@@ -16,8 +17,7 @@ import javax.validation.Valid;
  * Created by lenovo on 2017/8/13.
  */
 @RestController
-@RequestMapping("/api/sm/view")
-//@RequestMapping("/api/permit/sm")
+@RequestMapping("/sm/view" + PermitPrefixURI.api)
 public class DataViewController{
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -29,7 +29,7 @@ public class DataViewController{
      * @return
      */
     @ResponseBody
-    @RequestMapping(value="/persistent",method= RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value= "/persistent",method= RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public Response persistent(@RequestBody @Valid  DataViewCreateRequest request) {
 //        logger.info(JSON.toJSONString(request));
         return dataViewService.persistent(request);

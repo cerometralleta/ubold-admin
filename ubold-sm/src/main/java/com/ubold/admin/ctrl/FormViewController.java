@@ -1,6 +1,7 @@
 package com.ubold.admin.ctrl;
 
 import com.alibaba.fastjson.JSON;
+import com.ubold.admin.constant.PermitPrefixURI;
 import com.ubold.admin.request.FormViewRequest;
 import com.ubold.admin.response.Response;
 import com.ubold.admin.service.FormViewService;
@@ -17,7 +18,7 @@ import javax.validation.Valid;
  * Created by lenovo on 2017/8/13.
  */
 @RestController
-@RequestMapping("/api/sm/form")
+@RequestMapping("/sm/form" + PermitPrefixURI.api)
 //@RequestMapping("/api/permit/sm")
 public class FormViewController {
     protected Logger logger = LoggerFactory.getLogger(getClass());
