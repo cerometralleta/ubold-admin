@@ -1,13 +1,17 @@
 package com.ubold.admin.security;
 
 import com.ubold.admin.domain.JwtUser;
+import com.ubold.admin.domain.Permission;
+import com.ubold.admin.domain.User;
 import com.ubold.admin.service.PermissionService;
 import com.ubold.admin.service.UserService;
+import org.apache.commons.collections.CollectionUtils;
 import org.assertj.core.util.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserCache;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -40,20 +44,20 @@ public class UboldUserDetailsService implements UserDetailsService {
         logger.info("UboldUserDetailsService::loadUserByUsername= {}",username);
 
         //查询用户是否存在
-//        List<User> users = userService.findByUserName(username);
-//        if(CollectionUtils.isEmpty(users)){
-//            throw new UsernameNotFoundException("username not found.");
-//        }
-//        User curUser = users.get(0);
+        List<User> users = userService.findByUserName(username);
+        if(CollectionUtils.isEmpty(users)){
+            throw new UsernameNotFoundException("username not found.");
+        }
+        User curUser = users.get(0);
         //用户权限
-//        List<Permission>  permissions = permissionService.findAllPermissionByUser(curUser);
+        List<Permission>  permissions = permissionService.findAllPermissionByUser(curUser.getId());
         List<GrantedAuthority> grantedAuthorities = Lists.newArrayList();
-//        List<String> links = permissionService.findAllPermissionLink(permissions);
-//        if(CollectionUtils.isNotEmpty(links)){
-//            links.forEach(link ->{
-//                grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_"+ link));//必须ROLE_为前缀
-//            });
-//        }
+        List<String> links = permissionService.findAllPermissionLink(permissions);
+        if(CollectionUtils.isNotEmpty(links)){
+            for(String link : links){
+                grantedAuthorities.add(new SimpleGrantedAuthority(link));
+            }
+        }
 //        if(CollectionUtils.isNotEmpty(permissions)){
 //            for(Permission permission:permissions){
 //                grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_"+ permission.getCode()));//必须ROLE_为前缀
@@ -61,7 +65,7 @@ public class UboldUserDetailsService implements UserDetailsService {
 //        }
         //获取用户权限
         logger.info("UboldUserDetailsService::grantedAuthorities = {}", grantedAuthorities);
-        JwtUser jwtUser = new JwtUser(username, "$2a$10$bFnRuIzRSOvkxhiwOamacumwypMWcNgEWu5r2DSHG93b9SpubZMmq",
+        JwtUser jwtUser = new JwtUser(username, curUser.getPassword(),
                 true, true,
                 true, true,grantedAuthorities);
         jwtUser.setAuthToken(jwtTokenUtil.generateToken(jwtUser));

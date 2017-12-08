@@ -13,6 +13,6 @@ import java.util.List;
 @Repository
 public interface MenuRepository extends JpaRepository<Menu,String>{
 
-    @Query(value = "${findMenuByPermissions}",nativeQuery = true)
+    @Query(value = "select rm.* from tb_rbac_menu rm ,tb_rbac_permission_menu rpm where rm.id = rpm.menu_id and rpm.permission_id in (?1)",nativeQuery = true)
     List<Menu> findMenuByPermissions(String permissions);
 }

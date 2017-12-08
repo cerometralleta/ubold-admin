@@ -10,7 +10,10 @@ import com.ubold.admin.service.MenuService;
 import com.ubold.admin.service.PermissionService;
 import org.apache.commons.collections.CollectionUtils;
 import org.assertj.core.util.Lists;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,7 +23,7 @@ import java.util.List;
  */
 @Service
 public class PermissionServiceImpl implements PermissionService {
-
+    protected Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired
     PermissionRepository permissionRepository;
 
@@ -50,7 +53,7 @@ public class PermissionServiceImpl implements PermissionService {
     public List<String> findAllPermissionLink(List<Permission> permissions) {
         StringBuffer permissionBuffer = new StringBuffer();
         for(Permission permission : permissions){
-            permissionBuffer.append("'").append(permission.getVersion()).append("'").append(",");
+            permissionBuffer.append("").append(permission.getId()).append("").append(",");
         }
         String permissionIds = permissionBuffer.deleteCharAt(permissionBuffer.lastIndexOf(",")).toString();
         List<String> permitList = Lists.newArrayList();
