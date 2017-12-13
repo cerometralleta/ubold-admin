@@ -19,11 +19,12 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     @Autowired
     private AuthenticationManager authenticationManager;
 
-//    @Override
-//    public void configure(final AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
+    @Override
+    public void configure(final AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
 //        oauthServer.tokenKeyAccess("permitAll()")
 //                .checkTokenAccess("isAuthenticated()");
-//    }
+        oauthServer.allowFormAuthenticationForClients();
+    }
 
     @Override
     public void configure(final ClientDetailsServiceConfigurer clients) throws Exception {

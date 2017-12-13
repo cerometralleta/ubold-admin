@@ -31,7 +31,9 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authenticated()
                 .and()
                 .exceptionHandling()
-                .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("http://www.baidu.com")).and().logout();
+                .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("http://localhost:4200/#/login"))
+                .and()
+                .logout();
         // @formatter:on
     }
 
@@ -43,4 +45,6 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .password("123")
                 .roles("USER");
     } // @formatter:on
+
+    
 }
