@@ -2,7 +2,6 @@ package com.ubold.admin.service.impl;
 
 import com.ubold.admin.response.Response;
 import com.ubold.admin.security.SecurityUser;
-import com.ubold.admin.security.UboldUserDetailsService;
 import com.ubold.admin.service.AuthService;
 import com.ubold.admin.service.PermissionService;
 import com.ubold.admin.vo.LoginParam;
@@ -21,9 +20,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthServiceImpl implements AuthService {
     protected Logger logger = LoggerFactory.getLogger(getClass());
-
-    @Autowired
-    UboldUserDetailsService uboldUserDetailsService;
 
     @Autowired
     PermissionService permissionService;

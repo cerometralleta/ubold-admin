@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 
 /**
@@ -30,9 +31,14 @@ public class AuthController {
      * @param request
      * @return
      */
-    @RequestMapping(value = PermitPrefixURI.api_permit + "/login", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = PermitPrefixURI.api_permit + "/login", method = RequestMethod.POST)
     public Response login(@RequestBody @Valid LoginParam loginParam) {
         return authService.login(loginParam);
+    }
+
+    @RequestMapping(value = PermitPrefixURI.api_permit + "/doLogin", method = RequestMethod.GET)
+    public Response dologin() {
+        return Response.SUCCESS();
     }
 
 
@@ -42,8 +48,15 @@ public class AuthController {
         return Response.SUCCESS();
     }
 
-//    @RequestMapping(value = "/user/", method = RequestMethod.GET)
-//    public List<User> listAllUsers() {
-//        return null;
-//    }
+    @RequestMapping(value = PermitPrefixURI.api + "/user", method = RequestMethod.POST)
+    public Response user() {
+        logger.info("AuthController::user");
+        return Response.SUCCESS();
+    }
+
+    @RequestMapping("/user/me")
+    public Principal user(Principal principal) {
+        System.out.println(principal);
+        return principal;
+    }
 }
