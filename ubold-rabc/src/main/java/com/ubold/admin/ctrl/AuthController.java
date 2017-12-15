@@ -36,12 +36,6 @@ public class AuthController {
         return authService.login(loginParam);
     }
 
-    @RequestMapping(value = PermitPrefixURI.api_permit + "/doLogin", method = RequestMethod.GET)
-    public Response dologin() {
-        return Response.SUCCESS();
-    }
-
-
     @RequestMapping(value = PermitPrefixURI.api + "/index", method = RequestMethod.GET)
     public Response index() {
         logger.info("AuthController::index");
