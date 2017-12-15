@@ -1,5 +1,6 @@
 package com.ubold.admin.security;
 
+import com.ubold.admin.constant.PermitPrefixURI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +49,7 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
         //允许基于使用HttpServletRequest限制访问
         http.authorizeRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()   //对preflight放行
-                .antMatchers("/", "/login**","/user", "/rabc/**").permitAll()
+                .antMatchers("/", "/login**","/user", "/**/"+ PermitPrefixURI.api_permit +"/**").permitAll()
                 .anyRequest().authenticated().and().httpBasic();
 
         http.csrf().disable();
