@@ -15,5 +15,7 @@
         <module>ubold-sm</module>
         <module>ubold-rabc</module>
         <module>ubold-web</module>
+        <module>ubold-client</module>
+        <module>ubold-authserver</module>
     </modules>
 </project>

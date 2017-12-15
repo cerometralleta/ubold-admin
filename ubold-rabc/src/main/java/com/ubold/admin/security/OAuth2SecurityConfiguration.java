@@ -36,24 +36,25 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.formLogin()
+//        http.formLogin().permitAll();
 //                .loginPage("http://localhost:4200/#/login")
-                  .successHandler(new AuthenticationSuccessHandler(){
-
-                            @Override
-                            public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
-                                Response<String> response = new Response<String>(StatusCodeConstant.SUCCESS.code, StatusCodeConstant.SUCCESS.message);
-                                httpServletResponse.getWriter().write(new String(response.toJsonString().getBytes(),"UTF-8"));
-                            }
-                        }).permitAll();
+//                  .successHandler(new AuthenticationSuccessHandler(){
+//
+//                            @Override
+//                            public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
+//                                Response<String> response = new Response<String>(StatusCodeConstant.SUCCESS.code, StatusCodeConstant.SUCCESS.message);
+//                                httpServletResponse.getWriter().write(new String(response.toJsonString().getBytes(),"UTF-8"));
+//                            }
+//                        })
 //                .successForwardUrl("http://localhost:4200/#/home")
 //                .permitAll();
 
-        //允许基于使用HttpServletRequest限制访问
-        http.authorizeRequests()
-                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()   //对preflight放行
-                .antMatchers("/", "/login**","/user", "/**/"+ PermitPrefixURI.api_permit +"/**").permitAll()
-                .anyRequest().authenticated().and().httpBasic();
+        http    .requestMatchers()
+                 .requestMatchers(CorsUtils::isPreFlightRequest) //对preflight放行
+                .antMatchers("/login","/oauth/authorize")
+                .and().authorizeRequests()
+                .anyRequest().authenticated()
+                .and().formLogin().permitAll().and().httpBasic();
 
         http.csrf().disable();
         http.headers().frameOptions().sameOrigin().disable();
@@ -68,7 +69,7 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 return configuration;
             }
         });
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+//      http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.ubold.admin.security;
+package config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -9,30 +9,26 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 
-/**
- * Created by ningzuokun on 2017/12/8.
- */
 @Configuration
 @EnableAuthorizationServer
-public class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
-
+public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
     @Autowired
     private AuthenticationManager authenticationManager;
 
     @Override
     public void configure(final AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
         oauthServer.tokenKeyAccess("permitAll()")
-                .checkTokenAccess("isAuthenticated()");
+            .checkTokenAccess("isAuthenticated()");
     }
 
     @Override
     public void configure(final ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()
-                .withClient("SampleClientId")
-                .secret("secret")
-                .authorizedGrantTypes("authorization_code")
-                .scopes("user_info")
-                .autoApprove(true)
+            .withClient("SampleClientId")
+            .secret("secret")
+            .authorizedGrantTypes("authorization_code")
+            .scopes("user_info")
+            .autoApprove(true)
         // .accessTokenValiditySeconds(3600)
         ; // 1 hour
     }
@@ -41,4 +37,5 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     public void configure(final AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints.authenticationManager(authenticationManager);
     }
+
 }
