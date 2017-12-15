@@ -1,6 +1,8 @@
 package com.ubold.admin.security;
 
 import com.ubold.admin.constant.PermitPrefixURI;
+import com.ubold.admin.constant.StatusCodeConstant;
+import com.ubold.admin.response.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,15 +36,16 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.formLogin().permitAll();
-//                .loginPage("http://localhost:4200/#/login");
-//                  .successHandler(new AuthenticationSuccessHandler(){
-//
-//                            @Override
-//                            public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
-//                                System.out.println(">>>>>>>>>>>>>>>>>>>>>>>");
-//                            }
-//                        })
+        http.formLogin()
+//                .loginPage("http://localhost:4200/#/login")
+                  .successHandler(new AuthenticationSuccessHandler(){
+
+                            @Override
+                            public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
+                                Response<String> response = new Response<String>(StatusCodeConstant.SUCCESS.code, StatusCodeConstant.SUCCESS.message);
+                                httpServletResponse.getWriter().write(new String(response.toJsonString().getBytes(),"UTF-8"));
+                            }
+                        }).permitAll();
 //                .successForwardUrl("http://localhost:4200/#/home")
 //                .permitAll();
 
