@@ -1,8 +1,5 @@
 package com.ubold.admin.security;
 
-import com.ubold.admin.constant.PermitPrefixURI;
-import com.ubold.admin.constant.StatusCodeConstant;
-import com.ubold.admin.response.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,17 +9,11 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.CorsUtils;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
  * Created by zkning on 2017/01/01.
@@ -54,7 +45,7 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login","/oauth/authorize")
                 .and().authorizeRequests()
                 .anyRequest().authenticated()
-                .and().formLogin().permitAll().and().httpBasic();
+                .and().formLogin().permitAll();
 
         http.csrf().disable();
         http.headers().frameOptions().sameOrigin().disable();
