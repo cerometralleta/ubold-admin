@@ -2,12 +2,14 @@ package com.ubold.admin.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
  * Created by ningzuokun on 2017/12/8.
@@ -21,20 +23,19 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 
     @Override
     public void configure(final AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
-        oauthServer.tokenKeyAccess("permitAll()")
-                .checkTokenAccess("isAuthenticated()");
+        oauthServer.allowFormAuthenticationForClients();
     }
 
     @Override
     public void configure(final ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()
-                .withClient("SampleClientId")
+                .withClient("uboldClientId")
                 .secret("secret")
-                .authorizedGrantTypes("authorization_code")
+                .authorizedGrantTypes("authorization_code","password","refresh_token")
                 .scopes("user_info")
-                .autoApprove(true)
+                .autoApprove(true);
         // .accessTokenValiditySeconds(3600)
-        ; // 1 hour
+        // 1 hour
     }
 
     @Override

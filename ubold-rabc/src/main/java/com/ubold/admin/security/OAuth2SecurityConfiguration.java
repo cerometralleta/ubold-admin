@@ -1,5 +1,6 @@
 package com.ubold.admin.security;
 
+import com.ubold.admin.constant.PermitPrefixURI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,7 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http    .requestMatchers()
                  .requestMatchers(CorsUtils::isPreFlightRequest) //对preflight放行
                 .antMatchers("/login","/oauth/authorize")
-                .and().authorizeRequests()
+                .and().authorizeRequests().antMatchers("/**/"+ PermitPrefixURI.api_permit+"/**").permitAll()
                 .anyRequest().authenticated()
                 .and().formLogin().permitAll();
 
@@ -64,12 +65,11 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception { // @formatter:off
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        // @formatter:off
         auth.parentAuthenticationManager(authenticationManager)
                 .inMemoryAuthentication()
-                .withUser("john")
-                .password("123")
-                .roles("USER");
+                .withUser("john").password("123").authorities("USER");
     } // @formatter:on
 
     @Override

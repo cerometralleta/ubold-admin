@@ -1,9 +1,11 @@
 package com.ubold.admin.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.ubold.admin.response.Response;
 import com.ubold.admin.security.SecurityUser;
 import com.ubold.admin.service.AuthService;
 import com.ubold.admin.service.PermissionService;
+import com.ubold.admin.util.HttpClientUtils;
 import com.ubold.admin.vo.LoginParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,5 +36,17 @@ public class AuthServiceImpl implements AuthService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         SecurityUser jwtUser = (SecurityUser) authentication.getPrincipal();
         return Response.SUCCESS(jwtUser.getAuthToken());
+    }
+
+    @Override
+    public Response passwordLogin(LoginParam loginParam) throws Exception {
+        String authcontextpath =
+                "http://localhost:8081/oauth/token?"+
+                        "username="+loginParam.getUsername()+"&password="+loginParam.getPassword()+
+                        "&grant_type=password&client_id=ubold&client_secret=123456";
+        String result = HttpClientUtils.doPost(authcontextpath);
+        logger.info("授权结果:{}",result);
+        JSONObject resultJson = JSONObject.parseObject(result);
+        return Response.SUCCESS();
     }
 }

@@ -14,4 +14,11 @@ public interface AuthService {
      * @return
      */
     public Response login(LoginParam loginParam);
+
+    /**
+     * 密码授权
+     * @param loginParam
+     * @return
+     */
+    public Response passwordLogin(LoginParam loginParam) throws Exception;
 }
