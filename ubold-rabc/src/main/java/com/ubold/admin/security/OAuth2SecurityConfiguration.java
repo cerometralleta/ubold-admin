@@ -3,13 +3,16 @@ package com.ubold.admin.security;
 import com.ubold.admin.constant.PermitPrefixURI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.CorsUtils;
@@ -23,24 +26,8 @@ import javax.servlet.http.HttpServletRequest;
 public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        http.formLogin().permitAll();
-//                .loginPage("http://localhost:4200/#/login")
-//                  .successHandler(new AuthenticationSuccessHandler(){
-//
-//                            @Override
-//                            public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
-//                                Response<String> response = new Response<String>(StatusCodeConstant.SUCCESS.code, StatusCodeConstant.SUCCESS.message);
-//                                httpServletResponse.getWriter().write(new String(response.toJsonString().getBytes(),"UTF-8"));
-//                            }
-//                        })
-//                .successForwardUrl("http://localhost:4200/#/home")
-//                .permitAll();
-
         http    .requestMatchers()
                  .requestMatchers(CorsUtils::isPreFlightRequest) //对preflight放行
                 .antMatchers("/login","/oauth/authorize")
@@ -64,13 +51,37 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
 //      http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
+    /**
+     * 初始化用户信息,同authenticationManagerBean
+     * @return
+     */
+//    @Bean
+//    @Override
+//    protected UserDetailsService userDetailsService(){
+//        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
+//        manager.createUser(User.withUsername("user_1").password("123456").authorities("USER").build());
+//        manager.createUser(User.withUsername("user_2").password("123456").authorities("USER").build());
+//        return manager;
+//    }
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         // @formatter:off
-        auth.parentAuthenticationManager(authenticationManager)
+        auth
+//                .parentAuthenticationManager(authenticationManagerBean)
                 .inMemoryAuthentication()
                 .withUser("john").password("123").authorities("USER");
     } // @formatter:on
+
+    /**
+     * 这一步的配置是必不可少的，否则SpringBoot会自动配置一个AuthenticationManager,覆盖掉内存中的用户
+     */
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        AuthenticationManager manager = super.authenticationManagerBean();
+        return manager;
+    }
 
     @Override
     public void configure(WebSecurity web) throws Exception {

@@ -7,6 +7,7 @@ import com.ubold.admin.service.AuthService;
 import com.ubold.admin.service.PermissionService;
 import com.ubold.admin.util.HttpClientUtils;
 import com.ubold.admin.vo.LoginParam;
+import com.ubold.admin.vo.Oauth2Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     PermissionService permissionService;
 
-    @Autowired
+//    @Autowired
     AuthenticationManager authenticationManager;
 
     @Override
@@ -40,13 +41,16 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public Response passwordLogin(LoginParam loginParam) throws Exception {
-        String authcontextpath =
-                "http://localhost:8081/oauth/token?"+
-                        "username="+loginParam.getUsername()+"&password="+loginParam.getPassword()+
-                        "&grant_type=password&client_id=ubold&client_secret=123456";
-        String result = HttpClientUtils.doPost(authcontextpath);
+        String oauth2Path =
+                "http://localhost:8081/oauth/token?" +
+                        "username=" + loginParam.getUsername()+
+                        "&password=" + loginParam.getPassword()+
+                        "&grant_type=password&scope=user_info" +
+                        "&client_id=uboldClientId" +
+                        "&client_secret=secret";
+        String result = HttpClientUtils.doPost(oauth2Path);
         logger.info("授权结果:{}",result);
-        JSONObject resultJson = JSONObject.parseObject(result);
-        return Response.SUCCESS();
+        Oauth2Result oauth2Result = JSONObject.parseObject(result, Oauth2Result.class);
+        return Response.SUCCESS(oauth2Result.getAccess_token());
     }
 }
