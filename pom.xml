@@ -14,10 +14,8 @@
         <module>ubold-orm</module>
         <module>ubold-sm</module>
         <module>ubold-rabc</module>
-        <module>ubold-web</module>
-        <module>ubold-client</module>
-        <module>ubold-auth</module>
         <module>ubold-authorize</module>
         <module>ubold-jwt</module>
+        <module>ubold-client</module>
     </modules>
 </project>
