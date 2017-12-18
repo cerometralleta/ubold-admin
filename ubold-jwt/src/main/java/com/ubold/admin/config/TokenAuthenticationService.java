@@ -5,6 +5,7 @@ import com.ubold.admin.response.Response;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -48,7 +49,7 @@ public class TokenAuthenticationService {
             response.getWriter().println(JSONObject.toJSONString(Response.SUCCESS(JWT)));
         } catch (IOException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             try {
                 response.getWriter().close();
             } catch (IOException e) {
@@ -61,27 +62,26 @@ public class TokenAuthenticationService {
     static Authentication getAuthentication(HttpServletRequest request) {
         // 从Header中拿到token
         String token = request.getHeader(HEADER_STRING);
-
-        if (token != null) {
-            // 解析 Token
-            Claims claims = Jwts.parser()
-                    // 验签
-                    .setSigningKey(SECRET)
-                    // 去掉 Bearer
-                    .parseClaimsJws(token.replace(TOKEN_PREFIX, ""))
-                    .getBody();
-
-            // 拿用户名
-            String user = claims.getSubject();
-
-            // 得到 权限（角色）
-            List<GrantedAuthority> authorities =  AuthorityUtils.commaSeparatedStringToAuthorityList((String) claims.get("authorities"));
-
-            // 返回验证令牌
-            return user != null ?
-                    new UsernamePasswordAuthenticationToken(user, null, authorities) :
-                    null;
+        if (StringUtils.isBlank(token)) {
+            return null;
         }
-        return null;
+        // 解析 Token
+        Claims claims = Jwts.parser()
+                // 验签
+                .setSigningKey(SECRET)
+                // 去掉 Bearer
+                .parseClaimsJws(token.replace(TOKEN_PREFIX, ""))
+                .getBody();
+
+        // 拿用户名
+        String user = claims.getSubject();
+
+        // 得到 权限（角色）
+        List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList((String) claims.get("authorities"));
+
+        // 返回验证令牌
+        return StringUtils.isNotBlank(user) ?
+                new UsernamePasswordAuthenticationToken(user, null, authorities) :
+                null;
     }
 }

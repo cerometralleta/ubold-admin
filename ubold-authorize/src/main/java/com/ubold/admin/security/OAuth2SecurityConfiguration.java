@@ -1,6 +1,7 @@
 package com.ubold.admin.security;
 
 import com.ubold.admin.constant.PermitPrefixURI;
+import com.ubold.admin.cors.UboldCorsConfigurationSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -34,18 +35,7 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         http.csrf().disable();
         http.headers().frameOptions().sameOrigin().disable();
-        http.cors().configurationSource(new CorsConfigurationSource(){
-
-            @Override
-            public CorsConfiguration getCorsConfiguration(HttpServletRequest httpServletRequest) {
-                CorsConfiguration configuration = new CorsConfiguration();
-                configuration.addAllowedOrigin("*");
-                configuration.addAllowedHeader( "*");
-                configuration.addAllowedMethod( "*");
-                return configuration;
-            }
-        });
-//      http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http.cors().configurationSource(new UboldCorsConfigurationSource());
     }
 
     /**

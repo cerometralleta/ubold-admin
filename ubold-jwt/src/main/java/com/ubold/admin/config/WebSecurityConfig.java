@@ -1,15 +1,12 @@
 package com.ubold.admin.config;
 
+import com.ubold.admin.cors.UboldCorsConfigurationSource;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * Created by ningzuokun on 2017/12/18.
@@ -38,17 +35,7 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.csrf().disable();
         http.headers().frameOptions().sameOrigin().disable();
-        http.cors().configurationSource(new CorsConfigurationSource(){
-
-            @Override
-            public CorsConfiguration getCorsConfiguration(HttpServletRequest httpServletRequest) {
-                CorsConfiguration configuration = new CorsConfiguration();
-                configuration.addAllowedOrigin("*");
-                configuration.addAllowedHeader( "*");
-                configuration.addAllowedMethod( "*");
-                return configuration;
-            }
-        });
+        http.cors().configurationSource(new UboldCorsConfigurationSource());
 
     }
 
@@ -56,6 +43,7 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         // 使用自定义身份验证组件
         auth.authenticationProvider(new CustomAuthenticationProvider());
-
     }
+
+
 }
