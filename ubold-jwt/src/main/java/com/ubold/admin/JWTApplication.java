@@ -7,9 +7,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * Created by ningzuokun on 2017/5/15.
  */
 @SpringBootApplication
-public class JwtApplication {
+public class JWTApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(JwtApplication.class, args);
+        SpringApplication.run(JWTApplication.class, args);
     }
 }
