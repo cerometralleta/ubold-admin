@@ -10,6 +10,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class RABCApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(JWTApplication.class, args);
+        SpringApplication.run(RABCApplication.class, args);
     }
 }

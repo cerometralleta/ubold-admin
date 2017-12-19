@@ -5,7 +5,9 @@ import com.ubold.admin.response.Response;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.apache.commons.lang3.CharEncoding;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -43,8 +45,8 @@ public class TokenAuthenticationService {
 
         // 将 JWT 写入 body
         try {
-            response.setCharacterEncoding("UTF-8");
-            response.setContentType("application/json");
+            response.setCharacterEncoding(CharEncoding.UTF_8);
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.setStatus(HttpServletResponse.SC_OK);
             response.getWriter().println(JSONObject.toJSONString(Response.SUCCESS(JWT)));
         } catch (IOException e) {

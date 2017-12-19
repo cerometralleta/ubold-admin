@@ -5,7 +5,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,11 +19,9 @@ public class SecurityUser implements UserDetails{
     boolean isAccountNonLocked;
     boolean isCredentialsNonExpired;
     boolean isEnabled;
-    Date authTokenThru;
-    String authToken;
-    Date lastPasswordResetDate;
     String userId;
 
+    public SecurityUser(){};
     public SecurityUser(String username, String password,
                         boolean isAccountNonExpired,
                         boolean isAccountNonLocked,
@@ -73,27 +70,11 @@ public class SecurityUser implements UserDetails{
         return this.isEnabled;
     }
 
-    public Date getAuthTokenThru() {
-        return authTokenThru;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setAuthTokenThru(Date authTokenThru) {
-        this.authTokenThru = authTokenThru;
-    }
-
-    public String getAuthToken() {
-        return authToken;
-    }
-
-    public void setAuthToken(String authToken) {
-        this.authToken = authToken;
-    }
-
-    public Date getLastPasswordResetDate() {
-        return lastPasswordResetDate;
-    }
-
-    public void setLastPasswordResetDate(Date lastPasswordResetDate) {
-        this.lastPasswordResetDate = lastPasswordResetDate;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }
