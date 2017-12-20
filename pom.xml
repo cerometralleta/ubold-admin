@@ -17,5 +17,6 @@
         <module>ubold-authorize</module>
         <module>ubold-jwt</module>
         <module>ubold-client</module>
+        <module>ubold-resources</module>
     </modules>
 </project>

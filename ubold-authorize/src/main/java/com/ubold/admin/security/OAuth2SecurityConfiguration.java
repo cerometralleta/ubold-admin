@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -25,9 +26,10 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http    .requestMatchers()
                  .requestMatchers(CorsUtils::isPreFlightRequest) //对preflight放行
-//                .antMatchers("/login","/oauth/authorize")
                 .and()
-                .authorizeRequests().antMatchers("/**/"+ PermitPrefixURI.api_permit+"/**").permitAll()
+                .authorizeRequests()
+                .antMatchers(HttpMethod.OPTIONS,"/**/"+ PermitPrefixURI.api_permit+"/**").permitAll()
+                .antMatchers("/oauth/token").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().permitAll();
@@ -43,7 +45,7 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
         auth
 //                .parentAuthenticationManager(authenticationManagerBean)
                 .inMemoryAuthentication()
-                .withUser("john").password("123").authorities("USER");
+                .withUser("john1").password("123").authorities("USER");
     }
 
     /**
