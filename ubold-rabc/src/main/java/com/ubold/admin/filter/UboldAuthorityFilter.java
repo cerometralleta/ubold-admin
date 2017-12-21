@@ -1,5 +1,7 @@
 package com.ubold.admin.filter;
 
+import org.aspectj.lang.ProceedingJoinPoint;
+
 import javax.servlet.*;
 import java.io.IOException;
 
@@ -19,7 +21,6 @@ public class UboldAuthorityFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         //url 过滤
         //spring param获取header参数值
-
     }
 
     @Override

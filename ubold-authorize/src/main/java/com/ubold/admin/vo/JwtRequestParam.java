@@ -8,7 +8,7 @@ import java.io.Serializable;
  * jwt 基础header参数
  * Created by ningzuokun on 2017/12/21.
  */
-public class JwtheaderParam implements Serializable{
+public class JwtRequestParam implements Serializable{
 
     /**
      * 授权token

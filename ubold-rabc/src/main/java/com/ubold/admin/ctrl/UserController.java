@@ -3,7 +3,6 @@ package com.ubold.admin.ctrl;
 import com.ubold.admin.constant.PermitPrefixURI;
 import com.ubold.admin.response.Response;
 import com.ubold.admin.service.AuthService;
-import com.ubold.admin.vo.JwtheaderParam;
 import com.ubold.admin.vo.LoginParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,9 +32,8 @@ public class UserController {
     }
 
     @RequestMapping(value = PermitPrefixURI.permit + "/index", method = RequestMethod.GET)
-    public Response index() {
-        logger.info("AuthController::index");
-        return Response.SUCCESS();
+    public void index() {
+        logger.info("rabc::UserController::index");
     }
 
     @RequestMapping(value = "/me", method = RequestMethod.POST)
@@ -43,7 +41,7 @@ public class UserController {
         return authService.getUserInfoByToken(param.getAuthorization());
     }
 
-    @RequestMapping("/oauth2/me")
+    @RequestMapping("/authority/me")
     public Principal user(Principal principal) {
         System.out.println(principal);
         return principal;

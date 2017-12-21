@@ -52,6 +52,8 @@
     <orderEntry type="library" name="Maven: com.vaadin.external.google:android-json:0.0.20131108.vaadin1" level="project" />
     <orderEntry type="library" name="Maven: javax.validation:validation-api:1.1.0.Final" level="project" />
     <orderEntry type="library" name="Maven: org.projectlombok:lombok:1.16.16" level="project" />
+    <orderEntry type="library" name="Maven: org.aspectj:aspectjrt:1.8.10" level="project" />
+    <orderEntry type="library" name="Maven: org.aspectj:aspectjweaver:1.8.10" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-data-jpa:1.5.3.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter:1.5.3.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot:1.5.3.RELEASE" level="project" />
@@ -63,7 +65,6 @@
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.yaml:snakeyaml:1.17" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-aop:1.5.3.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-aop:4.3.8.RELEASE" level="project" />
-    <orderEntry type="library" name="Maven: org.aspectj:aspectjweaver:1.8.10" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-jdbc:1.5.3.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.apache.tomcat:tomcat-jdbc:8.5.14" level="project" />
     <orderEntry type="library" name="Maven: org.apache.tomcat:tomcat-juli:8.5.14" level="project" />

@@ -16,7 +16,7 @@ public class ValidationUtil {
 
     public static <T> Response validator(T t) {
         Set<ConstraintViolation<T>> violations = validator.validate(t);
-        if (null != violations) {
+        if (BeanUtils.isNotEmpty(violations)) {
             return Response.FAILURE(StatusCodeConstant.INVALID_ARGS.code,violations.iterator().next().getMessage());
         }
         return Response.SUCCESS();
