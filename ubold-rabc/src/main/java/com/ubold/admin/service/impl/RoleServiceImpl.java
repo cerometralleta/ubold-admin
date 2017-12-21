@@ -1,6 +1,6 @@
 package com.ubold.admin.service.impl;
 
-import com.ubold.admin.domain.User;
+import com.ubold.admin.domain.UserInfo;
 import com.ubold.admin.response.Response;
 import com.ubold.admin.service.RoleService;
 import org.springframework.stereotype.Service;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 public class RoleServiceImpl implements RoleService {
 
     @Override
-    public Response findPermissionByUser(User user) {
+    public Response findPermissionByUser(UserInfo user) {
         if(null == user){
             return Response.FAILURE();
         }

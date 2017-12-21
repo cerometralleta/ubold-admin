@@ -1,6 +1,6 @@
 package com.ubold.admin.service.impl;
 
-import com.ubold.admin.domain.User;
+import com.ubold.admin.domain.UserInfo;
 import com.ubold.admin.repository.UserRepository;
 import com.ubold.admin.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ public class UserServiceImpl implements UserService{
     UserRepository userRepository;
 
     @Override
-    public List<User> findByUserName(String userName) {
+    public List<UserInfo> findByUserName(String userName) {
         return userRepository.findByUsername(userName);
     }
 }

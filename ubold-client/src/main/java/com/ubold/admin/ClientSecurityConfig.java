@@ -18,7 +18,7 @@ public class ClientSecurityConfig extends WebSecurityConfigurerAdapter {
         http.antMatcher("/**")
             .authorizeRequests()
             .antMatchers("/", "/login**").permitAll()
-            .antMatchers("/**/"+ PermitPrefixURI.api_permit+"/**").permitAll()
+            .antMatchers("/**/"+ PermitPrefixURI.permit+"/**").permitAll()
             .anyRequest()
             .authenticated();
 

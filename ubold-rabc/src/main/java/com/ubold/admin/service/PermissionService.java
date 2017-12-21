@@ -1,8 +1,6 @@
 package com.ubold.admin.service;
 
-import com.ubold.admin.domain.Menu;
 import com.ubold.admin.domain.Permission;
-import com.ubold.admin.domain.User;
 
 import java.util.List;
 

@@ -17,7 +17,7 @@ import javax.validation.Valid;
  * Created by lenovo on 2017/8/13.
  */
 @RestController
-@RequestMapping("/sm/view" + PermitPrefixURI.api)
+@RequestMapping("/sm/view")
 public class DataViewController{
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -49,7 +49,7 @@ public class DataViewController{
 
 
     @ResponseBody
-    @RequestMapping(value="/index")
+    @RequestMapping(value=PermitPrefixURI.permit + "/index")
     public Response index() {
         logger.info("application started");
         return Response.SUCCESS("ubold started");

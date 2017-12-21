@@ -1,6 +1,6 @@
 package com.ubold.admin.service;
 
-import com.ubold.admin.domain.User;
+import com.ubold.admin.domain.UserInfo;
 
 import java.util.List;
 
@@ -9,5 +9,5 @@ import java.util.List;
  */
 public interface UserService {
 
-    List<User> findByUserName(String userName);
+    List<UserInfo> findByUserName(String userName);
 }

@@ -3,7 +3,6 @@ package com.ubold.admin.service.impl;
 import com.ubold.admin.domain.Functional;
 import com.ubold.admin.domain.Menu;
 import com.ubold.admin.domain.Permission;
-import com.ubold.admin.domain.User;
 import com.ubold.admin.repository.PermissionRepository;
 import com.ubold.admin.service.FunctionalService;
 import com.ubold.admin.service.MenuService;
@@ -13,7 +12,6 @@ import org.assertj.core.util.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

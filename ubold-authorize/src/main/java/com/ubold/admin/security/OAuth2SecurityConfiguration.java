@@ -28,7 +28,7 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
                  .requestMatchers(CorsUtils::isPreFlightRequest) //对preflight放行
                 .and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.OPTIONS,"/**/"+ PermitPrefixURI.api_permit+"/**").permitAll()
+                .antMatchers(HttpMethod.OPTIONS,"/**/"+ PermitPrefixURI.permit+"/**").permitAll()
                 .antMatchers("/oauth/token").permitAll()
                 .anyRequest().authenticated()
                 .and()

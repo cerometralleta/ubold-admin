@@ -6,13 +6,8 @@ package com.ubold.admin.constant;
 public class PermitPrefixURI {
 
     /**
-     * api
-     */
-    public static final String api = "/api";
-
-    /**
      * 允许访问
      */
-    public static final String api_permit = "/api/permit";
+    public static final String permit = "/permit";
 
 }

@@ -8,7 +8,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name="TB_USER_INFO")
-public class User extends Auditable{
+public class UserInfo extends Auditable{
 
     private String password;
     private String username;

@@ -15,6 +15,11 @@ public class SecurityOaut2Configure {
     private String privateKey;
     private String publicKey;
 
+    /**
+     * authorizty context
+     */
+    private String authorityContext;
+
     public String getPrivateKey() {
         return privateKey;
     }
@@ -29,5 +34,13 @@ public class SecurityOaut2Configure {
 
     public void setPublicKey(String publicKey) {
         this.publicKey = publicKey;
+    }
+
+    public String getAuthorityContext() {
+        return authorityContext;
+    }
+
+    public void setAuthorityContext(String authorityContext) {
+        this.authorityContext = authorityContext;
     }
 }

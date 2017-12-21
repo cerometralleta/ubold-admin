@@ -28,7 +28,7 @@ import java.util.List;
  * Created by lenovo on 2017/8/30.
  */
 @RestController
-@RequestMapping("/sm/sql" + PermitPrefixURI.api)
+@RequestMapping("/sm/sql")
 public class SqlDefineController {
     protected Logger logger = LoggerFactory.getLogger(getClass());
 

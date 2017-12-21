@@ -48,8 +48,8 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
                 .authorizedGrantTypes("authorization_code","password","refresh_token")
                 .scopes("user_info")
                 .autoApprove(true)
-                .accessTokenValiditySeconds(90)
-                .refreshTokenValiditySeconds(90);// 1 hour
+                .accessTokenValiditySeconds(600)
+                .refreshTokenValiditySeconds(600);// 1 hour
     }
 
     @Override

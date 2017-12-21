@@ -1,6 +1,6 @@
 package com.ubold.admin.service;
 
-import com.ubold.admin.domain.User;
+import com.ubold.admin.domain.UserInfo;
 import com.ubold.admin.response.Response;
 
 /**
@@ -13,5 +13,5 @@ public interface RoleService {
      * @param user
      * @return
      */
-    public Response findPermissionByUser(User user);
+    public Response findPermissionByUser(UserInfo user);
 }

@@ -18,7 +18,7 @@ import javax.validation.Valid;
  * Created by lenovo on 2017/8/13.
  */
 @RestController
-@RequestMapping("/sm/form" + PermitPrefixURI.api)
+@RequestMapping("/sm/form")
 //@RequestMapping("/api/permit/sm")
 public class FormViewController {
     protected Logger logger = LoggerFactory.getLogger(getClass());
