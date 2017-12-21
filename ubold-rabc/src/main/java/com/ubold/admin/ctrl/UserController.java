@@ -3,6 +3,7 @@ package com.ubold.admin.ctrl;
 import com.ubold.admin.constant.PermitPrefixURI;
 import com.ubold.admin.response.Response;
 import com.ubold.admin.service.AuthService;
+import com.ubold.admin.vo.JwtRequestParam;
 import com.ubold.admin.vo.LoginParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +38,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/me", method = RequestMethod.POST)
-    public Response user(@RequestBody JwtheaderParam param) {
+    public Response user(@RequestBody JwtRequestParam param) {
         return authService.getUserInfoByToken(param.getAuthorization());
     }
 
