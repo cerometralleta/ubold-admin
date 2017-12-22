@@ -39,11 +39,13 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public Response ClientPasswordLogin(LoginParam loginParam) throws Exception {
-        String oauth2Path = securityOaut2Configure.getAuthorityContext() +
-                            "/oauth/token?" +
-                            "username=" + loginParam.getUsername()+
-                            "&password=" + loginParam.getPassword()+
-                            "&grant_type=password&scope=user_info";
+        String oauth2Path = String.format("%s/oauth/token?username=%s&password=%s&grant_type=password&scope=%s&client_id=%s&client_secret=%s",
+                securityOaut2Configure.getAuthorityContext(),
+                loginParam.getUsername(),
+                loginParam.getPassword(),
+                "user_info",
+                "uboldClientId",
+                "secret");
         String result = HttpClientUtils.doPost(oauth2Path);
         logger.info("授权结果:{}",result);
         Oauth2Result oauth2Result = JSONObject.parseObject(result, Oauth2Result.class);
