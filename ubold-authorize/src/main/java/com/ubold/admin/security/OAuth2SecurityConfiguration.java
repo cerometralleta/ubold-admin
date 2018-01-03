@@ -24,12 +24,14 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http    .requestMatchers()
-                 .requestMatchers(CorsUtils::isPreFlightRequest) //对preflight放行
+        http
+                .requestMatchers()
+                .requestMatchers(CorsUtils::isPreFlightRequest) //对preflight放行
+                .antMatchers("/login", "/oauth/authorize")
+//                .antMatchers("/**","/login","/oauth/authorize")//配置使HttpSecurity接收以"/**"开头请求。
                 .and()
                 .authorizeRequests()
-                .antMatchers("/user/permit/index").permitAll()
-                .antMatchers(HttpMethod.OPTIONS,"/**"+ PermitPrefixURI.permit+"/**").permitAll()
+                .antMatchers("/**"+ PermitPrefixURI.permit+"/**").permitAll()
                 .antMatchers("/oauth/token").permitAll()
                 .anyRequest().authenticated()
                 .and()
@@ -38,7 +40,7 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http.headers().frameOptions().sameOrigin().disable();
         http.cors().configurationSource(new UboldCorsConfigurationSource());
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+//        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
     @Override

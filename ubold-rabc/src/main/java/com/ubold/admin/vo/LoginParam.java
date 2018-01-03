@@ -2,10 +2,12 @@ package com.ubold.admin.vo;
 
 import org.hibernate.validator.constraints.NotBlank;
 
+import java.io.Serializable;
+
 /**
  * Created by lenovo on 2017/11/11.
  */
-public class LoginParam extends JwtRequestParam {
+public class LoginParam implements Serializable{
 
     @NotBlank(message = "用户名不能为空")
     private String username;

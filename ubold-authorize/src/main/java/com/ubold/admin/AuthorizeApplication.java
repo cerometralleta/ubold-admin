@@ -8,7 +8,6 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
  * Created by ningzuokun on 2017/5/15.
  */
 @SpringBootApplication
-@EnableResourceServer
 public class AuthorizeApplication {
 
     public static void main(String[] args) {

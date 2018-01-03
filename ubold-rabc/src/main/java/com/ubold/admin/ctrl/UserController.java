@@ -42,7 +42,7 @@ public class UserController {
         return authService.getUserInfoByToken(param.getAuthorization());
     }
 
-    @RequestMapping("/authority/me")
+    @RequestMapping("/principal")
     public Principal user(Principal principal) {
         System.out.println(principal);
         return principal;
