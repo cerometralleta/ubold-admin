@@ -1,18 +1,15 @@
 package com.ubold.admin.security;
 
-import com.ubold.admin.constant.PermitPrefixURI;
 import com.ubold.admin.cors.UboldCorsConfigurationSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.web.cors.CorsUtils;
 
 /**
@@ -27,12 +24,11 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .requestMatchers()
                 .requestMatchers(CorsUtils::isPreFlightRequest) //对preflight放行
-                .antMatchers("/login", "/oauth/authorize")
-//                .antMatchers("/**","/login","/oauth/authorize")//配置使HttpSecurity接收以"/**"开头请求。
+                .antMatchers("/login", "/oauth/authorize")//requestMatchers,不拦截需要token验证的url
                 .and()
                 .authorizeRequests()
-                .antMatchers("/**"+ PermitPrefixURI.permit+"/**").permitAll()
-                .antMatchers("/oauth/token").permitAll()
+//                .antMatchers("/**"+ PermitPrefixURI.permit+"/**").permitAll()
+//                .antMatchers("/oauth/authorize").authenticated()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().permitAll();
