@@ -19,6 +19,7 @@ import org.springframework.security.jwt.Jwt;
 import org.springframework.security.jwt.JwtHelper;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -59,7 +60,10 @@ public class AuthServiceImpl implements AuthService {
     public Response<UserInfo> getUserInfoByToken(String token) {
         Jwt jwt = JwtHelper.decode(token);
         ClaimsResult claimsParam = JSONObject.parseObject(jwt.getClaims(),ClaimsResult.class);
-        List<UserInfo> userInfoList = userService.findByUserName(claimsParam.getUser_name());
+//        List<UserInfo> userInfoList = userService.findByUserName(claimsParam.getUser_name());
+        List<UserInfo> userInfoList = new ArrayList<>();
+        UserInfo userInfo = new UserInfo();
+        userInfoList.add(userInfo);
         if(CollectionUtils.isNotEmpty(userInfoList)){
             return Response.SUCCESS(userInfoList.get(0));
         }

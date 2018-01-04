@@ -22,7 +22,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .and()
                 .authorizeRequests()
                 .antMatchers("/**" + PermitPrefixURI.permit + "/**").permitAll()
-                .antMatchers("/login", "/oauth/authorize").permitAll()
+                .antMatchers("/login", "/oauth/**").permitAll()
                 .anyRequest()
                 .authenticated();
     }
