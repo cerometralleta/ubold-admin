@@ -3,6 +3,8 @@ package com.ubold.admin.config;
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ubold.admin.response.Response;
+import com.ubold.admin.util.SpringContextUtil;
+import org.apache.commons.lang3.CharEncoding;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,40 +26,36 @@ import java.io.IOException;
  * Created by ningzuokun on 2017/12/18.
  */
 public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
-
     public JWTLoginFilter(String url, AuthenticationManager authManager) {
         super(new AntPathRequestMatcher(url));
         setAuthenticationManager(authManager);
     }
-
     @Override
     public Authentication attemptAuthentication(
             HttpServletRequest req, HttpServletResponse res)
             throws AuthenticationException, IOException, ServletException {
-
         // JSON反序列化成 AccountCredentials
         AccountCredentials creds = new ObjectMapper().readValue(req.getInputStream(), AccountCredentials.class);
-
         // 返回一个验证令牌
         return getAuthenticationManager()
                 .authenticate(new UsernamePasswordAuthenticationToken(creds.getUsername(),creds.getPassword())
         );
     }
-
     @Override
     protected void successfulAuthentication(
             HttpServletRequest req,
             HttpServletResponse res, FilterChain chain,
             Authentication auth) throws IOException, ServletException {
-        TokenAuthenticationService.addAuthentication(res, auth.getName());
+        TokenAuthenticationService tokenAuthenticationService = SpringContextUtil.getBean(TokenAuthenticationService.class);
+        tokenAuthenticationService.addAuthentication(res, auth.getName());
     }
 
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
-
+        response.setCharacterEncoding(CharEncoding.UTF_8);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpServletResponse.SC_OK);
-        response.getOutputStream().println(JSONObject.toJSONString(Response.FAILURE()));
+        response.getWriter().println(JSONObject.toJSONString(Response.FAILURE()));
     }
 }

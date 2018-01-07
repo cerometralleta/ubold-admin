@@ -1,5 +1,7 @@
 package com.ubold.admin.config;
 
+import com.ubold.admin.util.SpringContextUtil;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
@@ -16,13 +18,13 @@ import java.io.IOException;
  * Created by ningzuokun on 2017/12/18.
  */
 public class JWTAuthenticationFilter extends GenericFilterBean {
-
     @Override
     public void doFilter(ServletRequest request,
                          ServletResponse response,
                          FilterChain filterChain)
             throws IOException, ServletException {
-        Authentication authentication = TokenAuthenticationService.getAuthentication((HttpServletRequest)request);
+        TokenAuthenticationService tokenAuthenticationService = SpringContextUtil.getBean(TokenAuthenticationService.class);
+        Authentication authentication = tokenAuthenticationService.getAuthentication((HttpServletRequest)request);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         filterChain.doFilter(request,response);
     }
