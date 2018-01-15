@@ -42,7 +42,7 @@ public class TokenAuthenticationService {
         // 生成JWT
         String JWT = Jwts.builder()
                 // 保存权限（角色）
-                .claim("authorities", "ROLE_ADMIN,AUTH_WRITE")
+                .claim("authorities", "read,write")
                 // 用户名写入标题
                 .setSubject(username)
                 // 有效期设置
@@ -83,14 +83,18 @@ public class TokenAuthenticationService {
                 // 去掉 Bearer
                 .parseClaimsJws(token.replace(TOKEN_PREFIX, ""))
                 .getBody();
-        //校验token是否过期
-         if(StringUtils.isBlank(stringRedisTemplate.opsForValue().get(token))){
-             return null;
-         }
         // 拿用户名
         String user = claims.getSubject();
+          //判断是否过期
+          if (claims.getExpiration().getTime() - System.currentTimeMillis() < 0) {
+              return null;
+          }
         // 得到 权限（角色）
         List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList((String) claims.get("authorities"));
+          //校验redis token是否过期或者已登出
+          if (StringUtils.isBlank(stringRedisTemplate.opsForValue().get(token))) {
+              return null;
+          }
         // 返回验证令牌
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =  StringUtils.isNotBlank(user) ?
                 new UsernamePasswordAuthenticationToken(user, null, authorities) :
