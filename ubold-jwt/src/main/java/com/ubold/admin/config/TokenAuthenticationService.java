@@ -2,9 +2,7 @@ package com.ubold.admin.config;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ubold.admin.response.Response;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+
 import org.apache.commons.lang3.CharEncoding;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +14,16 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 
 /**
  * Created by ningzuokun on 2017/12/18.
@@ -51,7 +54,7 @@ public class TokenAuthenticationService {
                 .signWith(SignatureAlgorithm.HS512, SECRET)
                 .compact();
         //写入redis
-         stringRedisTemplate.opsForValue().set(JWT,JWT,expirationTimes - new Date().getTime());
+//         stringRedisTemplate.opsForValue().set(JWT,JWT,expirationTimes - new Date().getTime());
         // 将 JWT 写入 body
         try {
             response.setCharacterEncoding(CharEncoding.UTF_8);
@@ -92,9 +95,9 @@ public class TokenAuthenticationService {
         // 得到 权限（角色）
         List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList((String) claims.get("authorities"));
           //校验redis token是否过期或者已登出
-          if (StringUtils.isBlank(stringRedisTemplate.opsForValue().get(token))) {
-              return null;
-          }
+//          if (StringUtils.isBlank(stringRedisTemplate.opsForValue().get(token))) {
+//              return null;
+//          }
         // 返回验证令牌
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =  StringUtils.isNotBlank(user) ?
                 new UsernamePasswordAuthenticationToken(user, null, authorities) :
