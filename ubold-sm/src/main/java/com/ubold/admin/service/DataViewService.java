@@ -21,5 +21,8 @@ public interface DataViewService {
      * @return
      */
     Response<DataView> findByDataViewCode(String dataViewCode);
-    List<DataView> getByDataViewCode(String code);
+
+    List<DataView> queryByDataViewCode(String dataViewCode);
+
+    DataView getByDataViewCode(String dataViewCode);
 }
