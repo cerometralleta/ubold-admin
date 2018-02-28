@@ -1,28 +1,35 @@
 package com.ubold.admin.ctrl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.ubold.admin.constant.PermitPrefixURI;
 import com.ubold.admin.request.SqlDefineRequest;
 import com.ubold.admin.request.ZtreeParamsRequest;
 import com.ubold.admin.response.Response;
 import com.ubold.admin.service.SqlDefineService;
+import com.ubold.admin.service.SqlIdJdbcService;
 import com.ubold.admin.vo.BootstrapPageResult;
 import com.ubold.admin.vo.BootstrapSearchParam;
 import com.ubold.admin.vo.ColumnParam;
 import com.ubold.admin.vo.SqlDefineFetchParam;
+
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+
+import javax.validation.Valid;
 
 /**
  * Created by lenovo on 2017/8/30.
@@ -36,6 +43,9 @@ public class SqlDefineController {
     SqlDefineService sqlDefineService;
 
     @Autowired
+    SqlIdJdbcService sqlIdJdbcService;
+
+    @Autowired
     HttpServletRequest httpServletRequest;
 
     @ResponseBody
@@ -47,7 +57,7 @@ public class SqlDefineController {
     @ResponseBody
     @RequestMapping(value="/createColumnList/{sqlId}",method= RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public Response createColumnList(@PathVariable String sqlId) {
-        List<ColumnParam> list = sqlDefineService.getColumnsBySqlId(sqlId);
+        List<ColumnParam> list = sqlIdJdbcService.getColumnsBySqlId(sqlId);
         return Response.SUCCESS(list);
     }
 
@@ -59,7 +69,7 @@ public class SqlDefineController {
     @ResponseBody
     @RequestMapping(value="/create/{code}",method=RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public Object createView(@PathVariable String code,@RequestBody JSONObject formParam) {
-        return sqlDefineService.createByDataViewCode(code, formParam);
+        return sqlIdJdbcService.createByDataViewCode(code, formParam);
     }
 
 
@@ -72,7 +82,7 @@ public class SqlDefineController {
     @ResponseBody
     @RequestMapping(value="/modfity/{code}",method=RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public Object modfityView(@PathVariable String code,@RequestBody JSONObject formParam) {
-        return sqlDefineService.modifyByDataViewCode(code, formParam);
+        return sqlIdJdbcService.modifyByDataViewCode(code, formParam);
     }
 
     /**
@@ -82,13 +92,13 @@ public class SqlDefineController {
     @ResponseBody
     @RequestMapping(value="/delete/{code}",method=RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public  Object deleteView(@PathVariable String code,@RequestBody JSONObject row) {
-        return sqlDefineService.deleteByDataViewCode(code, row);
+        return sqlIdJdbcService.deleteByDataViewCode(code, row);
     }
 
     @ResponseBody
     @RequestMapping(value="/fetch",method= RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public Response fetch(@RequestBody @Valid SqlDefineFetchParam sqlDefineFetchParam) {
-        Response response = sqlDefineService.fetch(sqlDefineFetchParam);
+        Response response = sqlIdJdbcService.fetch(sqlDefineFetchParam);
         return response;
     }
 
@@ -99,7 +109,7 @@ public class SqlDefineController {
     @ResponseBody
     @RequestMapping(value="/ztree",method= RequestMethod.POST)
     public Object ztree(ZtreeParamsRequest ztreeParamsRequest) {
-        Response response = sqlDefineService.ztree(ztreeParamsRequest);
+        Response response = sqlIdJdbcService.ztree(ztreeParamsRequest);
         return response.getResult();
     }
 
@@ -118,9 +128,10 @@ public class SqlDefineController {
             if (!StringUtils.isEmpty(searchText)) {
                 searchText = new String(searchText.getBytes("ISO-8859-1"), "UTF-8");
             }
-            response = sqlDefineService.getBootstrapTableResponse(pageSize,pageNumber,searchText,sortName,sortOrder,sqlId,bootstrapSearchParam);
+            response = sqlIdJdbcService.getBootstrapTableResponse(pageSize, pageNumber, searchText, sortName, sortOrder,
+                    sqlId, bootstrapSearchParam);
         }else{
-            response = sqlDefineService.getBootstrapTableResponse(bootstrapSearchParam,sqlId);
+            response = sqlIdJdbcService.getBootstrapTableResponse(bootstrapSearchParam, sqlId);
         }
         if(response.checkSuccess()){
             return response.getResult();
