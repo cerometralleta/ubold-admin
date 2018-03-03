@@ -22,7 +22,7 @@
         </dependency>
         <dependency>
             <groupId>com.ubold.admin</groupId>
-            <artifactId>ubold-authorize</artifactId>
+            <artifactId>ubold-jwt</artifactId>
             <version>1.0.0</version>
         </dependency>
     </dependencies>

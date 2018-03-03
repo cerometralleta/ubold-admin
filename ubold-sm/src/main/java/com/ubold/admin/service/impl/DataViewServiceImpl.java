@@ -8,12 +8,7 @@ import com.ubold.admin.request.DataViewCreateRequest;
 import com.ubold.admin.response.Response;
 import com.ubold.admin.service.DataViewService;
 import com.ubold.admin.util.GUID;
-import com.ubold.admin.vo.ButtonParam;
-import com.ubold.admin.vo.ColumnParam;
-import com.ubold.admin.vo.DataFilterParam;
-import com.ubold.admin.vo.OptionsParam;
-import com.ubold.admin.vo.TreeOptionsParam;
-
+import com.ubold.admin.vo.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,18 +31,18 @@ public class DataViewServiceImpl implements DataViewService {
         // 编码是否重复
         List<DataView> dataViewList;
         DataView dataView = new DataView();
-        if(StringUtils.isBlank(request.getId())){
+        if (StringUtils.isBlank(request.getId())) {
             dataViewList = dataViewRepository.findByDataViewCode(request.getDataViewCode());
             dataView.setId(GUID.nextId());
-        }else{
+        } else {
             dataView = dataViewRepository.findOne(request.getId());
-            if(null == dataView){
-                return Response.FAILURE("错误数据id:"+ request.getId());
+            if (null == dataView) {
+                return Response.FAILURE("错误数据id:" + request.getId());
             }
-            dataViewList = dataViewRepository.findByDataViewCodeAndIdNot(request.getDataViewCode(),request.getId());
+            dataViewList = dataViewRepository.findByDataViewCodeAndIdNot(request.getDataViewCode(), request.getId());
         }
-        if(CollectionUtils.isNotEmpty(dataViewList)){
-            return Response.FAILURE("已存在视图编号:"+ request.getDataViewCode());
+        if (CollectionUtils.isNotEmpty(dataViewList)) {
+            return Response.FAILURE("已存在视图编号:" + request.getDataViewCode());
         }
         dataView.setSqlId(request.getSqlId());
         dataView.setRemark(request.getRemark());
@@ -65,10 +60,11 @@ public class DataViewServiceImpl implements DataViewService {
 
     /**
      * 创建dataView
+     *
      * @param request
      * @return
      */
-    private DataView createDataView(DataViewCreateRequest request){
+    private DataView createDataView(DataViewCreateRequest request) {
         DataView dataView = new DataView();
         dataView.setId(request.getId());
         dataView.setSqlId(request.getSqlId());
@@ -87,8 +83,8 @@ public class DataViewServiceImpl implements DataViewService {
     @Override
     public Response<DataView> findByDataViewCode(String dataViewCode) {
         List<DataView> dataViewList = dataViewRepository.findByDataViewCode(dataViewCode);
-        if(CollectionUtils.isEmpty(dataViewList)){
-            return Response.FAILURE("视图未定义,视图编号:"+dataViewCode);
+        if (CollectionUtils.isEmpty(dataViewList)) {
+            return Response.FAILURE("视图未定义,视图编号:" + dataViewCode);
         }
         DataView dataView = dataViewList.get(0);
         return Response.SUCCESS(this.parseResult(dataView));
@@ -111,7 +107,7 @@ public class DataViewServiceImpl implements DataViewService {
     @Override
     public Response<List<TablesResult>> queryTables(QuerytableParam querytableParam) {
         List<TablesResult> tablesVos = new ArrayList<>();
-        if(StringUtils.isBlank(querytableParam.getTableName())){
+        if (StringUtils.isBlank(querytableParam.getTableName())) {
             return Response.SUCCESS(tablesVos);
         }
         TablesResult tablesVo = new TablesResult();
@@ -141,11 +137,12 @@ public class DataViewServiceImpl implements DataViewService {
     }
 
     /**
-     *  转换为页面显示数据
+     * 转换为页面显示数据
+     *
      * @param dataView
      * @return
      */
-    private DataViewCreateRequest parseResult(DataView dataView){
+    private DataViewCreateRequest parseResult(DataView dataView) {
         DataViewCreateRequest request = new DataViewCreateRequest();
         request.setButtons(JSON.parseArray(dataView.getButtons(), ButtonParam.class));
         request.setColumns(JSON.parseArray(dataView.getColumns(), ColumnParam.class));
