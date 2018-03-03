@@ -25,7 +25,10 @@ public interface DataViewService {
      * @return
      */
     Response<DataView> findByDataViewCode(String dataViewCode);
-    List<DataView> getByDataViewCode(String code);
+
+    List<DataView> queryByDataViewCode(String dataViewCode);
+
+    DataView getByDataViewCode(String dataViewCode);
     Response<List<TablesResult>> queryTables(QuerytableParam querytableParam);
     Response<SqlDefine> querytableInfo(QueryTableInfoParam queryTableInfoParam);
 }

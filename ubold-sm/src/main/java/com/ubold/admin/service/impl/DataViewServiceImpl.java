@@ -8,7 +8,12 @@ import com.ubold.admin.request.DataViewCreateRequest;
 import com.ubold.admin.response.Response;
 import com.ubold.admin.service.DataViewService;
 import com.ubold.admin.util.GUID;
-import com.ubold.admin.vo.*;
+import com.ubold.admin.vo.ButtonParam;
+import com.ubold.admin.vo.ColumnParam;
+import com.ubold.admin.vo.DataFilterParam;
+import com.ubold.admin.vo.OptionsParam;
+import com.ubold.admin.vo.TreeOptionsParam;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,8 +95,17 @@ public class DataViewServiceImpl implements DataViewService {
     }
 
     @Override
-    public List<DataView> getByDataViewCode(String code) {
+    public List<DataView> queryByDataViewCode(String code) {
         return dataViewRepository.findByDataViewCode(code);
+    }
+
+    @Override
+    public DataView getByDataViewCode(String dataViewCode) {
+        List<DataView> dataViewList = dataViewRepository.findByDataViewCode(dataViewCode);
+        if (CollectionUtils.isNotEmpty(dataViewList)) {
+            return dataViewList.get(0);
+        }
+        return null;
     }
 
     @Override
