@@ -4,6 +4,8 @@ import com.ubold.admin.constant.PermitPrefixURI;
 import com.ubold.admin.request.DataViewCreateRequest;
 import com.ubold.admin.response.Response;
 import com.ubold.admin.service.DataViewService;
+import com.ubold.admin.vo.QueryTableInfoParam;
+import com.ubold.admin.vo.QuerytableParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,5 +55,17 @@ public class DataViewController{
     public Response index() {
         logger.info("application started");
         return Response.SUCCESS("ubold started");
+    }
+
+    @ResponseBody
+    @RequestMapping(value="/querytables")
+    public Response querytable(@RequestBody @Valid QuerytableParam querytableParam) {
+        return dataViewService.queryTables(querytableParam);
+    }
+
+    @ResponseBody
+    @RequestMapping(value="/querytableInfo")
+    public Response querytableInfo(@RequestBody @Valid QueryTableInfoParam queryTableInfoParam) {
+        return dataViewService.querytableInfo(queryTableInfoParam);
     }
 }

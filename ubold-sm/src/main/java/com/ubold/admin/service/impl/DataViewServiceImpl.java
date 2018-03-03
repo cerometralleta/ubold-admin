@@ -2,6 +2,7 @@ package com.ubold.admin.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.ubold.admin.domain.DataView;
+import com.ubold.admin.domain.SqlDefine;
 import com.ubold.admin.repository.DataViewRepository;
 import com.ubold.admin.request.DataViewCreateRequest;
 import com.ubold.admin.response.Response;
@@ -13,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -90,6 +92,38 @@ public class DataViewServiceImpl implements DataViewService {
     @Override
     public List<DataView> getByDataViewCode(String code) {
         return dataViewRepository.findByDataViewCode(code);
+    }
+
+    @Override
+    public Response<List<TablesResult>> queryTables(QuerytableParam querytableParam) {
+        List<TablesResult> tablesVos = new ArrayList<>();
+        if(StringUtils.isBlank(querytableParam.getTableName())){
+            return Response.SUCCESS(tablesVos);
+        }
+        TablesResult tablesVo = new TablesResult();
+        tablesVo.setTableName("tb_rbac_menu");
+        tablesVo.setRemark("菜单管理");
+        tablesVos.add(tablesVo);
+
+        TablesResult tablesVo1 = new TablesResult();
+        tablesVo1.setTableName("tb_rbac_permission_menu");
+        tablesVo1.setRemark("菜单授权");
+        tablesVos.add(tablesVo1);
+
+        TablesResult tablesVo2 = new TablesResult();
+        tablesVo2.setTableName("tb_user_info");
+        tablesVo2.setRemark("用户管理");
+        tablesVos.add(tablesVo2);
+        return Response.SUCCESS(tablesVos);
+    }
+
+    @Override
+    public Response<SqlDefine> querytableInfo(QueryTableInfoParam queryTableInfoParam) {
+        SqlDefine sqlDefine = new SqlDefine();
+        sqlDefine.setMasterTable(queryTableInfoParam.getTableName());
+        sqlDefine.setMasterTableId("ID");
+        sqlDefine.setSelectSql("select * from tb_user_info");
+        return Response.SUCCESS(sqlDefine);
     }
 
     /**

@@ -1,8 +1,12 @@
 package com.ubold.admin.service;
 
 import com.ubold.admin.domain.DataView;
+import com.ubold.admin.domain.SqlDefine;
 import com.ubold.admin.request.DataViewCreateRequest;
 import com.ubold.admin.response.Response;
+import com.ubold.admin.vo.QueryTableInfoParam;
+import com.ubold.admin.vo.QuerytableParam;
+import com.ubold.admin.vo.TablesResult;
 
 import java.util.List;
 
@@ -22,4 +26,6 @@ public interface DataViewService {
      */
     Response<DataView> findByDataViewCode(String dataViewCode);
     List<DataView> getByDataViewCode(String code);
+    Response<List<TablesResult>> queryTables(QuerytableParam querytableParam);
+    Response<SqlDefine> querytableInfo(QueryTableInfoParam queryTableInfoParam);
 }
