@@ -8,8 +8,8 @@ import java.util.List;
  */
 public class BootstrapSearchParam implements Serializable{
 
-    private Integer pageSize;
-    private Integer pageNumber;
+    private Integer pageSize = 50;
+    private Integer pageNumber = 1;
     private String searchText;
     private String sortName;
     private String sortOrder;
