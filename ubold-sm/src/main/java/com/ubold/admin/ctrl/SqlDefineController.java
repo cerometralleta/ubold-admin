@@ -128,12 +128,6 @@ public class SqlDefineController {
             if (!StringUtils.isEmpty(searchText)) {
                 searchText = new String(searchText.getBytes("ISO-8859-1"), "UTF-8");
             }
-            if (null == pageNumber) {
-                pageNumber = 1;
-            }
-            if (null == pageSize) {
-                pageSize = 50;
-            }
             response = sqlIdJdbcService.getBootstrapTableResponse(pageSize, pageNumber, searchText, sortName, sortOrder,
                     sqlId, bootstrapSearchParam);
         }else{

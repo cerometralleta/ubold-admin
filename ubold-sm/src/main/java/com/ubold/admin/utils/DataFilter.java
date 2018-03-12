@@ -2,6 +2,7 @@ package com.ubold.admin.utils;
 
 import com.ubold.admin.constant.SqlExpression;
 import com.ubold.admin.vo.ConditionParam;
+
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.util.Lists;
 
@@ -23,25 +24,32 @@ public class DataFilter {
 	//兼容bootstraptable排序
 	private String sortOrder;
 	private String sortName;
-	public void setSortOrder(String sortOrder) {
+
+    public DataFilter(List<ConditionParam> conditionVoList) {
+        addCondition(conditionVoList);
+    }
+
+    public DataFilter() {
+    }
+
+    public static DataFilter getInstance() {
+        return new DataFilter();
+    }
+
+    public void setSortOrder(String sortOrder) {
 		this.sortOrder = sortOrder;
 	}
+
 	public void setSortName(String sortName) {
 		this.sortName = sortName;
 	}
-
-	public DataFilter(List<ConditionParam> conditionVoList){
-		addCondition(conditionVoList);
-	}
-	
-	public DataFilter(){}
 
 	public void addCondition(List<ConditionParam> ConditionParamList){
 		if(ConditionParamList == null)
 			return;
 
 		for(ConditionParam cond : ConditionParamList){
-			
+
 			//排序字段
 			addCondition(cond.getField(),cond.getExpression(),cond.getValue(),cond.getSortOrder());
 		}
@@ -49,7 +57,7 @@ public class DataFilter {
 
 	public void addCondition(ConditionParam cond){
 		addCondition(cond.getField(),cond.getExpression(),cond.getValue(),cond.getSortOrder());
-	} 
+    }
 
 	public void EQ(String alias,String value){
 		addCondition(alias, SqlExpression.EQ,value,null);
@@ -61,25 +69,25 @@ public class DataFilter {
 				condition.append(" AND ");
 			}
 			condition.append(" t.").append(alias);
-			
+
 			//拼装条件表达式
-			if(SqlExpression.IN.equals(expr) || 
-					SqlExpression.NOT_IN.equals(expr)){
+            if (SqlExpression.IN.equals(expr) ||
+                    SqlExpression.NOT_IN.equals(expr)){
 				condition.append(" " + expr +" (").append(":").append(alias).append(") ");
-			}else if(SqlExpression.NULL.equals(expr) || 
-					SqlExpression.NOT_NULL.equals(expr)){
+            } else if (SqlExpression.NULL.equals(expr) ||
+                    SqlExpression.NOT_NULL.equals(expr)){
 				condition.append(expr);
 			}else{
 				condition.append(" " + expr +" ").append(":").append(alias);
 			}
-			
+
 			//输入值
 			if(SqlExpression.LIKE.equals(expr)){
 				params.put(alias, "%"+value+"%");
-			}else if(SqlExpression.NULL.equals(expr) || 
-					SqlExpression.NOT_NULL.equals(expr)){
-			}else if(SqlExpression.IN.equals(expr) || 
-					SqlExpression.NOT_IN.equals(expr)){
+            } else if (SqlExpression.NULL.equals(expr) ||
+                    SqlExpression.NOT_NULL.equals(expr)){
+            } else if (SqlExpression.IN.equals(expr) ||
+                    SqlExpression.NOT_IN.equals(expr)){
 				params.put(alias, Lists.newArrayList(value.split(",")));
 			}else{
 				params.put(alias, value);
@@ -115,8 +123,8 @@ public class DataFilter {
 		.append(this.querySql)
 		.append(") t ");
 		if(StringUtils.isNotBlank(condition)){
-			storeSql.append( WHERE ).append(condition); 
-		}
+            storeSql.append(WHERE).append(condition);
+        }
 		return storeSql.toString();
 	}
 
@@ -130,8 +138,8 @@ public class DataFilter {
 		.append(querySql)
 		.append(") t ");
 		if(StringUtils.isNotBlank(condition)){
-			storeSql.append( WHERE ).append(condition); 
-		}
+            storeSql.append(WHERE).append(condition);
+        }
 		this.addSort(this.sortName,this.sortOrder);
 		return storeSql.append(orderBy).toString();
 	}
@@ -143,13 +151,19 @@ public class DataFilter {
 	 * @return
 	 */
 	public String createPager(Integer pageNo,Integer pageSize){
-		StringBuffer storeSql = new StringBuffer();
+        if (null == pageNo) {
+            pageNo = 1;
+        }
+        if (null == pageSize) {
+            pageSize = 50;
+        }
+        StringBuffer storeSql = new StringBuffer();
 		storeSql.append("select t.* from (")
 		.append(querySql)
 		.append(") t ");
 		if(StringUtils.isNotBlank(condition)){
-			storeSql.append( WHERE ).append(condition); 
-		}
+            storeSql.append(WHERE).append(condition);
+        }
 		this.addSort(this.sortName,this.sortOrder);
 		storeSql.append(orderBy);
 		if(null != pageNo && null != pageSize){
@@ -185,12 +199,9 @@ public class DataFilter {
 	public void put(String alis,Object value){
 		params.put(alis, value);
 	}
-	public void setQuerySql(String querySql) {
-		this.querySql = querySql;
-	}
 
-	public static DataFilter getInstance(){
-		return new DataFilter();
+    public void setQuerySql(String querySql) {
+		this.querySql = querySql;
 	}
 
 }
