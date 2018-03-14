@@ -20,6 +20,8 @@ public class DataFilter {
 	private StringBuffer condition = new StringBuffer();
 	private StringBuffer orderBy = new StringBuffer();
 	private Map<String,Object> params = new HashMap<>();
+    private Integer PAGENO = 1;
+    private Integer PAGESIZE = 50;
 
 	//兼容bootstraptable排序
 	private String sortOrder;
@@ -119,10 +121,8 @@ public class DataFilter {
 	 */
 	public String countSql(){
 		StringBuffer storeSql = new StringBuffer();
-		storeSql.append("select count(1) from (")
-		.append(this.querySql)
-		.append(") t ");
-		if(StringUtils.isNotBlank(condition)){
+        storeSql.append("select count(1) from (").append(this.querySql).append(") t ");
+        if(StringUtils.isNotBlank(condition)){
             storeSql.append(WHERE).append(condition);
         }
 		return storeSql.toString();
@@ -134,10 +134,8 @@ public class DataFilter {
 	 */
 	public String getSql(){
 		StringBuffer storeSql = new StringBuffer();
-		storeSql.append("select t.* from (")
-		.append(querySql)
-		.append(") t ");
-		if(StringUtils.isNotBlank(condition)){
+        storeSql.append("select t.* from (").append(querySql).append(") t ");
+        if(StringUtils.isNotBlank(condition)){
             storeSql.append(WHERE).append(condition);
         }
 		this.addSort(this.sortName,this.sortOrder);
@@ -152,16 +150,14 @@ public class DataFilter {
 	 */
 	public String createPager(Integer pageNo,Integer pageSize){
         if (null == pageNo) {
-            pageNo = 1;
+            pageNo = PAGENO;
         }
         if (null == pageSize) {
-            pageSize = 50;
+            pageSize = PAGESIZE;
         }
         StringBuffer storeSql = new StringBuffer();
-		storeSql.append("select t.* from (")
-		.append(querySql)
-		.append(") t ");
-		if(StringUtils.isNotBlank(condition)){
+        storeSql.append("select t.* from (").append(querySql).append(") t ");
+        if(StringUtils.isNotBlank(condition)){
             storeSql.append(WHERE).append(condition);
         }
 		this.addSort(this.sortName,this.sortOrder);
