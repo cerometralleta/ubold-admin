@@ -15,6 +15,8 @@ import java.util.ArrayList;
  * Created by ningzuokun on 2017/12/18.
  */
 public class CustomAuthenticationProvider implements AuthenticationProvider {
+    private static final String ROLE_ADMIN = "ROLE_ADMIN";
+    private static final String AUTH_WRITE = "AUTH_WRITE";
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -27,8 +29,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
             // 这里设置权限和角色
             ArrayList<GrantedAuthority> authorities = new ArrayList<>();
-            authorities.add( new SimpleGrantedAuthority("ROLE_ADMIN") );
-            authorities.add( new SimpleGrantedAuthority("AUTH_WRITE") );
+            authorities.add(new SimpleGrantedAuthority(ROLE_ADMIN));
+            authorities.add(new SimpleGrantedAuthority(AUTH_WRITE));
             // 生成令牌
             Authentication auth = new UsernamePasswordAuthenticationToken(name, password, authorities);
             return auth;
