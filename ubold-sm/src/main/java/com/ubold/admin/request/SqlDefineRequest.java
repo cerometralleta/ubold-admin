@@ -2,12 +2,10 @@ package com.ubold.admin.request;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-import java.io.Serializable;
-
 /**
  * Created by ningzuokun on 2017/11/8.
  */
-public class SqlDefineRequest implements Serializable{
+public class SqlDefineRequest extends Request {
 
     private String id;
     @NotBlank(message = "sqlId不能为空")

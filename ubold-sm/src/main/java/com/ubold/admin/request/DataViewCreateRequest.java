@@ -1,17 +1,22 @@
 package com.ubold.admin.request;
 
-import com.ubold.admin.vo.*;
+import com.ubold.admin.vo.ButtonParam;
+import com.ubold.admin.vo.ColumnParam;
+import com.ubold.admin.vo.DataFilterParam;
+import com.ubold.admin.vo.OptionsParam;
+import com.ubold.admin.vo.TreeOptionsParam;
+
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 import java.util.List;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * 数据视图创建请求
  * Created by lenovo on 2017/8/13.
  */
-public class DataViewCreateRequest implements Serializable {
+public class DataViewCreateRequest extends Request {
 
     @NotBlank(message = "视图编号不能为空值")
     private String dataViewCode;

@@ -3,12 +3,11 @@ package com.ubold.admin.request;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 
 /**
  * Created by lenovo on 2017/9/8.
  */
-public class ZtreeParamsRequest implements Serializable{
+public class ZtreeParamsRequest extends Request {
 
     @NotBlank
     private String sqlId;

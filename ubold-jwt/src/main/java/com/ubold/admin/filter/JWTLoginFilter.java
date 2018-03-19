@@ -1,9 +1,13 @@
-package com.ubold.admin.config;
+package com.ubold.admin.filter;
 
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ubold.admin.response.Response;
+import com.ubold.admin.service.TokenAuthenticationService;
 import com.ubold.admin.util.SpringContextUtil;
+import com.ubold.admin.vo.AccountCredentials;
+import com.ubold.admin.vo.SessionInfo;
+
 import org.apache.commons.lang3.CharEncoding;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,11 +17,12 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import java.io.IOException;
+
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
  * attemptAuthentication - 登录时需要验证时候调用
@@ -45,9 +50,9 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
     protected void successfulAuthentication(
             HttpServletRequest req,
             HttpServletResponse res, FilterChain chain,
-            Authentication auth) throws IOException, ServletException {
+            Authentication authentication) throws IOException, ServletException {
         TokenAuthenticationService tokenAuthenticationService = SpringContextUtil.getBean(TokenAuthenticationService.class);
-        tokenAuthenticationService.addAuthentication(res, auth.getName());
+        tokenAuthenticationService.addAuthentication(res, (SessionInfo) authentication.getDetails());
     }
 
 

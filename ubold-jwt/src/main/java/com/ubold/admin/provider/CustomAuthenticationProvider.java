@@ -1,4 +1,7 @@
-package com.ubold.admin.config;
+package com.ubold.admin.provider;
+
+import com.ubold.admin.domain.UserInfo;
+import com.ubold.admin.vo.SessionInfo;
 
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -20,23 +23,39 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        // 获取认证的用户名 & 密码
-        String name = authentication.getName();
+        String username = authentication.getName();
         String password = authentication.getCredentials().toString();
-
+        // 获取认证的用户名 & 密码
+        SessionInfo sessionInfo = this.createSessionInfo(username, password);
+        boolean isTrue = (null != sessionInfo);
         // 认证逻辑
-        if (name.equals("admin") && password.equals("123456")) {
-
+        if (isTrue) {
             // 这里设置权限和角色
             ArrayList<GrantedAuthority> authorities = new ArrayList<>();
             authorities.add(new SimpleGrantedAuthority(ROLE_ADMIN));
             authorities.add(new SimpleGrantedAuthority(AUTH_WRITE));
             // 生成令牌
-            Authentication auth = new UsernamePasswordAuthenticationToken(name, password, authorities);
-            return auth;
+            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+                    username, password, authorities);
+            //存储用户详细信息
+            usernamePasswordAuthenticationToken.setDetails(sessionInfo);
+            return usernamePasswordAuthenticationToken;
         }else {
             throw new BadCredentialsException("密码错误~");
         }
+    }
+
+    protected SessionInfo createSessionInfo(String userName, String password) {
+        UserInfo userInfo = new UserInfo();
+        if (userName.equals("admin") && password.equals("123456")) {
+            userInfo.setId("016233fbde5ajTXPPT30kgiCgKXf5100");
+            userInfo.setUsername("administrator");
+        }
+        SessionInfo sessionInfo = new SessionInfo();
+        sessionInfo.setUsername(userInfo.getUsername());
+        sessionInfo.setPassword(userInfo.getPassword());
+        sessionInfo.setUserId(userInfo.getId());
+        return sessionInfo;
     }
 
     // 是否可以提供输入类型的认证服务

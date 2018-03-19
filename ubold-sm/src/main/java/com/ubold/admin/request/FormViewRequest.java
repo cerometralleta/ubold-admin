@@ -2,14 +2,14 @@ package com.ubold.admin.request;
 
 import com.ubold.admin.vo.FieldParam;
 
-import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 import java.util.List;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * Created by lenovo on 2017/8/28.
  */
-public class FormViewRequest implements Serializable{
+public class FormViewRequest extends Request {
     private String id;
     private String code;
     private String sqlId;
