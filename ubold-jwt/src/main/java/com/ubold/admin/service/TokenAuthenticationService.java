@@ -32,7 +32,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
  */
 @Service
 public class TokenAuthenticationService {
-    static final long EXPIRATIONTIME = 432_000_000;     // 5天
+    static final long EXPIRATIONTIME = 1000 * 60 * 60 * 24 * 5;     // 5天
     static final String SECRET = "P@ssw02d";            // JWT密码
     static final String TOKEN_PREFIX = "Bearer";        // Token前缀
     static final String HEADER_STRING = "Authorization";// 存放Token的Header Key
@@ -114,8 +114,8 @@ public class TokenAuthenticationService {
             return null;
         }
         // 得到 权限（角色）
-        List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList(
-                (String) claims.get(AUTHORITIES));
+        List<GrantedAuthority> authorities = AuthorityUtils
+                .commaSeparatedStringToAuthorityList((String) claims.get(AUTHORITIES));
 
         //校验redis subject用户账户,获取用户详细信息
         String sessionInfoJson = stringRedisTemplate.opsForValue().get(this.createApplicationSessionId(username));
@@ -123,7 +123,6 @@ public class TokenAuthenticationService {
             return null;
         }
         SessionInfo sessionInfo = JSONObject.parseObject(sessionInfoJson, SessionInfo.class);
-
         // 返回验证令牌
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = StringUtils.isNotBlank(username) ?
                 new UsernamePasswordAuthenticationToken(username, sessionInfo.getPassword(), authorities) :

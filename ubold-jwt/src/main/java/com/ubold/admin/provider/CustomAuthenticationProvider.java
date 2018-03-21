@@ -55,6 +55,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         sessionInfo.setUsername(userInfo.getUsername());
         sessionInfo.setPassword(userInfo.getPassword());
         sessionInfo.setUserId(userInfo.getId());
+
+        //TODO 获取用户权限
         return sessionInfo;
     }
 

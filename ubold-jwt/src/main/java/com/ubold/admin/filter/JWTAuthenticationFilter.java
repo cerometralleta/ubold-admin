@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
  * Created by ningzuokun on 2017/12/18.
  */
 public class JWTAuthenticationFilter extends GenericFilterBean {
+
     @Override
     public void doFilter(ServletRequest request,
                          ServletResponse response,

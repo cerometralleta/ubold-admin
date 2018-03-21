@@ -11,4 +11,22 @@ import javax.persistence.Table;
 @Table(name="TB_RBAC_ROLE")
 public class Role extends Auditable{
 
+    private String roleName;
+    private String remark;
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
 }
