@@ -1,6 +1,10 @@
 package com.ubold.admin.service;
 
 import com.ubold.admin.domain.Resource;
+import com.ubold.admin.request.Request;
+import com.ubold.admin.response.Response;
+import com.ubold.admin.vo.AuthorizeUrlParam;
+import com.ubold.admin.vo.GetMenuResult;
 
 import java.util.List;
 
@@ -22,4 +26,8 @@ public interface ResourceService {
      * @return
      */
     List<String> findAllResourceLink(List<Resource> resources);
+
+    Response authorizeUrl(AuthorizeUrlParam authorizeUrlParam);
+
+    Response<GetMenuResult> getMenuList(Request request);
 }
