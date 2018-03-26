@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50557
 File Encoding         : 65001
 
-Date: 2018-03-26 16:02:59
+Date: 2018-03-26 16:06:44
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -65,29 +65,28 @@ CREATE TABLE `tb_rbac_resource` (
   `name` varchar(50) DEFAULT NULL COMMENT '名称',
   `remark` varchar(500) DEFAULT NULL COMMENT '备注',
   `parent` varchar(50) DEFAULT NULL COMMENT '父菜单',
+  `icon` varchar(50) DEFAULT NULL COMMENT '图标',
+  `type` tinyint(4) DEFAULT NULL,
+  `link` varchar(255) DEFAULT NULL,
+  `last_update_time` datetime DEFAULT NULL,
+  `last_update_user` varchar(50) DEFAULT NULL,
   `version` decimal(10,0) DEFAULT '0',
   `create_user` varchar(50) DEFAULT NULL,
   `create_time` datetime DEFAULT NULL,
-  `last_update_user` varchar(50) DEFAULT NULL,
-  `last_update_time` datetime DEFAULT NULL,
-  `code` varchar(30) DEFAULT NULL COMMENT '编号',
-  `type` tinyint(4) DEFAULT NULL,
-  `link` varchar(255) DEFAULT NULL,
-  `icon` varchar(50) DEFAULT NULL COMMENT '图标',
   KEY `idx_unqiue_id` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='菜单表';
 
 -- ----------------------------
 -- Records of tb_rbac_resource
 -- ----------------------------
-INSERT INTO `tb_rbac_resource` VALUES ('01559ba349demTa8haRXHHT6FcIe0c96', '首页', '首页展示', '0', '0', null, null, null, null, null, '1', 'main', 'md md-dashboard');
-INSERT INTO `tb_rbac_resource` VALUES ('01559ba349demTa8haRXHHT6FcIe0c98', 'SQL管理', 'SQL管理页', '0', '0', null, null, null, null, null, '1', null, 'md md-group-work');
-INSERT INTO `tb_rbac_resource` VALUES ('01559ba349demTa8haRXHHT6FcIe0c91', 'SQLDEFINE LIST', 'SQL自定义查询', '01559ba349demTa8haRXHHT6FcIe0c98', '0', null, null, null, null, null, '1', 'dataview/DV10000000000000', null);
-INSERT INTO `tb_rbac_resource` VALUES ('01559ba349demTa8haRXHHT6FcIe0c81', 'DATAVIEW LIST', '视图查询', '01559ba349demTa8haRXHHT6FcIe0c98', '0', null, null, null, null, null, '1', 'dataviewlist', null);
-INSERT INTO `tb_rbac_resource` VALUES ('01559ba349demTa8haRXHHT6FcIe1c81', 'DATA DICT', '数据字典', '01559ba349demTa8haRXHHT6FcIe0c98', '0', null, null, null, null, null, '1', 'dataview/DV20171028203619', null);
-INSERT INTO `tb_rbac_resource` VALUES ('01559ba349demTa8haRXHHT6FcIe1cz1', 'FormView Create', '新建表单', '01559ba349demTa8haRXHHT6FcIe0c98', '0', null, null, null, null, null, '1', 'formviewcreate', null);
-INSERT INTO `tb_rbac_resource` VALUES ('01559ba349demTa8hCRXHHT6FcIe1cz1', 'MENU EDIT', '菜单设置', '01559ba349demTa8haRXHHT6FcIe0c98', '0', null, null, null, null, null, '1', 'menuedit', null);
-INSERT INTO `tb_rbac_resource` VALUES ('01559ba349demTa8hCRXHHT6FcIe1cz3', 'SQL DEFINE', 'SQL自定义编辑', '01559ba349demTa8haRXHHT6FcIe0c98', '0', null, null, null, null, null, '1', 'sqldefineedit', null);
+INSERT INTO `tb_rbac_resource` VALUES ('01559ba349demTa8haRXHHT6FcIe0c96', '首页', '首页展示', '0', 'md md-dashboard', '1', 'main', null, null, '0', null, null);
+INSERT INTO `tb_rbac_resource` VALUES ('01559ba349demTa8haRXHHT6FcIe0c98', 'SQL管理', 'SQL管理页', '0', 'md md-group-work', '1', null, null, null, '0', null, null);
+INSERT INTO `tb_rbac_resource` VALUES ('01559ba349demTa8haRXHHT6FcIe0c91', 'SQLDEFINE LIST', 'SQL自定义查询', '01559ba349demTa8haRXHHT6FcIe0c98', null, '1', 'dataview/DV10000000000000', null, null, '0', null, null);
+INSERT INTO `tb_rbac_resource` VALUES ('01559ba349demTa8haRXHHT6FcIe0c81', 'DATAVIEW LIST', '视图查询', '01559ba349demTa8haRXHHT6FcIe0c98', null, '1', 'dataviewlist', null, null, '0', null, null);
+INSERT INTO `tb_rbac_resource` VALUES ('01559ba349demTa8haRXHHT6FcIe1c81', 'DATA DICT', '数据字典', '01559ba349demTa8haRXHHT6FcIe0c98', null, '1', 'dataview/DV20171028203619', null, null, '0', null, null);
+INSERT INTO `tb_rbac_resource` VALUES ('01559ba349demTa8haRXHHT6FcIe1cz1', 'FormView Create', '新建表单', '01559ba349demTa8haRXHHT6FcIe0c98', null, '1', 'formviewcreate', null, null, '0', null, null);
+INSERT INTO `tb_rbac_resource` VALUES ('01559ba349demTa8hCRXHHT6FcIe1cz1', 'MENU EDIT', '菜单设置', '01559ba349demTa8haRXHHT6FcIe0c98', null, '1', 'menuedit', null, null, '0', null, null);
+INSERT INTO `tb_rbac_resource` VALUES ('01559ba349demTa8hCRXHHT6FcIe1cz3', 'SQL DEFINE', 'SQL自定义编辑', '01559ba349demTa8haRXHHT6FcIe0c98', null, '1', 'sqldefineedit', null, null, '0', null, null);
 
 -- ----------------------------
 -- Table structure for tb_rbac_role
