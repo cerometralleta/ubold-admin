@@ -11,7 +11,7 @@ public class ButtonParam {
     private String icon;
     private String title;
     private String url;
-    private String location;//导航按钮 1:导航按钮,0:行内按钮
+    private String position;//导航按钮 1:导航按钮,0:行内按钮
     private String sort;
     private String btnsize;
     private String color;
@@ -88,19 +88,19 @@ public class ButtonParam {
         this.url = url;
     }
 
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
     public String getSort() {
         return sort;
     }
 
     public void setSort(String sort) {
         this.sort = sort;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
     }
 }
