@@ -16,7 +16,6 @@ public class Resource extends Auditable {
     private String name;
     private String remark;
     private String parent;
-    private String code;
     private Integer type;
     private String link;
     private String icon;
@@ -62,14 +61,6 @@ public class Resource extends Auditable {
 
     public void setParent(String parent) {
         this.parent = parent;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
     }
 
     public Integer getType() {
