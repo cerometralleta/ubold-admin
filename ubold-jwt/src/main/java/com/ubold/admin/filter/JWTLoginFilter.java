@@ -6,7 +6,7 @@ import com.ubold.admin.response.Response;
 import com.ubold.admin.service.TokenAuthenticationService;
 import com.ubold.admin.util.SpringContextUtil;
 import com.ubold.admin.vo.AccountCredentials;
-import com.ubold.admin.vo.SessionInfo;
+import com.ubold.admin.vo.TokenInfo;
 
 import org.apache.commons.lang3.CharEncoding;
 import org.springframework.http.MediaType;
@@ -52,7 +52,7 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
             HttpServletResponse res, FilterChain chain,
             Authentication authentication) throws IOException, ServletException {
         TokenAuthenticationService tokenAuthenticationService = SpringContextUtil.getBean(TokenAuthenticationService.class);
-        tokenAuthenticationService.addAuthentication(res, (SessionInfo) authentication.getDetails());
+        tokenAuthenticationService.addAuthentication(res, (TokenInfo) authentication.getDetails());
     }
 
 

@@ -1,7 +1,7 @@
 package com.ubold.admin.aop;
 
 import com.ubold.admin.request.Request;
-import com.ubold.admin.vo.SessionInfo;
+import com.ubold.admin.vo.TokenInfo;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -33,7 +33,7 @@ public class UboldAuthorityAspect {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         for (Object parameterAgrs : args) {
             if (parameterAgrs instanceof Request) {
-                ((Request) parameterAgrs).setSessionUserId(((SessionInfo) authentication.getDetails()).getUserId());
+                ((Request) parameterAgrs).setSessionUserId(((TokenInfo) authentication.getDetails()).getUserId());
             }
         }
         return point.proceed();

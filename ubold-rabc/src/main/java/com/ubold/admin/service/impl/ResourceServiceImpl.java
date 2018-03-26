@@ -25,6 +25,7 @@ import java.util.Map;
  */
 @Service
 public class ResourceServiceImpl implements ResourceService {
+    private static final String TOP_NODEID = "0";
     protected Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired
     ResourceRepository resourceRepository;
@@ -62,7 +63,7 @@ public class ResourceServiceImpl implements ResourceService {
         List<Resource> resources = resourceRepository
                 .findResourceByRoleUserIdAndType(request.getSessionUserId(), MenuTypeEnum.MENU.getCode());
         if (CollectionUtils.isEmpty(resources)) {
-            return null;
+            return Response.FAILURE();
         }
         List<Resource> parentList = Lists.newArrayList();
         getMenuResult.setResources(parentList);
@@ -71,7 +72,7 @@ public class ResourceServiceImpl implements ResourceService {
         for (Resource resource : resources) {
 
             //一级节点
-            if (null == resource.getParent()) {
+            if (TOP_NODEID.equals(resource.getParent())) {
                 parentList.add(resource);
                 continue;
             }

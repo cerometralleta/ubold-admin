@@ -1,13 +1,14 @@
 package com.ubold.admin.service;
 
 import com.ubold.admin.domain.UserInfo;
-
-import java.util.List;
+import com.ubold.admin.response.Response;
 
 /**
  * Created by lenovo on 2017/11/10.
  */
 public interface UserService {
 
-    List<UserInfo> findByUserName(String userName);
+    UserInfo findByUserName(String userName);
+
+    Response<UserInfo> findByUserNameAndPassword(String userName, String password);
 }

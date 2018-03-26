@@ -1,7 +1,10 @@
 package com.ubold.admin.provider;
 
 import com.ubold.admin.domain.UserInfo;
-import com.ubold.admin.vo.SessionInfo;
+import com.ubold.admin.response.Response;
+import com.ubold.admin.service.UserService;
+import com.ubold.admin.util.SpringContextUtil;
+import com.ubold.admin.vo.TokenInfo;
 
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -26,38 +29,35 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         String username = authentication.getName();
         String password = authentication.getCredentials().toString();
         // 获取认证的用户名 & 密码
-        SessionInfo sessionInfo = this.createSessionInfo(username, password);
-        boolean isTrue = (null != sessionInfo);
+        Response<TokenInfo> tokenInfoResponse = this.createTokenInfo(username, password);
         // 认证逻辑
-        if (isTrue) {
+        if (tokenInfoResponse.checkSuccess()) {
             // 这里设置权限和角色
             ArrayList<GrantedAuthority> authorities = new ArrayList<>();
             authorities.add(new SimpleGrantedAuthority(ROLE_ADMIN));
             authorities.add(new SimpleGrantedAuthority(AUTH_WRITE));
             // 生成令牌
-            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                    username, password, authorities);
+            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                    new UsernamePasswordAuthenticationToken(username, password, authorities);
             //存储用户详细信息
-            usernamePasswordAuthenticationToken.setDetails(sessionInfo);
+            usernamePasswordAuthenticationToken.setDetails(tokenInfoResponse.getResult());
             return usernamePasswordAuthenticationToken;
-        }else {
-            throw new BadCredentialsException("密码错误~");
         }
+        throw new BadCredentialsException("密码错误~");
     }
 
-    protected SessionInfo createSessionInfo(String userName, String password) {
-        UserInfo userInfo = new UserInfo();
-        if (userName.equals("admin") && password.equals("123456")) {
-            userInfo.setId("016233fbde5ajTXPPT30kgiCgKXf5100");
-            userInfo.setUsername("administrator");
+    protected Response<TokenInfo> createTokenInfo(String userName, String password) {
+        UserService userService = SpringContextUtil.getBean(UserService.class);
+        Response<UserInfo> response = userService.findByUserNameAndPassword(userName, password);
+        if (!response.checkSuccess()) {
+            return Response.FAILURE();
         }
-        SessionInfo sessionInfo = new SessionInfo();
-        sessionInfo.setUsername(userInfo.getUsername());
-        sessionInfo.setPassword(userInfo.getPassword());
-        sessionInfo.setUserId(userInfo.getId());
-
-        //TODO 获取用户权限
-        return sessionInfo;
+        UserInfo userInfo = response.getResult();
+        TokenInfo tokenInfo = new TokenInfo();
+        tokenInfo.setUsername(userInfo.getUsername());
+        tokenInfo.setUserId(userInfo.getId());
+        tokenInfo.setPassword(userInfo.getPassword());
+        return Response.SUCCESS(tokenInfo);
     }
 
     // 是否可以提供输入类型的认证服务

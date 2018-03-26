@@ -1,8 +1,12 @@
 package com.ubold.admin.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.ubold.admin.request.Request;
 import com.ubold.admin.response.Response;
-import com.ubold.admin.vo.SessionInfo;
+import com.ubold.admin.util.SpringContextUtil;
+import com.ubold.admin.vo.AccountCredentialsResult;
+import com.ubold.admin.vo.GetMenuResult;
+import com.ubold.admin.vo.TokenInfo;
 
 import org.apache.commons.lang3.CharEncoding;
 import org.apache.commons.lang3.StringUtils;
@@ -37,13 +41,13 @@ public class TokenAuthenticationService {
     static final String TOKEN_PREFIX = "Bearer";        // Token前缀
     static final String HEADER_STRING = "Authorization";// 存放Token的Header Key
     static final String AUTHORITIES = "authorities";
-    static final String USER_SESSION_ID = "UserSessionId:";
+    static final String USER_TOKEN = "userToken:";
 
     @Autowired
     StringRedisTemplate stringRedisTemplate;
 
     // JWT生成方法
-    public void addAuthentication(HttpServletResponse response, SessionInfo sessionInfo) {
+    public void addAuthentication(HttpServletResponse response, TokenInfo tokenInfo) {
          //过期时间
         long expirationTimes = System.currentTimeMillis() + EXPIRATIONTIME;
         // 生成JWT
@@ -51,23 +55,25 @@ public class TokenAuthenticationService {
                 // 保存权限（角色）
                 .claim(AUTHORITIES, "read,write")
                 // 用户名写入标题
-                .setSubject(sessionInfo.getUsername())
+                .setSubject(tokenInfo.getUsername())
                 // 有效期设置
                 .setExpiration(new Date(expirationTimes))
                 // 签名设置
                 .signWith(SignatureAlgorithm.HS512, SECRET)
                 .compact();
         //写入redis
-        stringRedisTemplate.opsForValue().set(this.createApplicationSessionId(sessionInfo.getUsername()),
-                JSONObject.toJSONString(sessionInfo),
+        stringRedisTemplate.opsForValue().set(this.userTokenCreate(tokenInfo.getUsername()),
+                JSONObject.toJSONString(tokenInfo),
                 expirationTimes - new Date().getTime(),
                 TimeUnit.MILLISECONDS);
+
         // 将 JWT 写入 body
         try {
             response.setCharacterEncoding(CharEncoding.UTF_8);
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.setStatus(HttpServletResponse.SC_OK);
-            response.getWriter().println(JSONObject.toJSONString(Response.SUCCESS(JWTString)));
+            response.getWriter().println(JSONObject.toJSONString(
+                    Response.SUCCESS(this.getAccountCredentialsResult(tokenInfo.getUserId(), JWTString))));
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -79,8 +85,22 @@ public class TokenAuthenticationService {
         }
     }
 
-    private String createApplicationSessionId(String username) {
-        return USER_SESSION_ID + username;
+    private AccountCredentialsResult getAccountCredentialsResult(String userId, String JWToken) {
+        //获取用户菜单
+        AccountCredentialsResult accountCredentialsResult = new AccountCredentialsResult();
+        accountCredentialsResult.setTokenId(JWToken);
+        ResourceService resourceService = SpringContextUtil.getBean(ResourceService.class);
+        Request request = new Request();
+        request.setSessionUserId(userId);
+        Response<GetMenuResult> response = resourceService.getMenuList(request);
+        if (response.checkSuccess()) {
+            accountCredentialsResult.setResources(response.getResult().getResources());
+        }
+        return accountCredentialsResult;
+    }
+
+    private String userTokenCreate(String username) {
+        return USER_TOKEN + username;
     }
 
     public Claims httpServletRequestClaims(HttpServletRequest request) {
@@ -100,7 +120,6 @@ public class TokenAuthenticationService {
         return claims;
     }
 
-
     // JWT验证方法
     public Authentication getAuthentication(HttpServletRequest httpServletRequest) {
         Claims claims = httpServletRequestClaims(httpServletRequest);
@@ -118,16 +137,16 @@ public class TokenAuthenticationService {
                 .commaSeparatedStringToAuthorityList((String) claims.get(AUTHORITIES));
 
         //校验redis subject用户账户,获取用户详细信息
-        String sessionInfoJson = stringRedisTemplate.opsForValue().get(this.createApplicationSessionId(username));
-        if (StringUtils.isBlank(sessionInfoJson)) {
+        String tokenInfoJson = stringRedisTemplate.opsForValue().get(this.userTokenCreate(username));
+        if (StringUtils.isBlank(tokenInfoJson)) {
             return null;
         }
-        SessionInfo sessionInfo = JSONObject.parseObject(sessionInfoJson, SessionInfo.class);
+        TokenInfo tokenInfo = JSONObject.parseObject(tokenInfoJson, TokenInfo.class);
         // 返回验证令牌
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = StringUtils.isNotBlank(username) ?
-                new UsernamePasswordAuthenticationToken(username, sessionInfo.getPassword(), authorities) :
+                new UsernamePasswordAuthenticationToken(username, tokenInfo.getPassword(), authorities) :
                 null;
-        usernamePasswordAuthenticationToken.setDetails(sessionInfo);
+        usernamePasswordAuthenticationToken.setDetails(tokenInfo);
         return usernamePasswordAuthenticationToken;
     }
 }

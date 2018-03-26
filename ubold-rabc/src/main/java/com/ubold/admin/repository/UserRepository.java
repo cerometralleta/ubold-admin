@@ -1,10 +1,9 @@
 package com.ubold.admin.repository;
 
 import com.ubold.admin.domain.UserInfo;
-import org.springframework.stereotype.Repository;
-import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 /**
  * Created by lenovo on 2017/11/10.
@@ -12,5 +11,7 @@ import java.util.List;
 @Repository
 public interface UserRepository extends JpaRepository<UserInfo, String> {
 
-    List<UserInfo> findByUsername(String userName);
+    UserInfo findByUsername(String userName);
+
+    UserInfo findByUsernameAndPassword(String userName, String password);
 }
