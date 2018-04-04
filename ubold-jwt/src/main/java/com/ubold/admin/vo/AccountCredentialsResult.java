@@ -4,6 +4,7 @@ import com.ubold.admin.domain.Resource;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by ningzuokun on 2018/3/26.
@@ -11,6 +12,7 @@ import java.util.List;
 public class AccountCredentialsResult implements Serializable {
 
     private List<Resource> resources;
+    private Map<String, String> authority;
     private String tokenId;
 
     public String getTokenId() {
@@ -27,5 +29,13 @@ public class AccountCredentialsResult implements Serializable {
 
     public void setResources(List<Resource> resources) {
         this.resources = resources;
+    }
+
+    public Map<String, String> getAuthority() {
+        return authority;
+    }
+
+    public void setAuthority(Map<String, String> authority) {
+        this.authority = authority;
     }
 }

@@ -1,7 +1,6 @@
 package com.ubold.admin.service;
 
 import com.alibaba.fastjson.JSONObject;
-import com.ubold.admin.request.Request;
 import com.ubold.admin.response.Response;
 import com.ubold.admin.util.SpringContextUtil;
 import com.ubold.admin.vo.AccountCredentialsResult;
@@ -90,12 +89,11 @@ public class TokenAuthenticationService {
         AccountCredentialsResult accountCredentialsResult = new AccountCredentialsResult();
         accountCredentialsResult.setTokenId(JWToken);
         ResourceService resourceService = SpringContextUtil.getBean(ResourceService.class);
-        Request request = new Request();
-        request.setSessionUserId(userId);
-        Response<GetMenuResult> response = resourceService.getMenuList(request);
+        Response<GetMenuResult> response = resourceService.getMenuList(userId);
         if (response.checkSuccess()) {
             accountCredentialsResult.setResources(response.getResult().getResources());
         }
+        accountCredentialsResult.setAuthority(resourceService.getAuthority(userId));
         return accountCredentialsResult;
     }
 

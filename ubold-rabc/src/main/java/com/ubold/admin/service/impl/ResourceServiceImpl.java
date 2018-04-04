@@ -3,7 +3,6 @@ package com.ubold.admin.service.impl;
 import com.ubold.admin.constants.MenuTypeEnum;
 import com.ubold.admin.domain.Resource;
 import com.ubold.admin.repository.ResourceRepository;
-import com.ubold.admin.request.Request;
 import com.ubold.admin.response.Response;
 import com.ubold.admin.service.ResourceService;
 import com.ubold.admin.vo.AuthorizeUrlParam;
@@ -11,6 +10,7 @@ import com.ubold.admin.vo.GetMenuResult;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.map.HashedMap;
+import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.util.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,10 +58,10 @@ public class ResourceServiceImpl implements ResourceService {
     }
 
     @Override
-    public Response<GetMenuResult> getMenuList(Request request) {
+    public Response<GetMenuResult> getMenuList(String userId) {
         GetMenuResult getMenuResult = new GetMenuResult();
         List<Resource> resources = resourceRepository
-                .findResourceByRoleUserIdAndType(request.getSessionUserId(), MenuTypeEnum.MENU.getCode());
+                .findResourceByRoleUserIdAndType(userId, MenuTypeEnum.MENU.getCode());
         if (CollectionUtils.isEmpty(resources)) {
             return Response.FAILURE();
         }
@@ -90,6 +90,21 @@ public class ResourceServiceImpl implements ResourceService {
             loopGetMenuList(resource, childMap);
         }
         return Response.SUCCESS(getMenuResult);
+    }
+
+    @Override
+    public Map<String, String> getAuthority(String userId) {
+        Map<String, String> authorityMap = new HashedMap();
+        List<Resource> resources = this.findAllResourceByUserId(userId);
+        if (CollectionUtils.isEmpty(resources)) {
+            return authorityMap;
+        }
+        for (Resource resource : resources) {
+            if (StringUtils.isNotBlank(resource.getLink())) {
+                authorityMap.put(resource.getLink(), resource.getLink());
+            }
+        }
+        return authorityMap;
     }
 
     //遍历

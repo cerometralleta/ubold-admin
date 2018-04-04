@@ -31,6 +31,6 @@ public class ResourceController {
 
     @RequestMapping(value = "/getMenuList", method = RequestMethod.GET)
     public Response getMenuList(@RequestBody Request request) {
-        return resourceService.getMenuList(request);
+        return resourceService.getMenuList(request.getSessionUserId());
     }
 }
