@@ -25,6 +25,11 @@ import java.lang.reflect.Method;
 public class RedisCacheConfig extends CachingConfigurerSupport{
 
     /**
+     * 默认缓存时间,单位:秒
+     */
+    private static final long DefaultExpiration = 60 * 60 * 6;
+
+    /**
      * 生成key的策略
      */
     @Bean
@@ -45,8 +50,9 @@ public class RedisCacheConfig extends CachingConfigurerSupport{
 
     @Bean
     public CacheManager cacheManager(RedisTemplate<?,?> redisTemplate) {
-        CacheManager cacheManager = new RedisCacheManager(redisTemplate);
-        return cacheManager;
+        RedisCacheManager redisCacheManager = new RedisCacheManager(redisTemplate);
+        redisCacheManager.setDefaultExpiration(this.DefaultExpiration);
+        return redisCacheManager;
     }
 
     @Bean
