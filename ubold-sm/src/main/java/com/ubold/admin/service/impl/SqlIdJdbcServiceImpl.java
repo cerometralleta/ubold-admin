@@ -81,7 +81,7 @@ public class SqlIdJdbcServiceImpl implements SqlIdJdbcService {
             field.setHalign(SqlDefineConstant.align_center);
             field.setValign(SqlDefineConstant.valign_middle);
             field.setFalign(SqlDefineConstant.valign_middle);
-            field.setUniqueCheck(false);
+            field.setUnduplicated(false);
             field.setIdx(i);
             this.setFieldTitle(field, srsmd.getColumnLabel(i));
             //判断是否是日期类型
@@ -160,7 +160,7 @@ public class SqlIdJdbcServiceImpl implements SqlIdJdbcService {
         Map<String, Object> paramMap = new HashMap<>();
         for (ColumnParam columnParam : dataViewFields) {
             if (!SqlDefineConstant.MODIFTY_ENABLE.equals(columnParam.getUpdateType())) {
-                if (this.uniquecheck(columnParam, sqlDefine, rowValue, false)) {
+                if (this.unduplicated(columnParam, sqlDefine, rowValue, false)) {
                     return Response.FAILURE(columnParam.getTitle() + "数据重复");
                 }
                 modifysql.append(columnParam.getField()).append("= :").append(columnParam.getField()).append(",");
@@ -189,8 +189,8 @@ public class SqlIdJdbcServiceImpl implements SqlIdJdbcService {
     /**
      * 数据唯一校验
      */
-    private boolean uniquecheck(ColumnParam field, SqlDefine sqlDefine, JSONObject rowValue, boolean insert) {
-        if (!field.isUniqueCheck()) {
+    private boolean unduplicated(ColumnParam field, SqlDefine sqlDefine, JSONObject rowValue, boolean insert) {
+        if (!field.isUnduplicated()) {
             return false;
         }
         Map<String, Object> checkParams = new HashedMap();
@@ -237,7 +237,7 @@ public class SqlIdJdbcServiceImpl implements SqlIdJdbcService {
             if (columnParam.getField().equalsIgnoreCase(sqlDefine.getMasterTableId())) {
                 return Response.FAILURE("创建数据不能设置主键");
             }
-            if (this.uniquecheck(columnParam, sqlDefine, rowValue, true)) {
+            if (this.unduplicated(columnParam, sqlDefine, rowValue, true)) {
                 return Response.FAILURE(columnParam.getTitle() + "数据重复");
             }
             createsql.append(columnParam.getField()).append(",");

@@ -31,7 +31,7 @@ public class ColumnParam implements Serializable{
     private String order;
     private boolean cardVisible;
     private boolean switchable;
-    private boolean uniqueCheck;
+    private boolean unduplicated;
     private boolean clickToSelect;
     private String formatter;
 //    private String footerFormatter;
@@ -53,12 +53,12 @@ public class ColumnParam implements Serializable{
         this.dataFormat = dataFormat;
     }
 
-    public boolean isUniqueCheck() {
-        return uniqueCheck;
+    public boolean isUnduplicated() {
+        return unduplicated;
     }
 
-    public void setUniqueCheck(boolean uniqueCheck) {
-        this.uniqueCheck = uniqueCheck;
+    public void setUnduplicated(boolean unduplicated) {
+        this.unduplicated = unduplicated;
     }
 
     public String getPattern() {
