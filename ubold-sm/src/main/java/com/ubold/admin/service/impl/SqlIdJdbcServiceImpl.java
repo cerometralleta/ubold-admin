@@ -17,17 +17,12 @@ import com.ubold.admin.service.SqlIdJdbcService;
 import com.ubold.admin.util.GUID;
 import com.ubold.admin.utils.DataFilter;
 import com.ubold.admin.utils.SimpleUtils;
-import com.ubold.admin.vo.BootstrapPageResult;
-import com.ubold.admin.vo.BootstrapSearchParam;
-import com.ubold.admin.vo.ColumnParam;
-import com.ubold.admin.vo.ConditionParam;
-import com.ubold.admin.vo.OptionsParam;
-import com.ubold.admin.vo.SqlDefineFetchParam;
-import com.ubold.admin.vo.TreeOptionsParam;
-
+import com.ubold.admin.vo.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.jdbc.support.rowset.SqlRowSetMetaData;
@@ -43,34 +38,38 @@ import java.util.Map;
  */
 @Service
 public class SqlIdJdbcServiceImpl implements SqlIdJdbcService {
-
+    protected Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired
     DataViewService dataViewService;
     @Autowired
     SqlDefineRepository sqlDefineRepository;
     @Autowired
     NamedParameterJdbcTemplateFactory namedParameterJdbcTemplateFactory;
-
+    private static final String BLANK_STR =  "#000000";
 
     @Override
     public List<ColumnParam> getColumnsBySqlId(String sqlId) {
-        List<ColumnParam> list = new ArrayList<ColumnParam>();
         SqlDefine sqlDefine = sqlDefineRepository.findBySqlId(sqlId);
         //获取主表实际列用来过滤
+        String resultSql="SELECT * FROM " + sqlDefine.getMasterTable() + " T WHERE 1=2 ";
         SqlRowSet resultSet = namedParameterJdbcTemplateFactory.get(sqlDefine.getDatasource())
-                .queryForRowSet("SELECT * FROM " + sqlDefine.getMasterTable() + " T WHERE 1=2 ",
-                        new HashMap<String, String>());
+                .queryForRowSet(resultSql,new HashMap<String, String>());
         SqlRowSetMetaData srsmd = resultSet.getMetaData();
         Map<String, Object> masterFieldMap = new HashMap<>();
         for (int i = 1; i < srsmd.getColumnCount() + 1; i++) {
             masterFieldMap.put(srsmd.getColumnLabel(i), srsmd.getColumnLabel(i));
         }
+        return createColumnParamList(sqlDefine,masterFieldMap);
+    }
+
+    protected List<ColumnParam> createColumnParamList(SqlDefine sqlDefine,Map<String, Object> masterFieldMap){
+        List<ColumnParam> list = new ArrayList<ColumnParam>();
         //获取查询所有列
         String viewSql = " SELECT T.* FROM (" + sqlDefine.getSelectSql() + ") T WHERE 1=2 ";
         //通过临时表 找到对应的字段属性
-        resultSet = namedParameterJdbcTemplateFactory.get(sqlDefine.getDatasource()).queryForRowSet(viewSql,
+        SqlRowSet resultSet = namedParameterJdbcTemplateFactory.get(sqlDefine.getDatasource()).queryForRowSet(viewSql,
                 new HashMap<String, String>());
-        srsmd = resultSet.getMetaData();
+        SqlRowSetMetaData srsmd = resultSet.getMetaData();
         ColumnParam field = null;
         for (int i = 1; i < srsmd.getColumnCount() + 1; i++) {
             field = new ColumnParam();
@@ -83,6 +82,8 @@ public class SqlIdJdbcServiceImpl implements SqlIdJdbcService {
             field.setValign(SqlDefineConstant.valign_middle);
             field.setFalign(SqlDefineConstant.valign_middle);
             field.setUniqueCheck(false);
+            field.setIdx(i);
+            this.setFieldTitle(field, srsmd.getColumnLabel(i));
             //判断是否是日期类型
             if (SimpleUtils.getDataType(field.getDataType()).equals(SqlDefineConstant.COLUMNTYPE_DATE)) {
                 field.setFieldType(ComponentType.DATEPICKER.getValue());
@@ -93,7 +94,6 @@ public class SqlIdJdbcServiceImpl implements SqlIdJdbcService {
             if (SimpleUtils.getDataType(field.getDataType()).equals(SqlDefineConstant.COLUMNTYPE_NUMBER)) {
                 field.setAlign(SqlDefineConstant.align_right);
             }
-            field.setIdx(i);
             if (masterFieldMap.containsKey(field.getField())) {
                 //修改类型
                 field.setUpdateType(SqlDefineConstant.MODIFTY_HIDE);
@@ -110,7 +110,6 @@ public class SqlIdJdbcServiceImpl implements SqlIdJdbcService {
                     field.setUpdateType(SqlDefineConstant.MODIFTY_HIDE);
                 }
             }
-            this.setFieldTitle(field, srsmd.getColumnLabel(i));
             list.add(field);
         }
         return list;
@@ -160,7 +159,7 @@ public class SqlIdJdbcServiceImpl implements SqlIdJdbcService {
         //参数绑定
         Map<String, Object> paramMap = new HashMap<>();
         for (ColumnParam columnParam : dataViewFields) {
-            if (SqlDefineConstant.MODIFTY_ENABLE.equals(columnParam.getUpdateType())) {
+            if (!SqlDefineConstant.MODIFTY_ENABLE.equals(columnParam.getUpdateType())) {
                 if (this.uniquecheck(columnParam, sqlDefine, rowValue, false)) {
                     return Response.FAILURE(columnParam.getTitle() + "数据重复");
                 }
@@ -231,18 +230,19 @@ public class SqlIdJdbcServiceImpl implements SqlIdJdbcService {
         //参数绑定
         Map<String, Object> paramMap = new HashMap<>();
         for (ColumnParam columnParam : dataViewFields) {
-            if (columnParam.isInsert()) {
-                //主键强制不能添加
-                if (columnParam.getField().equalsIgnoreCase(sqlDefine.getMasterTableId())) {
-                    return Response.FAILURE("创建数据不能设置主键");
-                }
-                if (this.uniquecheck(columnParam, sqlDefine, rowValue, true)) {
-                    return Response.FAILURE(columnParam.getTitle() + "数据重复");
-                }
-                createsql.append(columnParam.getField()).append(",");
-                expressionsql.append(":").append(columnParam.getField()).append(",");
-                paramMap.put(columnParam.getField(), rowValue.get(columnParam.getField()));
+            if (!columnParam.isInsert()) {
+                continue;
             }
+            //主键强制不能添加
+            if (columnParam.getField().equalsIgnoreCase(sqlDefine.getMasterTableId())) {
+                return Response.FAILURE("创建数据不能设置主键");
+            }
+            if (this.uniquecheck(columnParam, sqlDefine, rowValue, true)) {
+                return Response.FAILURE(columnParam.getTitle() + "数据重复");
+            }
+            createsql.append(columnParam.getField()).append(",");
+            expressionsql.append(":").append(columnParam.getField()).append(",");
+            paramMap.put(columnParam.getField(), rowValue.get(columnParam.getField()));
         }
         //添加主键列
         createsql.append(sqlDefine.getMasterTableId());
@@ -344,8 +344,7 @@ public class SqlIdJdbcServiceImpl implements SqlIdJdbcService {
 
         //查询总数
         Long count = namedParameterJdbcTemplateFactory.get(sqlDefine.getDatasource()).queryForObject(
-                dataFilter.countSql(), dataFilter.getParams(),
-                Long.class);
+                dataFilter.countSql(), dataFilter.getParams(),Long.class);
         pageResultForBootstrap.setTotal(count);
         return Response.SUCCESS(pageResultForBootstrap);
     }
@@ -364,7 +363,7 @@ public class SqlIdJdbcServiceImpl implements SqlIdJdbcService {
 
         //默认是空字符串
         String idValue = StringUtils.isBlank(
-                treeOptionsParam.getNodeValue()) ? "#000000" : treeOptionsParam.getNodeValue();
+                treeOptionsParam.getNodeValue()) ? BLANK_STR : treeOptionsParam.getNodeValue();
         List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
         switch (treeOptionsParam.getScope()) {
             case TreeNodeHandleType.TREEHANDLETYPE_ALL:
@@ -398,15 +397,15 @@ public class SqlIdJdbcServiceImpl implements SqlIdJdbcService {
         for (Map<String, Object> item : mapList) {
             sb.append(item.get(key)).append(",");
         }
-        return StringUtils.isBlank(sb) ? "#000000" : sb.deleteCharAt(sb.lastIndexOf(",")).toString();
+        return StringUtils.isBlank(sb) ? BLANK_STR: sb.deleteCharAt(sb.lastIndexOf(",")).toString();
     }
 
     /**
      * tree查询SQL
      */
     private String warpTreeSql(String sql, String field) {
-        return new StringBuffer("select t.* from (").append(sql).append(") t WHERE T.").append(field).append(
-                " =:").append(field).toString();
+        return new StringBuffer("select t.* from (").append(sql).append(") t WHERE T.").append(field)
+                .append(" =:").append(field).toString();
     }
 
     /**
@@ -447,8 +446,7 @@ public class SqlIdJdbcServiceImpl implements SqlIdJdbcService {
             }
         }
         List<Map<String, Object>> dataList = namedParameterJdbcTemplateFactory.get(
-                sqlDefine.getDatasource()).queryForList
-                (sqlBuilder.toString(), paraMap);
+                sqlDefine.getDatasource()).queryForList(sqlBuilder.toString(), paraMap);
         //异步加载判断是否parent
         if (ztreeParamsRequest.isEnable()) {
             for (Map<String, Object> node : dataList) {
