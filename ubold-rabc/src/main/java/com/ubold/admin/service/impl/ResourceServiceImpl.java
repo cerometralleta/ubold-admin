@@ -92,6 +92,7 @@ public class ResourceServiceImpl implements ResourceService {
         return Response.SUCCESS(getMenuResult);
     }
 
+    //TODO cache..
     @Override
     public Map<String, String> getAuthority(String userId) {
         Map<String, String> authorityMap = new HashedMap();

@@ -1,11 +1,9 @@
 package com.ubold.admin.provider;
 
-import com.ubold.admin.domain.UserInfo;
 import com.ubold.admin.response.Response;
-import com.ubold.admin.service.UserService;
+import com.ubold.admin.service.TokenAuthenticationService;
 import com.ubold.admin.util.SpringContextUtil;
 import com.ubold.admin.vo.TokenInfo;
-
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,8 +26,10 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String username = authentication.getName();
         String password = authentication.getCredentials().toString();
+
         // 获取认证的用户名 & 密码
-        Response<TokenInfo> tokenInfoResponse = this.createTokenInfo(username, password);
+        TokenAuthenticationService tokenAuthenticationService = SpringContextUtil.getBean(TokenAuthenticationService.class);
+        Response<TokenInfo> tokenInfoResponse = tokenAuthenticationService.createTokenInfo(username, password);
         // 认证逻辑
         if (tokenInfoResponse.checkSuccess()) {
             // 这里设置权限和角色
@@ -46,19 +46,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         throw new BadCredentialsException("密码错误~");
     }
 
-    protected Response<TokenInfo> createTokenInfo(String userName, String password) {
-        UserService userService = SpringContextUtil.getBean(UserService.class);
-        Response<UserInfo> response = userService.findByUserNameAndPassword(userName, password);
-        if (!response.checkSuccess()) {
-            return Response.FAILURE();
-        }
-        UserInfo userInfo = response.getResult();
-        TokenInfo tokenInfo = new TokenInfo();
-        tokenInfo.setUsername(userInfo.getUsername());
-        tokenInfo.setUserId(userInfo.getId());
-        tokenInfo.setPassword(userInfo.getPassword());
-        return Response.SUCCESS(tokenInfo);
-    }
 
     // 是否可以提供输入类型的认证服务
     @Override

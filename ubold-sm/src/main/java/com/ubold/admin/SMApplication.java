@@ -9,9 +9,9 @@ import org.springframework.cache.annotation.EnableCaching;
  */
 @SpringBootApplication
 @EnableCaching
-public class JWTApplication {
+public class SMApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(JWTApplication.class, args);
+        SpringApplication.run(SMApplication.class, args);
     }
 }
