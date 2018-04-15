@@ -4,7 +4,7 @@ import com.ubold.admin.constant.PermitPrefixURI;
 import com.ubold.admin.request.DataViewCreateRequest;
 import com.ubold.admin.response.Response;
 import com.ubold.admin.service.DataViewService;
-import com.ubold.admin.vo.QueryTableInfoParam;
+import com.ubold.admin.service.SqlIdJdbcService;
 import com.ubold.admin.vo.QuerytableParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +25,8 @@ public class DataViewController{
 
     @Autowired
     DataViewService dataViewService;
+    @Autowired
+    SqlIdJdbcService sqlIdJdbcService;
     /**
      * 创建视图
      * @param request
@@ -58,14 +60,14 @@ public class DataViewController{
     }
 
     @ResponseBody
-    @RequestMapping(value="/querytables")
-    public Response querytable(@RequestBody @Valid QuerytableParam querytableParam) {
-        return dataViewService.queryTables(querytableParam);
+    @RequestMapping(value="/queryTableschemas")
+    public Response queryTableschema(@RequestBody @Valid QuerytableParam querytableParam) {
+        return Response.SUCCESS(sqlIdJdbcService.queryTableschema(querytableParam));
     }
 
     @ResponseBody
-    @RequestMapping(value="/querytableInfo")
-    public Response querytableInfo(@RequestBody @Valid QueryTableInfoParam queryTableInfoParam) {
-        return dataViewService.querytableInfo(queryTableInfoParam);
+    @RequestMapping(value="/queryTableschemaInfo")
+    public Response queryTableschemaInfo(@RequestBody @Valid QuerytableParam querytableParam) {
+        return dataViewService.queryTableschemaInfo(querytableParam);
     }
 }

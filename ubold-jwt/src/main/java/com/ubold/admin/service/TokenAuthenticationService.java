@@ -61,10 +61,10 @@ public class TokenAuthenticationService {
                 .signWith(SignatureAlgorithm.HS512, SECRET)
                 .compact();
         //写入redis
-        stringRedisTemplate.opsForValue().set(this.userTokenCreate(tokenInfo.getUsername()),
-                JSONObject.toJSONString(tokenInfo),
-                expirationTimes - new Date().getTime(),
-                TimeUnit.MILLISECONDS);
+//        stringRedisTemplate.opsForValue().set(this.userTokenCreate(tokenInfo.getUsername()),
+//                JSONObject.toJSONString(tokenInfo),
+//                expirationTimes - new Date().getTime(),
+//                TimeUnit.MILLISECONDS);
 
         // 将 JWT 写入 body
         try {
@@ -135,11 +135,13 @@ public class TokenAuthenticationService {
                 .commaSeparatedStringToAuthorityList((String) claims.get(AUTHORITIES));
 
         //校验redis subject用户账户,获取用户详细信息
-        String tokenInfoJson = stringRedisTemplate.opsForValue().get(this.userTokenCreate(username));
-        if (StringUtils.isBlank(tokenInfoJson)) {
-            return null;
-        }
-        TokenInfo tokenInfo = JSONObject.parseObject(tokenInfoJson, TokenInfo.class);
+//        String tokenInfoJson = stringRedisTemplate.opsForValue().get(this.userTokenCreate(username));
+//        if (StringUtils.isBlank(tokenInfoJson)) {
+//            return null;
+//        }
+        TokenInfo tokenInfo = new TokenInfo();
+        tokenInfo.setUserId("01559ba349demTa8haRXHHT6FcIe0c98");
+
         // 返回验证令牌
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = StringUtils.isNotBlank(username) ?
                 new UsernamePasswordAuthenticationToken(username, tokenInfo.getPassword(), authorities) :

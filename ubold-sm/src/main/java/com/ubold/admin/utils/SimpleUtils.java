@@ -2,14 +2,15 @@ package com.ubold.admin.utils;
 
 import com.ubold.admin.constant.SqlDefineConstant;
 import com.ubold.admin.vo.DataTypeResult;
+import com.ubold.admin.vo.SQLColumnschemaResult;
 import org.apache.commons.lang3.StringUtils;
 
 import java.sql.Types;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * 简陋的工具类
  * @author zkning
  *
  */
@@ -139,5 +140,15 @@ public class SimpleUtils {
 			return dataTypeVo; 
 		}
 		return null;
+	}
+
+	public static String createQuerySql(String tableName,List<SQLColumnschemaResult> sqlColumnschemaResults){
+		StringBuffer stringBuffer = new StringBuffer("select ");
+		sqlColumnschemaResults.forEach((SQLColumnschemaResult sqlColumnschemaResult)->{
+			stringBuffer.append("t.").append(sqlColumnschemaResult.getColumnName()).append(",");
+		});
+		stringBuffer.deleteCharAt(stringBuffer.lastIndexOf(","));
+		stringBuffer.append(" from ").append(tableName).append(" t ");
+		return stringBuffer.toString().toUpperCase();
 	}
 }

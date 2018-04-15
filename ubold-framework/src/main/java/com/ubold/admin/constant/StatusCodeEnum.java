@@ -8,7 +8,7 @@ public enum StatusCodeEnum {
 	
 	SUCCESS(0,"处理成功"),
 	
-	SYSTEM_ERROR(1,"未知错误"),
+	SYSTEM_ERROR(1,"处理失败"),
 
 	INVALID_REQUEST(2, "无效请求"),
 	

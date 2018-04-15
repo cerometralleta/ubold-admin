@@ -3,10 +3,7 @@ package com.ubold.admin.service;
 import com.alibaba.fastjson.JSONObject;
 import com.ubold.admin.request.ZtreeParamsRequest;
 import com.ubold.admin.response.Response;
-import com.ubold.admin.vo.BootstrapPageResult;
-import com.ubold.admin.vo.BootstrapSearchParam;
-import com.ubold.admin.vo.ColumnParam;
-import com.ubold.admin.vo.SqlDefineFetchParam;
+import com.ubold.admin.vo.*;
 
 import java.util.List;
 
@@ -32,4 +29,7 @@ public interface SqlIdJdbcService {
     Response modifyByDataViewCode(String code, JSONObject rowValue);
 
     Response ztree(ZtreeParamsRequest ztreeParamsRequest);
+
+    List<SQLTableschemaResult> queryTableschema(QuerytableParam querytableParam);
+    List<SQLColumnschemaResult> queryColumnschema(QuerytableParam querytableParam);
 }

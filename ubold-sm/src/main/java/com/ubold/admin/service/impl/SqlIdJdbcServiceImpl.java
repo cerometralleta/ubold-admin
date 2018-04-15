@@ -24,10 +24,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.jdbc.support.rowset.SqlRowSetMetaData;
 import org.springframework.stereotype.Service;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -159,7 +162,7 @@ public class SqlIdJdbcServiceImpl implements SqlIdJdbcService {
         //参数绑定
         Map<String, Object> paramMap = new HashMap<>();
         for (ColumnParam columnParam : dataViewFields) {
-            if (!SqlDefineConstant.MODIFTY_ENABLE.equals(columnParam.getUpdateType())) {
+            if (SqlDefineConstant.MODIFTY_ENABLE.equals(columnParam.getUpdateType())) {
                 if (this.unduplicated(columnParam, sqlDefine, rowValue, false)) {
                     return Response.FAILURE(columnParam.getTitle() + "数据重复");
                 }
@@ -167,18 +170,31 @@ public class SqlIdJdbcServiceImpl implements SqlIdJdbcService {
                 paramMap.put(columnParam.getField(), rowValue.get(columnParam.getField()));
             }
         }
+        if(paramMap.isEmpty()){
+            return Response.FAILURE("请设置需要更新的字段");
+        }
         //sql整理
         modifysql.deleteCharAt(modifysql.lastIndexOf(","));
         //sql条件处理
-        modifysql.append(" WHERE ").append(sqlDefine.getMasterTableId()).append("= :").append(
-                sqlDefine.getMasterTableId());
+        StringBuffer whereSql = new StringBuffer().append(" WHERE ")
+                .append(sqlDefine.getMasterTableId()).append("= :")
+                .append(sqlDefine.getMasterTableId());
+        paramMap.put(sqlDefine.getMasterTableId(), rowValue.get(sqlDefine.getMasterTableId()));
+        
         //根据版本号更新
         if (StringUtils.isNotBlank(optionsParam.getVersion())) {
-            modifysql.append(" and ").append(optionsParam.getVersion()).append("  = :").append(
-                    optionsParam.getVersion());
-            paramMap.put(optionsParam.getVersion(), rowValue.get(optionsParam.getVersion()));
+            int version = (Integer)rowValue.get(optionsParam.getVersion()) + 1;
+            //修改版本号
+            modifysql.append(", ").append(optionsParam.getVersion()).append("  = :")
+                    .append(optionsParam.getVersion());
+            paramMap.put(optionsParam.getVersion(), version);
+
+            //where条件添加版本
+            whereSql.append(" and ").append(optionsParam.getVersion()).append("  < :")
+                    .append(optionsParam.getVersion());
+            paramMap.put(optionsParam.getVersion(), version);
         }
-        paramMap.put(sqlDefine.getMasterTableId(), rowValue.get(sqlDefine.getMasterTableId()));
+        modifysql = modifysql.append(whereSql);
         if (namedParameterJdbcTemplateFactory.get(sqlDefine.getDatasource()).update(modifysql.toString(),
                 paramMap) < 1) {
             return Response.FAILURE(modifysql);
@@ -411,7 +427,7 @@ public class SqlIdJdbcServiceImpl implements SqlIdJdbcService {
     /**
      * 根据nodeId获取所有子节点
      */
-    private List<Map<String, Object>> findAllNode(String sql, Object pId, TreeOptionsParam treeVo, int dataSource) {
+    private List<Map<String, Object>> findAllNode(String sql, Object pId, TreeOptionsParam treeVo, String dataSource) {
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put(treeVo.getpIdKey(), pId);
         List<Map<String, Object>> queryResult = new ArrayList<Map<String, Object>>();
@@ -467,8 +483,53 @@ public class SqlIdJdbcServiceImpl implements SqlIdJdbcService {
                 .append(ztreeParamsRequest.getpIdKey()).append("= :parent");
         Map<String, Object> paraMap = new HashedMap();
         paraMap.put("parent", parent);
-        List<Map<String, Object>> dataList = namedParameterJdbcTemplateFactory.get(
-                sqlDefine.getDatasource()).queryForList(stringBuilder.toString(), paraMap);
+        List<Map<String, Object>> dataList =
+                namedParameterJdbcTemplateFactory.get(sqlDefine.getDatasource()).queryForList(stringBuilder.toString(), paraMap);
         return dataList.size() > 0;
+    }
+
+
+    @Override
+    public List<SQLTableschemaResult> queryTableschema(QuerytableParam querytableParam) {
+        List<SQLTableschemaResult> dataList = new ArrayList<>();
+        if (StringUtils.isBlank(querytableParam.getTablename())) {
+            return dataList;
+        }
+        String sql = "select table_name,TABLE_COMMENT from information_schema.tables " +
+                     "where table_schema=:tableschema and TABLE_NAME like :tableName";
+        Map<String,Object> paraMap = new HashedMap();
+        paraMap.put("tableName",querytableParam.getTablename()+'%');
+        paraMap.put("tableschema",querytableParam.getTableschema());
+        dataList = namedParameterJdbcTemplateFactory.get(querytableParam.getDatasource())
+                        .query(sql,paraMap, new RowMapper<SQLTableschemaResult>() {
+                            @Override
+                            public SQLTableschemaResult mapRow(ResultSet resultSet, int i) throws SQLException {
+                                SQLTableschemaResult tablesResult = new SQLTableschemaResult();
+                                tablesResult.setTableName(resultSet.getString("table_name"));
+                                tablesResult.setTableComment(resultSet.getString("table_comment"));
+                                return tablesResult;
+                            }
+                        });
+        return dataList;
+    }
+
+    @Override
+    public List<SQLColumnschemaResult> queryColumnschema(QuerytableParam querytableParam){
+        String sql  = "SELECT t.column_name,t.column_key,t.column_comment FROM information_schema.COLUMNS t where t.TABLE_NAME = :tableName and t.table_schema = :tableschema";
+        Map<String,Object> paraMap = new HashedMap();
+        paraMap.put("tableName",querytableParam.getTablename());
+        paraMap.put("tableschema",querytableParam.getTableschema());
+        List<SQLColumnschemaResult> dataList = namedParameterJdbcTemplateFactory.get(querytableParam.getDatasource())
+                .query(sql,paraMap, new RowMapper<SQLColumnschemaResult>() {
+                    @Override
+                    public SQLColumnschemaResult mapRow(ResultSet resultSet, int i) throws SQLException {
+                        SQLColumnschemaResult mySQLColumnResult = new SQLColumnschemaResult();
+                        mySQLColumnResult.setColumnName(resultSet.getString("column_name"));
+                        mySQLColumnResult.setColumnKey(resultSet.getString("column_key"));
+                        mySQLColumnResult.setColumnComment(resultSet.getString("column_comment"));
+                        return mySQLColumnResult;
+                    }
+                });
+        return dataList;
     }
 }

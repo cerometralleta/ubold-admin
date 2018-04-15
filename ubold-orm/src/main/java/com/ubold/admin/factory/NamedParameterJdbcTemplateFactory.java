@@ -18,7 +18,7 @@ public class NamedParameterJdbcTemplateFactory {
     /**
      * 默认master数据源,数据视图crud操作根据sqldefine配置的datasouce执行
      */
-    public NamedParameterJdbcTemplate get(Integer dataSourceCode) {
+    public NamedParameterJdbcTemplate get(String dataSourceCode) {
         if (null == dataSourceCode) {
             return namedParameterJdbcTemplate;
         }

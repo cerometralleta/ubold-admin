@@ -6,19 +6,19 @@ package com.ubold.admin.constant;
 public enum NamedParameterJdbcTemplateEnum {
     MASTER(DataSourceCodeConstant.MASTER, "主数据源");
 
-    private int dataSourceCode;
+    private String dataSourceCode;
     private String dataSourceName;
 
-    private NamedParameterJdbcTemplateEnum(int dataSourceCode, String dataSourceName) {
+    private NamedParameterJdbcTemplateEnum(String dataSourceCode, String dataSourceName) {
         this.dataSourceCode = dataSourceCode;
         this.dataSourceName = dataSourceName;
     }
 
-    public int getDataSourceCode() {
+    public String getDataSourceCode() {
         return dataSourceCode;
     }
 
-    public void setDataSourceCode(int dataSourceCode) {
+    public void setDataSourceCode(String dataSourceCode) {
         this.dataSourceCode = dataSourceCode;
     }
 
@@ -31,6 +31,6 @@ public enum NamedParameterJdbcTemplateEnum {
     }
 
     public static class DataSourceCodeConstant {
-        public static final int MASTER = 1;
+        public static final String MASTER = "127.0.0.1";
     }
 }

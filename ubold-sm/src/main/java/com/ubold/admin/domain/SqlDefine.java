@@ -24,7 +24,7 @@ public class SqlDefine extends Auditable{
 	
 	@Column(name="sqlexpand")
 	private String sqlExpand;
-    private Integer datasource;
+    private String datasource;
     /**
 	 * 是否缓存
 	 */
@@ -108,11 +108,11 @@ public class SqlDefine extends Auditable{
 		this.selectSql = selectSql;
 	}
 
-    public Integer getDatasource() {
+    public String getDatasource() {
         return datasource;
 	}
 
-    public void setDatasource(Integer datasource) {
+    public void setDatasource(String datasource) {
         this.datasource = datasource;
 	}
 	public Integer getCache() {
