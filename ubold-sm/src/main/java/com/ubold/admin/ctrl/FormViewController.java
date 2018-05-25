@@ -21,7 +21,6 @@ import javax.validation.Valid;
 @RequestMapping("/sm/form")
 //@RequestMapping("/api/permit/sm")
 public class FormViewController {
-    protected Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     FormViewService formViewService;
@@ -33,7 +32,6 @@ public class FormViewController {
     @ResponseBody
     @RequestMapping(value="/persistent",method= RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public Response persistent(@RequestBody @Valid FormViewRequest request) {
-//        logger.info(JSON.toJSONString(request));
         return formViewService.persistent(request);
     }
 

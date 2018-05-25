@@ -1,6 +1,7 @@
 package com.ubold.admin.ctrl;
 
 import com.ubold.admin.constant.PermitPrefixURI;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,14 +14,14 @@ import java.security.Principal;
 /**
  * Created by ningzuokun on 2017/11/22.
  */
+@Slf4j
 @RestController
 @RequestMapping("/user")
 public class UserController {
-    protected Logger logger = LoggerFactory.getLogger(getClass());
 
     @RequestMapping(value = PermitPrefixURI.permit + "/index", method = RequestMethod.GET)
     public void index() {
-        logger.info("rabc::UserController::index");
+        log.info("rabc::UserController::index");
     }
 
     @RequestMapping("/principal")

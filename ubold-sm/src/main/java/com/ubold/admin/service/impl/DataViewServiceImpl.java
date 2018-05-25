@@ -40,9 +40,6 @@ public class DataViewServiceImpl implements DataViewService {
             dataView.setId(GUID.nextId());
         } else {
             dataView = dataViewRepository.findOne(request.getId());
-            if (null == dataView) {
-                return Response.FAILURE("错误数据id:" + request.getId());
-            }
             dataViewList = dataViewRepository.findByDataViewCodeAndIdNot(request.getDataViewCode(), request.getId());
         }
         if (CollectionUtils.isNotEmpty(dataViewList)) {
@@ -87,9 +84,6 @@ public class DataViewServiceImpl implements DataViewService {
     @Override
     public Response<DataView> findByDataViewCode(String dataViewCode) {
         List<DataView> dataViewList = dataViewRepository.findByDataViewCode(dataViewCode);
-        if (CollectionUtils.isEmpty(dataViewList)) {
-            return Response.FAILURE("视图未定义,视图编号:" + dataViewCode);
-        }
         DataView dataView = dataViewList.get(0);
         return Response.SUCCESS(this.parseResult(dataView));
     }

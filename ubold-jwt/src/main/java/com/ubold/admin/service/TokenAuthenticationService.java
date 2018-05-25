@@ -35,7 +35,6 @@ import java.util.Map;
  */
 @Service
 public class TokenAuthenticationService {
-    protected Logger logger = LoggerFactory.getLogger(getClass());
     static final long EXPIRATIONTIME = 1000 * 60 * 60 * 24 * 5;     // 5天
     static final String SECRET = "P@ssw02d";            // JWT密码
     static final String TOKEN_PREFIX = "Bearer";        // Token前缀

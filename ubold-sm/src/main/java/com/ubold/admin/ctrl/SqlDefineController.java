@@ -37,7 +37,6 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/sm/sql")
 public class SqlDefineController {
-    protected Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     SqlDefineService sqlDefineService;

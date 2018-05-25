@@ -50,9 +50,6 @@ public class FormViewServiceImpl implements FormViewService{
     @Override
     public Response findByCode(String code) {
         List<FormView> dataViewList = formViewRepository.findByCode(code);
-        if(CollectionUtils.isEmpty(dataViewList)){
-            return Response.FAILURE("表单未定义,编号:" + code);
-        }
         FormView formView = dataViewList.get(0);
         FormViewRequest request = new FormViewRequest();
         request.setCode(formView.getCode());

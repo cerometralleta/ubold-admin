@@ -18,6 +18,7 @@ import com.ubold.admin.util.GUID;
 import com.ubold.admin.utils.DataFilter;
 import com.ubold.admin.utils.SimpleUtils;
 import com.ubold.admin.vo.*;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
@@ -39,9 +40,9 @@ import java.util.Map;
 /**
  * @author zkning
  */
+@Slf4j
 @Service
 public class SqlIdJdbcServiceImpl implements SqlIdJdbcService {
-    protected Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired
     DataViewService dataViewService;
     @Autowired

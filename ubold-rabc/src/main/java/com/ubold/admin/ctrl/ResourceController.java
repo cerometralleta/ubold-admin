@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/resource")
 public class ResourceController {
-    protected Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     ResourceService resourceService;

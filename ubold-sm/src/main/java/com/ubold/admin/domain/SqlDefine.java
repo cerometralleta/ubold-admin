@@ -1,9 +1,11 @@
 package com.ubold.admin.domain;
 
+import lombok.Data;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
+@Data
 @Entity
 @Table(name="TB_SM_SQLDEFINE")
 public class SqlDefine extends Auditable{
@@ -57,77 +59,4 @@ public class SqlDefine extends Auditable{
 	 */
 	@Column(name="mastertableid")
 	private String masterTableId;
-	
-	public String getMasterTable() {
-		return masterTable;
-	}
-	public void setMasterTable(String masterTable) {
-		this.masterTable = masterTable;
-	}
-	public String getMasterTableId() {
-		return masterTableId;
-	}
-	public void setMasterTableId(String masterTableId) {
-		this.masterTableId = masterTableId;
-	}
-	public String getSqlExpand() {
-		return sqlExpand;
-	}
-	public void setSqlExpand(String sqlExpand) {
-		this.sqlExpand = sqlExpand;
-	}
-	public String getSqldesc() {
-		return sqldesc;
-	}
-	public void setSqldesc(String sqldesc) {
-		this.sqldesc = sqldesc;
-	}
-	public String getGroupId() {
-		return groupId;
-	}
-	public void setGroupId(String groupId) {
-		this.groupId = groupId;
-	}
-	public String getSqlId() {
-		return sqlId;
-	}
-	public void setSqlId(String sqlId) {
-		this.sqlId = sqlId;
-	}
-	public String getSqlName() {
-		return sqlName;
-	}
-	public void setSqlName(String sqlName) {
-		this.sqlName = sqlName;
-	}
-	 
-	public String getSelectSql() {
-		return selectSql;
-	}
-	public void setSelectSql(String selectSql) {
-		this.selectSql = selectSql;
-	}
-
-    public String getDatasource() {
-        return datasource;
-	}
-
-    public void setDatasource(String datasource) {
-        this.datasource = datasource;
-	}
-	public Integer getCache() {
-		return cache;
-	}
-	public void setCache(Integer cache) {
-		this.cache = cache;
-	}
-	public Integer getStatus() {
-		return status;
-	}
-	public void setStatus(Integer status) {
-		this.status = status;
-	}
-	
-	
-	
 }
