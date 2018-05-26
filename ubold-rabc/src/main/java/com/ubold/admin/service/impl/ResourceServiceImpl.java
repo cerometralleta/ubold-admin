@@ -26,7 +26,7 @@ import java.util.Map;
 @Service
 public class ResourceServiceImpl implements ResourceService {
     private static final String TOP_NODEID = "0";
-    protected Logger logger = LoggerFactory.getLogger(getClass());
+
     @Autowired
     ResourceRepository resourceRepository;
 

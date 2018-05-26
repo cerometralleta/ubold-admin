@@ -3,6 +3,9 @@ package com.ubold.admin.response;
 import com.alibaba.fastjson.JSONObject;
 import com.ubold.admin.constant.StatusCodeEnum;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,15 +16,17 @@ import java.io.Serializable;
  * @author zkning
  */
 public class Response<T> implements Serializable{
-	/**
-	 *
-	 */
 	private static final long serialVersionUID = 1L;
-	protected Logger logger = LoggerFactory.getLogger(getClass());
+
+	@ApiModelProperty(value = "响应码")
 	private Integer code;
+
+	@ApiModelProperty(value = "响应消息")
 	private String message;
+
+	@ApiModelProperty(value = "响应结果")
 	private T result;
-	
+
 	public Response(Integer code,String message){
 		this.code = code;
 		this.message = message;

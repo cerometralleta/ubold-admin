@@ -4,9 +4,8 @@ import com.ubold.admin.request.Request;
 import com.ubold.admin.response.Response;
 import com.ubold.admin.service.ResourceService;
 import com.ubold.admin.vo.AuthorizeUrlParam;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.ubold.admin.vo.GetMenuResult;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,13 +22,15 @@ public class ResourceController {
     @Autowired
     ResourceService resourceService;
 
+    @ApiOperation(value = "URL鉴权")
     @RequestMapping(value = "/authorizeUrl", method = RequestMethod.GET)
     public Response authorizeUrl(@RequestBody AuthorizeUrlParam authorizeUrlParam) {
         return resourceService.authorizeUrl(authorizeUrlParam);
     }
 
+    @ApiOperation(value = "获取授权菜单列表")
     @RequestMapping(value = "/getMenuList", method = RequestMethod.GET)
-    public Response getMenuList(@RequestBody Request request) {
+    public Response<GetMenuResult> getMenuList(Request request) {
         return resourceService.getMenuList(request.getSessionUserId());
     }
 }

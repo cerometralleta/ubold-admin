@@ -1,28 +1,19 @@
 package com.ubold.admin.request;
 
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+
 import java.io.Serializable;
 
 /**
  * Created by ningzuokun on 2018/3/17.
  */
+@Data
 public class Request implements Serializable {
 
+    @ApiModelProperty(value="请求序列号",hidden=true)
     private String serialNo;
+
+    @ApiModelProperty(value="用户id",hidden=true)
     private String sessionUserId;
-
-    public String getSerialNo() {
-        return serialNo;
-    }
-
-    public void setSerialNo(String serialNo) {
-        this.serialNo = serialNo;
-    }
-
-    public String getSessionUserId() {
-        return sessionUserId;
-    }
-
-    public void setSessionUserId(String sessionUserId) {
-        this.sessionUserId = sessionUserId;
-    }
 }

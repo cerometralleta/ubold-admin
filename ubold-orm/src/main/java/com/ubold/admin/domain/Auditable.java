@@ -1,6 +1,7 @@
 package com.ubold.admin.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -19,11 +20,19 @@ public class Auditable implements Serializable {
     private String id;
 
     @Version
+    @ApiModelProperty(value = "版本号")
     private long version;
 
+    @ApiModelProperty(value = "创建者")
     private String createUser;
+
+    @ApiModelProperty(value = "创建时间")
     private Date createTime;
+
+    @ApiModelProperty(value = "修改者")
     private String lastUpdateUser;
+
+    @ApiModelProperty(value = "修改时间")
     private Date lastUpdateTime;
 
     @PrePersist

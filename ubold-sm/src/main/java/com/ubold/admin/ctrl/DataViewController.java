@@ -6,6 +6,10 @@ import com.ubold.admin.response.Response;
 import com.ubold.admin.service.DataViewService;
 import com.ubold.admin.service.SqlIdJdbcService;
 import com.ubold.admin.vo.QuerytableParam;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -43,28 +47,28 @@ public class DataViewController{
      * @return
      */
     @ResponseBody
-    @RequestMapping(value="/find/{dataViewCode}")
-    public Response findByDataViewCode(@PathVariable String dataViewCode) {
+    @RequestMapping(value="/find/{dataViewCode}",method= RequestMethod.POST)
+    public Response findByDataViewCode(@ApiParam(value = "视图编码") @PathVariable String dataViewCode) {
         return dataViewService.findByDataViewCode(dataViewCode);
     }
 
-
-
     @ResponseBody
-    @RequestMapping(value=PermitPrefixURI.permit + "/index")
+    @RequestMapping(value=PermitPrefixURI.permit + "/index",method= RequestMethod.GET)
     public Response index() {
         log.info("application started");
         return Response.SUCCESS("ubold started");
     }
 
+    @ApiOperation(value = "查询数据库表列表")
     @ResponseBody
-    @RequestMapping(value="/queryTableschemas")
+    @RequestMapping(value="/queryTableschemas",method= RequestMethod.POST)
     public Response queryTableschema(@RequestBody @Valid QuerytableParam querytableParam) {
         return Response.SUCCESS(sqlIdJdbcService.queryTableschema(querytableParam));
     }
 
+    @ApiOperation(value = "根据表名生成SQL定义内容")
     @ResponseBody
-    @RequestMapping(value="/queryTableschemaInfo")
+    @RequestMapping(value="/queryTableschemaInfo",method= RequestMethod.POST)
     public Response queryTableschemaInfo(@RequestBody @Valid QuerytableParam querytableParam) {
         return dataViewService.queryTableschemaInfo(querytableParam);
     }

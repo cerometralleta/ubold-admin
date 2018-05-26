@@ -498,11 +498,13 @@ public class SqlIdJdbcServiceImpl implements SqlIdJdbcService {
         }
         String sql = "select table_name,TABLE_COMMENT from information_schema.tables " +
                      "where table_schema=:tableschema and TABLE_NAME like :tableName";
+
         Map<String,Object> paraMap = new HashedMap();
         paraMap.put("tableName",querytableParam.getTablename()+'%');
         paraMap.put("tableschema",querytableParam.getTableschema());
         dataList = namedParameterJdbcTemplateFactory.get(querytableParam.getDatasource())
                         .query(sql,paraMap, new RowMapper<SQLTableschemaResult>() {
+
                             @Override
                             public SQLTableschemaResult mapRow(ResultSet resultSet, int i) throws SQLException {
                                 SQLTableschemaResult tablesResult = new SQLTableschemaResult();

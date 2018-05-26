@@ -41,7 +41,7 @@ public class FormViewController {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value="/find/{code}")
+    @RequestMapping(value="/find/{code}",method= RequestMethod.POST)
     public Response findByDataViewCode(@PathVariable String code) {
         return formViewService.findByCode(code);
     }
