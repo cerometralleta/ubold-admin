@@ -6,6 +6,8 @@ import com.ubold.admin.vo.SQLColumnschemaResult;
 import org.apache.commons.lang3.StringUtils;
 
 import java.sql.Types;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -150,5 +152,9 @@ public class SimpleUtils {
 		stringBuffer.deleteCharAt(stringBuffer.lastIndexOf(","));
 		stringBuffer.append(" from ").append(tableName).append(" t ");
 		return stringBuffer.toString().toUpperCase();
+	}
+
+	public static Object[] linkedHashMapToValues(LinkedHashMap linkedHashMap){
+		 return linkedHashMap.values().toArray();
 	}
 }

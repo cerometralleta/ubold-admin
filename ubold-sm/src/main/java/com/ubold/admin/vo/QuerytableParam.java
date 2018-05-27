@@ -19,6 +19,6 @@ public class QuerytableParam {
     private String  datasource;
 
 //    @NotBlank
-    @ApiModelProperty(value = "数据库概要")
-    private String  tableschema;
+//    @ApiModelProperty(value = "数据库概要")
+//    private String  tableschema;
 }
