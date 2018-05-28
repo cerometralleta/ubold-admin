@@ -31,6 +31,6 @@ public class ResourceController {
     @ApiOperation(value = "获取授权菜单列表")
     @RequestMapping(value = "/getMenuList", method = RequestMethod.GET)
     public Response<GetMenuResult> getMenuList(Request request) {
-        return resourceService.getMenuList(request.getSessionUserId());
+        return resourceService.getMenuItems(request.getSessionUserId());
     }
 }

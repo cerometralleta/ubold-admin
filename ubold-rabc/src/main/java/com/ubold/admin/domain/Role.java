@@ -16,4 +16,5 @@ public class Role extends Auditable{
 
     private String roleName;
     private String remark;
+
 }

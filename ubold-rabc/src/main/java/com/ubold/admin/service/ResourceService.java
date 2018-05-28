@@ -1,6 +1,6 @@
 package com.ubold.admin.service;
 
-import com.ubold.admin.domain.Resource;
+import com.ubold.admin.domain.Resources;
 import com.ubold.admin.model.AuthorizeUrlParam;
 import com.ubold.admin.model.GetMenuResult;
 import com.ubold.admin.response.Response;
@@ -18,17 +18,17 @@ public interface ResourceService {
      * @param user
      * @return
      */
-    List<Resource> findAllResourceByUserId(String userId);
+    List<Resources> findAllResourceByUserId(String userId);
 
     /**
      * 获取所有权限link
      * @param permissions
      * @return
      */
-    List<String> findAllResourceLink(List<Resource> resources);
+    List<String> findAllResourceLink(List<Resources> resources);
     Response authorizeUrl(AuthorizeUrlParam authorizeUrlParam);
 
-    Response<GetMenuResult> getMenuList(String userId);
+    Response<GetMenuResult> getMenuItems(String userId);
 
     Map<String, String> getAuthority(String userId);
 }

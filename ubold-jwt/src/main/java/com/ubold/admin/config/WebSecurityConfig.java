@@ -66,4 +66,9 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // 使用自定义身份验证组件
         auth.authenticationProvider(new CustomAuthenticationProvider());
     }
+
+    //添加排除拦截的url
+    public static void addExcludeUrl(String url){
+        excludeList.add(url);
+    }
 }

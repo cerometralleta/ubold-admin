@@ -2,8 +2,6 @@ package com.ubold.admin.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ubold.admin.domain.User;
-import com.ubold.admin.model.AccountCredentialsResult;
-import com.ubold.admin.model.TokenInfo;
 import com.ubold.admin.response.Response;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -46,7 +44,7 @@ public class TokenAuthenticationService {
     JwtLoginService jwtUserAuthService;
 
     // JWT生成方法
-    public void addAuthentication(HttpServletResponse response, TokenInfo tokenInfo) {
+    public void addAuthentication(HttpServletResponse response, User user) {
          //过期时间
         long expirationTimes = System.currentTimeMillis() + EXPIRATIONTIME;
         // 生成JWT
@@ -54,15 +52,16 @@ public class TokenAuthenticationService {
                 // 保存权限（角色）
                 .claim(AUTHORITIES, "read,write")
                 // 用户名写入标题
-                .setSubject(tokenInfo.getUsername())
+                .setSubject(user.getUsername())
                 // 有效期设置
                 .setExpiration(new Date(expirationTimes))
                 // 签名设置
                 .signWith(SignatureAlgorithm.HS512, SECRET)
                 .compact();
+
         //写入redis
-//        stringRedisTemplate.opsForValue().set(this.userTokenCreate(tokenInfo.getUsername()),
-//                JSONObject.toJSONString(tokenInfo),
+//        stringRedisTemplate.opsForValue().set(this.userTokenCreate(user.getUsername()),
+//                JSONObject.toJSONString(user),
 //                expirationTimes - new Date().getTime(),
 //                TimeUnit.MILLISECONDS);
 
@@ -72,7 +71,7 @@ public class TokenAuthenticationService {
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.setStatus(HttpServletResponse.SC_OK);
             response.getWriter().println(JSONObject.toJSONString(
-                    Response.SUCCESS(this.getAccountCredentialsResult(tokenInfo.getUserId(), JWTString))));
+                    Response.SUCCESS(jwtUserAuthService.getAccountCredentials(user, JWTString))));
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -84,22 +83,7 @@ public class TokenAuthenticationService {
         }
     }
 
-    private AccountCredentialsResult getAccountCredentialsResult(String userId, String JWToken) {
-
-        //获取用户菜单
-        AccountCredentialsResult accountCredentialsResult = new AccountCredentialsResult();
-        accountCredentialsResult.setTokenId(JWToken);
-
-        //登录返回菜单列表
-        List menuItems = jwtUserAuthService.getMenuItems(userId);
-        accountCredentialsResult.setResources(menuItems);
-
-        //用户所有权限kv
-        accountCredentialsResult.setAuthority(jwtUserAuthService.getAuthority(userId));
-        return accountCredentialsResult;
-    }
-
-    private String userTokenCreate(String username) {
+    private String createtokenId(String username) {
         return USER_TOKEN + username;
     }
 
@@ -138,15 +122,15 @@ public class TokenAuthenticationService {
         }
 
         //校验redis subject用户账户,获取用户详细信息
-//        String tokenInfoJson = stringRedisTemplate.opsForValue().get(this.userTokenCreate(username));
+//        String tokenInfoJson = stringRedisTemplate.opsForValue().get(this.createtokenId(username));
 //        if (StringUtils.isBlank(tokenInfoJson)) {
 //            return null;
 //        }
-        TokenInfo tokenInfo = new TokenInfo();
-        tokenInfo.setUserId("01559ba349demTa8haRXHHT6FcIe0c98");
+        User user = new User();
+        user.setId("01559ba349demTa8haRXHHT6FcIe0c98");
 
         //url验证
-        Map<String,String> authorityMap = jwtUserAuthService.getAuthority(tokenInfo.getUserId());
+        Map<String,String> authorityMap = jwtUserAuthService.getResources(user.getId());
         if(!authorityMap.containsKey(httpServletRequest.getServletPath())){
 //            return null;
         }
@@ -155,22 +139,17 @@ public class TokenAuthenticationService {
 
         // 返回验证令牌
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = StringUtils.isNotBlank(username) ?
-                new UsernamePasswordAuthenticationToken(username, tokenInfo.getPassword(), authorities) :
+                new UsernamePasswordAuthenticationToken(username, user.getPassword(), authorities) :
                 null;
-        usernamePasswordAuthenticationToken.setDetails(tokenInfo);
+        usernamePasswordAuthenticationToken.setDetails(user);
         return usernamePasswordAuthenticationToken;
     }
 
-    public Response<TokenInfo> createTokenInfo(String userName, String password) {
+    public Response<User> getUserInfo(String userName, String password) {
         Response<? extends User> response = jwtUserAuthService.findByUserNameAndPassword(userName, password);
         if (!response.checkSuccess()) {
             return Response.FAILURE();
         }
-        User userInfo = response.getResult();
-        TokenInfo tokenInfo = new TokenInfo();
-        tokenInfo.setUsername(userInfo.getUsername());
-        tokenInfo.setUserId(userInfo.getId());
-        tokenInfo.setPassword(userInfo.getPassword());
-        return Response.SUCCESS(tokenInfo);
+        return Response.SUCCESS(response.getResult());
     }
 }

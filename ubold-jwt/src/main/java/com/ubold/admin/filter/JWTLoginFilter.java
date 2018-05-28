@@ -2,11 +2,11 @@ package com.ubold.admin.filter;
 
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ubold.admin.domain.User;
 import com.ubold.admin.response.Response;
 import com.ubold.admin.service.TokenAuthenticationService;
 import com.ubold.admin.util.SpringContextUtil;
 import com.ubold.admin.model.AccountCredentials;
-import com.ubold.admin.model.TokenInfo;
 
 import org.apache.commons.lang3.CharEncoding;
 import org.springframework.http.MediaType;
@@ -52,7 +52,7 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
             HttpServletResponse res, FilterChain chain,
             Authentication authentication) throws IOException, ServletException {
         TokenAuthenticationService tokenAuthenticationService = SpringContextUtil.getBean(TokenAuthenticationService.class);
-        tokenAuthenticationService.addAuthentication(res, (TokenInfo) authentication.getDetails());
+        tokenAuthenticationService.addAuthentication(res, (User) authentication.getDetails());
     }
 
 

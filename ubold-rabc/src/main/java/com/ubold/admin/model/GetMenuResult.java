@@ -1,6 +1,6 @@
 package com.ubold.admin.model;
 
-import com.ubold.admin.domain.ResourceInfo;
+import com.ubold.admin.domain.Resources;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -13,5 +13,5 @@ import java.util.List;
 @Data
 public class GetMenuResult implements Serializable {
 
-    private List<ResourceInfo> resources;
+    private List<Resources> resources;
 }

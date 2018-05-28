@@ -1,9 +1,9 @@
 package com.ubold.admin.provider;
 
+import com.ubold.admin.domain.User;
 import com.ubold.admin.response.Response;
 import com.ubold.admin.service.TokenAuthenticationService;
 import com.ubold.admin.util.SpringContextUtil;
-import com.ubold.admin.model.TokenInfo;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,16 +29,20 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         // 获取认证的用户名 & 密码
         TokenAuthenticationService tokenAuthenticationService = SpringContextUtil.getBean(TokenAuthenticationService.class);
-        Response<TokenInfo> tokenInfoResponse = tokenAuthenticationService.createTokenInfo(username, password);
+        Response<User> tokenInfoResponse = tokenAuthenticationService.getUserInfo(username, password);
+
         // 认证逻辑
         if (tokenInfoResponse.checkSuccess()) {
+
             // 这里设置权限和角色
             ArrayList<GrantedAuthority> authorities = new ArrayList<>();
             authorities.add(new SimpleGrantedAuthority(ROLE_ADMIN));
             authorities.add(new SimpleGrantedAuthority(AUTH_WRITE));
+
             // 生成令牌
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                     new UsernamePasswordAuthenticationToken(username, password, authorities);
+
             //存储用户详细信息
             usernamePasswordAuthenticationToken.setDetails(tokenInfoResponse.getResult());
             return usernamePasswordAuthenticationToken;

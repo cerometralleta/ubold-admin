@@ -1,6 +1,5 @@
 package com.ubold.admin.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -23,41 +22,30 @@ public class Auditable implements Serializable {
     @ApiModelProperty(value = "版本号")
     private long version;
 
-    @ApiModelProperty(value = "创建者")
-    private String createUser;
-
     @ApiModelProperty(value = "创建时间")
     private Date createTime;
 
-    @ApiModelProperty(value = "修改者")
-    private String lastUpdateUser;
-
     @ApiModelProperty(value = "修改时间")
     private Date lastUpdateTime;
+
+//    @ApiModelProperty(value = "修改者")
+//    private String lastUpdateUser;
+//
+//    @ApiModelProperty(value = "创建者")
+//    private String createUser;
 
     @PrePersist
     public void prePersist() {
         Date currentTime = new Date();
         this.setCreateTime(currentTime);
-        this.setCreateUser(getUserName());
         this.setLastUpdateTime(currentTime);
-        this.setLastUpdateUser(getUserName());
+//        this.setCreateUser(getUserName());
+//        this.setLastUpdateUser(getUserName());
     }
 
     @PreUpdate
     public void preUpdate() {
         this.setLastUpdateTime(new Date());
-        this.setLastUpdateUser(getUserName());
-    }
-    
-    @JsonIgnore
-    private String getUserName() {
-        String username = null;
-        try {
-//            username = SecurityContextHolder.getContext().getAuthentication().getName();
-        } catch (Exception e) {
-            username = null;
-        }
-        return username;
+//        this.setLastUpdateUser(getUserName());
     }
 }

@@ -12,7 +12,4 @@ import javax.persistence.Table;
 @Entity
 @Table(name="TB_USER_INFO")
 public class UserInfo extends User{
-
-    private String password;
-    private String username;
 }
