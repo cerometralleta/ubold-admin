@@ -1,4 +1,4 @@
-package com.ubold.admin.vo;
+package com.ubold.admin.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 

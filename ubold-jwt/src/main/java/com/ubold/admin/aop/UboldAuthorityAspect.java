@@ -1,7 +1,7 @@
 package com.ubold.admin.aop;
 
 import com.ubold.admin.request.Request;
-import com.ubold.admin.vo.TokenInfo;
+import com.ubold.admin.model.TokenInfo;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;

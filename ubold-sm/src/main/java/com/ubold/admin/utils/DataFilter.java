@@ -1,7 +1,7 @@
 package com.ubold.admin.utils;
 
 import com.ubold.admin.constant.SqlExpression;
-import com.ubold.admin.vo.ConditionParam;
+import com.ubold.admin.model.ConditionParam;
 
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.util.Lists;

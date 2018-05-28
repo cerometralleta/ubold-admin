@@ -4,7 +4,7 @@ import com.ubold.admin.domain.DataView;
 import com.ubold.admin.domain.SqlDefine;
 import com.ubold.admin.request.DataViewCreateRequest;
 import com.ubold.admin.response.Response;
-import com.ubold.admin.vo.QuerytableParam;
+import com.ubold.admin.model.QuerytableParam;
 
 import java.util.List;
 

@@ -1,9 +1,9 @@
 package com.ubold.admin.service;
 
 import com.ubold.admin.domain.Resource;
+import com.ubold.admin.model.AuthorizeUrlParam;
+import com.ubold.admin.model.GetMenuResult;
 import com.ubold.admin.response.Response;
-import com.ubold.admin.vo.AuthorizeUrlParam;
-import com.ubold.admin.vo.GetMenuResult;
 
 import java.util.List;
 import java.util.Map;

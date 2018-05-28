@@ -14,10 +14,5 @@
             <artifactId>ubold-persistence</artifactId>
             <version>1.0.0</version>
         </dependency>
-        <dependency>
-            <groupId>com.ubold.admin</groupId>
-            <artifactId>ubold-jwt</artifactId>
-            <version>1.0.0</version>
-        </dependency>
     </dependencies>
 </project>

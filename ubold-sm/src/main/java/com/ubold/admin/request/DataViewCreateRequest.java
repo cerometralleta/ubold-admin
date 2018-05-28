@@ -1,10 +1,10 @@
 package com.ubold.admin.request;
 
-import com.ubold.admin.vo.ButtonParam;
-import com.ubold.admin.vo.ColumnParam;
-import com.ubold.admin.vo.DataFilterParam;
-import com.ubold.admin.vo.OptionsParam;
-import com.ubold.admin.vo.TreeOptionsParam;
+import com.ubold.admin.model.ButtonParam;
+import com.ubold.admin.model.ColumnParam;
+import com.ubold.admin.model.DataFilterParam;
+import com.ubold.admin.model.OptionsParam;
+import com.ubold.admin.model.TreeOptionsParam;
 
 import org.hibernate.validator.constraints.NotBlank;
 

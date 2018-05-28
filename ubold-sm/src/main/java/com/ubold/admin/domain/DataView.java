@@ -1,12 +1,10 @@
 package com.ubold.admin.domain;
 
-import com.ubold.admin.vo.*;
 import lombok.Data;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import java.util.ArrayList;
 
 /**
  * Created by lenovo on 2017/8/13.

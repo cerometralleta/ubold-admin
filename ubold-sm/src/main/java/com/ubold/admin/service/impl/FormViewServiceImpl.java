@@ -7,7 +7,7 @@ import com.ubold.admin.request.FormViewRequest;
 import com.ubold.admin.response.Response;
 import com.ubold.admin.service.FormViewService;
 import com.ubold.admin.util.GUID;
-import com.ubold.admin.vo.FieldParam;
+import com.ubold.admin.model.FieldParam;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

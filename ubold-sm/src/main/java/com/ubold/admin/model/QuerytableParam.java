@@ -1,4 +1,4 @@
-package com.ubold.admin.vo;
+package com.ubold.admin.model;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

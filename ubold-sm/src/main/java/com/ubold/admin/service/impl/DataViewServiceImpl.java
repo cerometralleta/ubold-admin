@@ -11,7 +11,7 @@ import com.ubold.admin.service.DataViewService;
 import com.ubold.admin.service.SqlIdJdbcService;
 import com.ubold.admin.util.GUID;
 import com.ubold.admin.utils.SimpleUtils;
-import com.ubold.admin.vo.*;
+import com.ubold.admin.model.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

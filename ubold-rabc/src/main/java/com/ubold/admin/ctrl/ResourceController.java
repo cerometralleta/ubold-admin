@@ -1,10 +1,10 @@
 package com.ubold.admin.ctrl;
 
+import com.ubold.admin.model.AuthorizeUrlParam;
+import com.ubold.admin.model.GetMenuResult;
 import com.ubold.admin.request.Request;
 import com.ubold.admin.response.Response;
 import com.ubold.admin.service.ResourceService;
-import com.ubold.admin.vo.AuthorizeUrlParam;
-import com.ubold.admin.vo.GetMenuResult;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;

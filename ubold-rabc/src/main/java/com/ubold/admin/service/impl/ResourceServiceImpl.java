@@ -2,18 +2,16 @@ package com.ubold.admin.service.impl;
 
 import com.ubold.admin.constants.MenuTypeEnum;
 import com.ubold.admin.domain.Resource;
+import com.ubold.admin.domain.ResourceInfo;
+import com.ubold.admin.model.AuthorizeUrlParam;
+import com.ubold.admin.model.GetMenuResult;
 import com.ubold.admin.repository.ResourceRepository;
 import com.ubold.admin.response.Response;
 import com.ubold.admin.service.ResourceService;
-import com.ubold.admin.vo.AuthorizeUrlParam;
-import com.ubold.admin.vo.GetMenuResult;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.util.Lists;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +39,7 @@ public class ResourceServiceImpl implements ResourceService {
     public List<String> findAllResourceLink(List<Resource> resources) {
         List<String> resourceLinkList = Lists.newArrayList();
         //查询菜单
-        for (Resource resource : resources) {
+        for (ResourceInfo resource : resources) {
             resourceLinkList.add(resource.getLink());
         }
         return resourceLinkList;
@@ -65,11 +63,11 @@ public class ResourceServiceImpl implements ResourceService {
         if (CollectionUtils.isEmpty(resources)) {
             return Response.FAILURE();
         }
-        List<Resource> parentList = Lists.newArrayList();
+        List<ResourceInfo> parentList = Lists.newArrayList();
         getMenuResult.setResources(parentList);
         //字节集合,key为parent
-        Map<String, List<Resource>> childMap = new HashedMap();
-        for (Resource resource : resources) {
+        Map<String, List<ResourceInfo>> childMap = new HashedMap();
+        for (ResourceInfo resource : resources) {
 
             //一级节点
             if (TOP_NODEID.equals(resource.getParent())) {
@@ -81,12 +79,12 @@ public class ResourceServiceImpl implements ResourceService {
             if (childMap.containsKey(resource.getParent())) {
                 childMap.get(resource.getParent()).add(resource);
             } else {
-                List<Resource> childList = Lists.newArrayList();
+                List<ResourceInfo> childList = Lists.newArrayList();
                 childList.add(resource);
                 childMap.put(resource.getParent(), childList);
             }
         }
-        for (Resource resource : parentList) {
+        for (ResourceInfo resource : parentList) {
             loopGetMenuList(resource, childMap);
         }
         return Response.SUCCESS(getMenuResult);
@@ -100,7 +98,7 @@ public class ResourceServiceImpl implements ResourceService {
         if (CollectionUtils.isEmpty(resources)) {
             return authorityMap;
         }
-        for (Resource resource : resources) {
+        for (ResourceInfo resource : resources) {
             if (StringUtils.isNotBlank(resource.getLink())) {
                 authorityMap.put(resource.getLink(), resource.getLink());
             }
@@ -109,7 +107,7 @@ public class ResourceServiceImpl implements ResourceService {
     }
 
     //遍历
-    protected void loopGetMenuList(Resource resource, Map<String, List<Resource>>
+    protected void loopGetMenuList(ResourceInfo resource, Map<String, List<ResourceInfo>>
             childMap) {
 
         //当前节点存在子节点
@@ -117,7 +115,7 @@ public class ResourceServiceImpl implements ResourceService {
             return;
         }
         resource.setChilds(childMap.get(resource.getId()));
-        for (Resource res : resource.getChilds()) {
+        for (ResourceInfo res : resource.getChilds()) {
             loopGetMenuList(res, childMap);
         }
     }

@@ -3,7 +3,7 @@ package com.ubold.admin.service;
 import com.alibaba.fastjson.JSONObject;
 import com.ubold.admin.request.ZtreeParamsRequest;
 import com.ubold.admin.response.Response;
-import com.ubold.admin.vo.*;
+import com.ubold.admin.model.*;
 
 import java.util.List;
 

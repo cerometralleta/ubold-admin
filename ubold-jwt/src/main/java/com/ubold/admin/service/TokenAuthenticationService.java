@@ -1,19 +1,16 @@
 package com.ubold.admin.service;
 
 import com.alibaba.fastjson.JSONObject;
-import com.ubold.admin.domain.UserInfo;
+import com.ubold.admin.domain.User;
+import com.ubold.admin.model.AccountCredentialsResult;
+import com.ubold.admin.model.GetMenuResult;
+import com.ubold.admin.model.TokenInfo;
 import com.ubold.admin.response.Response;
-import com.ubold.admin.util.SpringContextUtil;
-import com.ubold.admin.vo.AccountCredentialsResult;
-import com.ubold.admin.vo.GetMenuResult;
-import com.ubold.admin.vo.TokenInfo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.apache.commons.lang3.CharEncoding;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.MediaType;
@@ -45,10 +42,9 @@ public class TokenAuthenticationService {
 
     @Autowired
     StringRedisTemplate stringRedisTemplate;
+
     @Autowired
-    UserService userService;
-    @Autowired
-    ResourceService resourceService;
+    JwtUserAuthService jwtUserAuthService;
 
     // JWT生成方法
     public void addAuthentication(HttpServletResponse response, TokenInfo tokenInfo) {
@@ -90,15 +86,15 @@ public class TokenAuthenticationService {
     }
 
     private AccountCredentialsResult getAccountCredentialsResult(String userId, String JWToken) {
+
         //获取用户菜单
         AccountCredentialsResult accountCredentialsResult = new AccountCredentialsResult();
         accountCredentialsResult.setTokenId(JWToken);
-        ResourceService resourceService = SpringContextUtil.getBean(ResourceService.class);
-        Response<GetMenuResult> response = resourceService.getMenuList(userId);
+        Response<GetMenuResult> response = jwtUserAuthService.getMenuItems(userId);
         if (response.checkSuccess()) {
             accountCredentialsResult.setResources(response.getResult().getResources());
         }
-        accountCredentialsResult.setAuthority(resourceService.getAuthority(userId));
+        accountCredentialsResult.setAuthority(jwtUserAuthService.getAuthority(userId));
         return accountCredentialsResult;
     }
 
@@ -149,7 +145,7 @@ public class TokenAuthenticationService {
         tokenInfo.setUserId("01559ba349demTa8haRXHHT6FcIe0c98");
 
         //url验证
-        Map<String,String> authorityMap = resourceService.getAuthority(tokenInfo.getUserId());
+        Map<String,String> authorityMap = jwtUserAuthService.getAuthority(tokenInfo.getUserId());
         if(!authorityMap.containsKey(httpServletRequest.getServletPath())){
 //            return null;
         }
@@ -165,11 +161,11 @@ public class TokenAuthenticationService {
     }
 
     public Response<TokenInfo> createTokenInfo(String userName, String password) {
-        Response<UserInfo> response = userService.findByUserNameAndPassword(userName, password);
+        Response<User> response = jwtUserAuthService.findByUserNameAndPassword(userName, password);
         if (!response.checkSuccess()) {
             return Response.FAILURE();
         }
-        UserInfo userInfo = response.getResult();
+        User userInfo = response.getResult();
         TokenInfo tokenInfo = new TokenInfo();
         tokenInfo.setUsername(userInfo.getUsername());
         tokenInfo.setUserId(userInfo.getId());

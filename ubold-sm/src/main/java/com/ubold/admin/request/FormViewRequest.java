@@ -1,6 +1,6 @@
 package com.ubold.admin.request;
 
-import com.ubold.admin.vo.FieldParam;
+import com.ubold.admin.model.FieldParam;
 
 import java.util.List;
 

@@ -5,8 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ubold.admin.response.Response;
 import com.ubold.admin.service.TokenAuthenticationService;
 import com.ubold.admin.util.SpringContextUtil;
-import com.ubold.admin.vo.AccountCredentials;
-import com.ubold.admin.vo.TokenInfo;
+import com.ubold.admin.model.AccountCredentials;
+import com.ubold.admin.model.TokenInfo;
 
 import org.apache.commons.lang3.CharEncoding;
 import org.springframework.http.MediaType;

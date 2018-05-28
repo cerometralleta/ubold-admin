@@ -1,7 +1,6 @@
-package com.ubold.admin.vo;
+package com.ubold.admin.model;
 
-import com.ubold.admin.domain.Resource;
-import io.swagger.annotations.ApiModelProperty;
+import com.ubold.admin.domain.ResourceInfo;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -14,5 +13,5 @@ import java.util.List;
 @Data
 public class GetMenuResult implements Serializable {
 
-    private List<Resource> resources;
+    private List<ResourceInfo> resources;
 }

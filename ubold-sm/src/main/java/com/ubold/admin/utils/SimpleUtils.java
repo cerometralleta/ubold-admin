@@ -1,12 +1,11 @@
 package com.ubold.admin.utils;
 
 import com.ubold.admin.constant.SqlDefineConstant;
-import com.ubold.admin.vo.DataTypeResult;
-import com.ubold.admin.vo.SQLColumnschemaResult;
+import com.ubold.admin.model.DataTypeResult;
+import com.ubold.admin.model.SQLColumnschemaResult;
 import org.apache.commons.lang3.StringUtils;
 
 import java.sql.Types;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.regex.Matcher;

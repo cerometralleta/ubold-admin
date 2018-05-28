@@ -1,18 +1,14 @@
-package com.ubold.admin.vo;
-
-import org.hibernate.validator.constraints.NotBlank;
+package com.ubold.admin.model;
 
 import java.io.Serializable;
 
 /**
- * Created by lenovo on 2017/11/11.
+ * 存储用户名密码，另一个是一个权限类型，负责存储权限和角色。
+ * Created by ningzuokun on 2017/12/18.
  */
-public class LoginParam implements Serializable{
+public class AccountCredentials implements Serializable{
 
-    @NotBlank(message = "用户名不能为空")
     private String username;
-
-    @NotBlank(message = "用户密码不能为空")
     private String password;
 
     public String getUsername() {
@@ -31,3 +27,4 @@ public class LoginParam implements Serializable{
         this.password = password;
     }
 }
+

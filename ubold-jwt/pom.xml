@@ -31,7 +31,7 @@
         </dependency>
         <dependency>
             <groupId>com.ubold.admin</groupId>
-            <artifactId>ubold-rabc</artifactId>
+            <artifactId>ubold-persistence</artifactId>
             <version>1.0.0</version>
         </dependency>
     </dependencies>

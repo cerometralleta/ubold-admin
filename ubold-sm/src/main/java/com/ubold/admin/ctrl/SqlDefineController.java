@@ -6,14 +6,12 @@ import com.ubold.admin.request.ZtreeParamsRequest;
 import com.ubold.admin.response.Response;
 import com.ubold.admin.service.SqlDefineService;
 import com.ubold.admin.service.SqlIdJdbcService;
-import com.ubold.admin.vo.BootstrapPageResult;
-import com.ubold.admin.vo.BootstrapSearchParam;
-import com.ubold.admin.vo.ColumnParam;
-import com.ubold.admin.vo.SqlDefineFetchParam;
+import com.ubold.admin.model.BootstrapPageResult;
+import com.ubold.admin.model.BootstrapSearchParam;
+import com.ubold.admin.model.ColumnParam;
+import com.ubold.admin.model.SqlDefineFetchParam;
 
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;

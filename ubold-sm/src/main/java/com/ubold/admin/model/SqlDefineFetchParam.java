@@ -1,4 +1,4 @@
-package com.ubold.admin.vo;
+package com.ubold.admin.model;
 
 import org.hibernate.validator.constraints.NotBlank;
 

@@ -1,4 +1,4 @@
-package com.ubold.admin.vo;
+package com.ubold.admin.model;
 
 /**
  * Created by lenovo on 2017/8/13.

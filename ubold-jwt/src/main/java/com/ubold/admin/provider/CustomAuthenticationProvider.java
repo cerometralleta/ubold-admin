@@ -3,7 +3,7 @@ package com.ubold.admin.provider;
 import com.ubold.admin.response.Response;
 import com.ubold.admin.service.TokenAuthenticationService;
 import com.ubold.admin.util.SpringContextUtil;
-import com.ubold.admin.vo.TokenInfo;
+import com.ubold.admin.model.TokenInfo;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
