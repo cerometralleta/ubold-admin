@@ -12,7 +12,7 @@ import java.util.Map;
  */
 @Data
 public class AccountCredentialsResult implements Serializable {
-    private List<ResourceInfo> resources;
+    private List resources;
     private Map<String, String> authority;
     private String tokenId;
 }

@@ -3,7 +3,6 @@ package com.ubold.admin.service;
 import com.alibaba.fastjson.JSONObject;
 import com.ubold.admin.domain.User;
 import com.ubold.admin.model.AccountCredentialsResult;
-import com.ubold.admin.model.GetMenuResult;
 import com.ubold.admin.model.TokenInfo;
 import com.ubold.admin.response.Response;
 import io.jsonwebtoken.Claims;
@@ -44,7 +43,7 @@ public class TokenAuthenticationService {
     StringRedisTemplate stringRedisTemplate;
 
     @Autowired
-    JwtUserAuthService jwtUserAuthService;
+    JwtLoginService jwtUserAuthService;
 
     // JWT生成方法
     public void addAuthentication(HttpServletResponse response, TokenInfo tokenInfo) {
@@ -90,10 +89,12 @@ public class TokenAuthenticationService {
         //获取用户菜单
         AccountCredentialsResult accountCredentialsResult = new AccountCredentialsResult();
         accountCredentialsResult.setTokenId(JWToken);
-        Response<GetMenuResult> response = jwtUserAuthService.getMenuItems(userId);
-        if (response.checkSuccess()) {
-            accountCredentialsResult.setResources(response.getResult().getResources());
-        }
+
+        //登录返回菜单列表
+        List menuItems = jwtUserAuthService.getMenuItems(userId);
+        accountCredentialsResult.setResources(menuItems);
+
+        //用户所有权限kv
         accountCredentialsResult.setAuthority(jwtUserAuthService.getAuthority(userId));
         return accountCredentialsResult;
     }
@@ -161,7 +162,7 @@ public class TokenAuthenticationService {
     }
 
     public Response<TokenInfo> createTokenInfo(String userName, String password) {
-        Response<User> response = jwtUserAuthService.findByUserNameAndPassword(userName, password);
+        Response<? extends User> response = jwtUserAuthService.findByUserNameAndPassword(userName, password);
         if (!response.checkSuccess()) {
             return Response.FAILURE();
         }
