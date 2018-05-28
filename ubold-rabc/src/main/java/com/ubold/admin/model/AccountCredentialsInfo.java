@@ -1,7 +1,7 @@
 package com.ubold.admin.model;
 
 import com.ubold.admin.domain.Resources;
-import com.ubold.admin.domain.UserInfo;
+import com.ubold.admin.domain.User;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -12,10 +12,10 @@ import java.util.List;
  * Created by ningzuokun on 2018/3/26.
  */
 @Data
-public class AccountCredentials implements Serializable {
+public class AccountCredentialsInfo implements Serializable {
 
     private App app;
-    private UserInfo user;
+    private User user;
     private List<Resources> menu;
     private String token;
 

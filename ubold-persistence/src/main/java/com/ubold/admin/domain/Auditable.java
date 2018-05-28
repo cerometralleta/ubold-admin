@@ -13,7 +13,7 @@ import java.util.Date;
 @Data
 @MappedSuperclass
 public class Auditable implements Serializable {
-    private static final long serialVersionUID = 1L;
+    protected static final long serialVersionUID = 1L;
 
     @Id
     private String id;
@@ -39,13 +39,10 @@ public class Auditable implements Serializable {
         Date currentTime = new Date();
         this.setCreateTime(currentTime);
         this.setLastUpdateTime(currentTime);
-//        this.setCreateUser(getUserName());
-//        this.setLastUpdateUser(getUserName());
     }
 
     @PreUpdate
     public void preUpdate() {
         this.setLastUpdateTime(new Date());
-//        this.setLastUpdateUser(getUserName());
     }
 }
