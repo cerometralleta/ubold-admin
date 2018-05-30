@@ -2,8 +2,7 @@ package com.ubold.admin.service.impl;
 
 import com.ubold.admin.domain.User;
 import com.ubold.admin.domain.UserInfo;
-import com.ubold.admin.model.AccountCredentialsInfo;
-import com.ubold.admin.model.GetMenuResult;
+import com.ubold.admin.model.CredentialsModel;
 import com.ubold.admin.response.Response;
 import com.ubold.admin.service.JwtLoginService;
 import com.ubold.admin.service.ResourceService;
@@ -36,19 +35,10 @@ public class JwtLoginServiceServiceImpl implements JwtLoginService {
     @Override
     public Serializable getAccountCredentials(User user, String JWToken) {
 
-        //获取用户菜单
-        AccountCredentialsInfo accountCredentials = new AccountCredentialsInfo();
-        accountCredentials.setToken(JWToken);
-        accountCredentials.setUser(user);
-
-        //登录返回菜单列表
-        Response<GetMenuResult> resultResponse = resourceService.getMenuItems(user.getId());
-        accountCredentials.setMenu(resultResponse.getResult().getResources());
-
-        AccountCredentialsInfo.App app = new AccountCredentialsInfo.App();
-        app.setName("Ubold");
-        app.setDescription("Ng-zorro admin panel front-end framework");
-        accountCredentials.setApp(app);
-        return accountCredentials;
+        //返回jwt token
+        CredentialsModel credentialsModel = new CredentialsModel();
+        credentialsModel.setToken(JWToken);
+        credentialsModel.setUser(user);
+        return credentialsModel;
     }
 }

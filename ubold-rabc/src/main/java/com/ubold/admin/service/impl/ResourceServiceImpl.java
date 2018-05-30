@@ -2,8 +2,10 @@ package com.ubold.admin.service.impl;
 
 import com.ubold.admin.constants.MenuTypeEnum;
 import com.ubold.admin.domain.Resources;
+import com.ubold.admin.domain.User;
+import com.ubold.admin.model.AccountInfoModel;
 import com.ubold.admin.model.AuthorizeUrlParam;
-import com.ubold.admin.model.GetMenuResult;
+import com.ubold.admin.model.GetMenuModel;
 import com.ubold.admin.repository.ResourceRepository;
 import com.ubold.admin.response.Response;
 import com.ubold.admin.service.ResourceService;
@@ -12,6 +14,7 @@ import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -55,8 +58,8 @@ public class ResourceServiceImpl implements ResourceService {
     }
 
     @Override
-    public Response<GetMenuResult> getMenuItems(String userId) {
-        GetMenuResult getMenuResult = new GetMenuResult();
+    public Response<GetMenuModel> getMenuItems(String userId) {
+        GetMenuModel getMenuResult = new GetMenuModel();
         List<Resources> resources = resourceRepository
                 .findResourceByRoleUserIdAndType(userId, MenuTypeEnum.MENU.getCode());
         if (CollectionUtils.isEmpty(resources)) {
@@ -103,6 +106,26 @@ public class ResourceServiceImpl implements ResourceService {
             }
         }
         return authorityMap;
+    }
+
+    @Override
+    public AccountInfoModel getAccountInfo(String userId) {
+        AccountInfoModel accountInfoModel = new AccountInfoModel();
+
+        //读取用户信息
+        User user = (User)SecurityContextHolder.getContext().getAuthentication().getDetails();
+        accountInfoModel.setUser(user);
+
+        //登录返回菜单列表
+        Response<GetMenuModel> resultResponse = getMenuItems(userId);
+        accountInfoModel.setMenu(resultResponse.getResult().getResources());
+
+        //aPP配置
+        AccountInfoModel.App app = new AccountInfoModel.App();
+        app.setName("Ubold");
+        app.setDescription("Ng-zorro admin panel front-end framework");
+        accountInfoModel.setApp(app);
+        return accountInfoModel;
     }
 
     //遍历

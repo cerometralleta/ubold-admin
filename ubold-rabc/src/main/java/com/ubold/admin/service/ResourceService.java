@@ -1,8 +1,9 @@
 package com.ubold.admin.service;
 
 import com.ubold.admin.domain.Resources;
+import com.ubold.admin.model.AccountInfoModel;
 import com.ubold.admin.model.AuthorizeUrlParam;
-import com.ubold.admin.model.GetMenuResult;
+import com.ubold.admin.model.GetMenuModel;
 import com.ubold.admin.response.Response;
 
 import java.util.List;
@@ -28,7 +29,9 @@ public interface ResourceService {
     List<String> findAllResourceLink(List<Resources> resources);
     Response authorizeUrl(AuthorizeUrlParam authorizeUrlParam);
 
-    Response<GetMenuResult> getMenuItems(String userId);
+    Response<GetMenuModel> getMenuItems(String userId);
 
     Map<String, String> getAuthority(String userId);
+
+    AccountInfoModel getAccountInfo(String userId);
 }

@@ -30,7 +30,7 @@ public enum StatusCodeEnum {
 
 	IO_EXCEPTION(103, "IO异常"),
 	
-	SYSTEM_DATA_ERROR(104,"服务器数据异常");
+	SYSTEM_DATA_ERROR(104,"数据异常");
 	
 	public Integer code;
 	public String message;

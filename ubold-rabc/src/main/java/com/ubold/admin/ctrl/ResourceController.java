@@ -1,7 +1,7 @@
 package com.ubold.admin.ctrl;
 
 import com.ubold.admin.model.AuthorizeUrlParam;
-import com.ubold.admin.model.GetMenuResult;
+import com.ubold.admin.model.GetMenuModel;
 import com.ubold.admin.request.Request;
 import com.ubold.admin.response.Response;
 import com.ubold.admin.service.ResourceService;
@@ -30,7 +30,7 @@ public class ResourceController {
 
     @ApiOperation(value = "获取授权菜单列表")
     @RequestMapping(value = "/getMenuList", method = RequestMethod.GET)
-    public Response<GetMenuResult> getMenuList(Request request) {
+    public Response<GetMenuModel> getMenuList(Request request) {
         return resourceService.getMenuItems(request.getSessionUserId());
     }
 }

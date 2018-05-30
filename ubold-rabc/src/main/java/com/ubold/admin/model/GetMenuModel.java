@@ -11,7 +11,7 @@ import java.util.List;
  * Created by ningzuokun on 2017/12/21.
  */
 @Data
-public class GetMenuResult implements Serializable {
+public class GetMenuModel implements Serializable {
 
     private List<Resources> resources;
 }

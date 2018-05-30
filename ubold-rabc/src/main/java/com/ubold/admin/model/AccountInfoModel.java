@@ -9,16 +9,16 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Created by ningzuokun on 2018/3/26.
+ * Created by lenovo on 2018/5/30.
  */
 @Data
-public class AccountCredentialsInfo implements Serializable {
+public class AccountInfoModel implements Serializable {
 
-    private App app;
+    private AccountInfoModel.App app;
     private User user;
     private List<Resources> menu;
-    private String token;
 
+    //APP系统配置
     @Data
     public static class App implements Serializable{
 
@@ -29,5 +29,3 @@ public class AccountCredentialsInfo implements Serializable {
         private String description;
     }
 }
-
-

@@ -1,6 +1,7 @@
 package com.ubold.admin.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.ubold.admin.constant.StatusCodeEnum;
 import com.ubold.admin.domain.User;
 import com.ubold.admin.response.Response;
 import io.jsonwebtoken.Claims;
@@ -34,7 +35,7 @@ public class TokenAuthenticationService {
     static final long EXPIRATIONTIME = 1000 * 60 * 60 * 24 * 5;     // 5天
     static final String SECRET = "P@ssw02d";            // JWT密码
     static final String TOKEN_PREFIX = "Bearer";        // Token前缀
-    static final String HEADER_STRING = "Authorization";// 存放Token的Header Key
+    static final String HEADER_STRING = "token";// 存放Token的Header Key
     static final String AUTHORITIES = "authorities";
     static final String USER_TOKEN = "userToken:";
     private static final String permit_prefix = "/permit/";
@@ -108,34 +109,42 @@ public class TokenAuthenticationService {
     }
 
     // JWT验证方法
-    public Authentication getAuthentication(HttpServletRequest httpServletRequest) {
+    public Response<Authentication> getAuthentication(HttpServletRequest httpServletRequest) {
         if(httpServletRequest.getServletPath().indexOf(permit_prefix) > 0){
-           return new UsernamePasswordAuthenticationToken(null, null, null);
+            Response.SUCCESS(new UsernamePasswordAuthenticationToken(null, null, null));
         }
         Claims claims = httpServletRequestClaims(httpServletRequest);
         if (null == claims) {
-            return null;
+
+            //未登陆
+            return Response.FAILURE(StatusCodeEnum.NEED_LOGIN.getCode(),StatusCodeEnum.NEED_LOGIN.getMessage());
         }
         // 拿用户名
         String username = claims.getSubject();
 
         //判断是否过期
         if (claims.getExpiration().getTime() - System.currentTimeMillis() < 0) {
-            return null;
+
+            //Session失效
+            return Response.FAILURE(StatusCodeEnum.SESSION_EXPIRED.getCode(),StatusCodeEnum.SESSION_EXPIRED.getMessage());
         }
 
         //校验redis subject用户账户,获取用户详细信息
 //        String tokenInfoJson = stringRedisTemplate.opsForValue().get(this.createtokenId(username));
 //        if (StringUtils.isBlank(tokenInfoJson)) {
-//            return null;
+
+             //Session失效
+//          return Response.FAILURE(StatusCodeEnum.SESSION_EXPIRED.getCode(),StatusCodeEnum.SESSION_EXPIRED.getMessage());
 //        }
         User user = new User();
         user.setId("01559ba349demTa8haRXHHT6FcIe0c98");
 
-        //url验证
+        //url权限验证
         Map<String,String> authorityMap = jwtUserAuthService.getResources(user.getId());
         if(!authorityMap.containsKey(httpServletRequest.getServletPath())){
-//            return null;
+
+            //没权限
+//            return Response.FAILURE(StatusCodeEnum.INSUFFICIENT_PRIVILEGES.getCode(),StatusCodeEnum.INSUFFICIENT_PRIVILEGES.getMessage());
         }
         // 得到权限（角色）
         List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList((String) claims.get(AUTHORITIES));
@@ -145,7 +154,7 @@ public class TokenAuthenticationService {
                 new UsernamePasswordAuthenticationToken(username, user.getPassword(), authorities) :
                 null;
         usernamePasswordAuthenticationToken.setDetails(user);
-        return usernamePasswordAuthenticationToken;
+        return Response.SUCCESS(usernamePasswordAuthenticationToken);
     }
 
     public Response<User> getUserInfo(String userName, String password) {

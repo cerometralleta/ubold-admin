@@ -31,7 +31,7 @@ public class UboldAuthorityAspect {
         }
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         for (Object parameterAgrs : args) {
-            if (parameterAgrs instanceof Request) {
+            if (parameterAgrs instanceof Request && null != authentication.getDetails()) {
                 ((Request) parameterAgrs).setSessionUserId(((User) authentication.getDetails()).getId());
             }
         }
