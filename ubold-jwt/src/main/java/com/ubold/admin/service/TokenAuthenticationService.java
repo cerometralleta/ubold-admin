@@ -6,6 +6,7 @@ import com.ubold.admin.response.Response;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.CharEncoding;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ import java.util.Map;
 /**
  * Created by ningzuokun on 2017/12/18.
  */
+@Slf4j
 @Service
 public class TokenAuthenticationService {
     static final long EXPIRATIONTIME = 1000 * 60 * 60 * 24 * 5;     // 5天
@@ -74,6 +76,7 @@ public class TokenAuthenticationService {
                     Response.SUCCESS(jwtUserAuthService.getAccountCredentials(user, JWTString))));
         } catch (IOException e) {
             e.printStackTrace();
+            log.error("Jwt token构建异常",e);
         } finally {
             try {
                 response.getWriter().close();

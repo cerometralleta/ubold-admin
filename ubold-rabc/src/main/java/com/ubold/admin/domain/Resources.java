@@ -62,6 +62,7 @@ public class Resources extends Auditable {
     @ApiModelProperty(value = "徽标 Badge 颜色 （默认：error， 所有颜色值见：https://github.com/cipchk/ng-alain/blob/master/_documents/utils.md#色彩）")
     private String badgeStatus;
 
+    @Transient
     @ApiModelProperty(value = "是否隐藏菜单")
     private boolean hide;
 
