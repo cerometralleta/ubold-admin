@@ -138,6 +138,10 @@ public class TokenAuthenticationService {
 //        }
         User user = new User();
         user.setId("01559ba349demTa8haRXHHT6FcIe0c98");
+        user.setName("kunkun");
+        user.setAvatar("/assets/tmp/img/avatar.jpg");
+        user.setEmail("cipchk@qq.com");
+        user.setUsername("kunkun");
 
         //url权限验证
         Map<String,String> authorityMap = jwtUserAuthService.getResources(user.getId());

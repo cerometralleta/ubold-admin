@@ -27,7 +27,6 @@ public class User extends Auditable{
     @ApiModelProperty(value = "邮箱")
     private String email;
 
-    @JsonIgnore
     @ApiModelProperty(value = "用户照片")
     private String avatar;
 }
