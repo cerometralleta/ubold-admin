@@ -6,11 +6,11 @@ import java.util.List;
 /**
  * Created by lenovo on 2018/2/12.
  */
-public class SQLTableschemaResult implements Serializable{
+public class FindTablesResult implements Serializable{
 
     private String tableName;
     private String tableComment;
-    private List<SQLColumnschemaResult> sqlColumnschemaResultList;
+    private List<GetColumnsResult> getColumnsResultList;
 
     public String getTableName() {
         return tableName;
@@ -28,11 +28,11 @@ public class SQLTableschemaResult implements Serializable{
         this.tableComment = tableComment;
     }
 
-    public List<SQLColumnschemaResult> getSqlColumnschemaResultList() {
-        return sqlColumnschemaResultList;
+    public List<GetColumnsResult> getGetColumnsResultList() {
+        return getColumnsResultList;
     }
 
-    public void setSqlColumnschemaResultList(List<SQLColumnschemaResult> sqlColumnschemaResultList) {
-        this.sqlColumnschemaResultList = sqlColumnschemaResultList;
+    public void setGetColumnsResultList(List<GetColumnsResult> getColumnsResultList) {
+        this.getColumnsResultList = getColumnsResultList;
     }
 }

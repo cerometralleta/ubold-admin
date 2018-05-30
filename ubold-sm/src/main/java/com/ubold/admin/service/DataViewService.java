@@ -2,9 +2,10 @@ package com.ubold.admin.service;
 
 import com.ubold.admin.domain.DataView;
 import com.ubold.admin.domain.SqlDefine;
+import com.ubold.admin.model.FindTablesParam;
+import com.ubold.admin.model.SqldefinePreviewParam;
 import com.ubold.admin.request.DataViewCreateRequest;
 import com.ubold.admin.response.Response;
-import com.ubold.admin.model.QuerytableParam;
 
 import java.util.List;
 
@@ -27,5 +28,7 @@ public interface DataViewService {
     List<DataView> queryByDataViewCode(String dataViewCode);
 
     DataView getByDataViewCode(String dataViewCode);
-    Response<SqlDefine> queryTableschemaInfo(QuerytableParam querytableParam);
+
+    //根据所选表名预览sqldefine
+    Response<SqlDefine> sqldefinePreview(SqldefinePreviewParam sqldefinePreviewParam);
 }

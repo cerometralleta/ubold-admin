@@ -1,8 +1,8 @@
 package com.ubold.admin.utils;
 
 import com.ubold.admin.constant.SqlDefineConstant;
+import com.ubold.admin.model.GetColumnsResult;
 import com.ubold.admin.model.DataTypeResult;
-import com.ubold.admin.model.SQLColumnschemaResult;
 import org.apache.commons.lang3.StringUtils;
 
 import java.sql.Types;
@@ -143,10 +143,10 @@ public class SimpleUtils {
 		return null;
 	}
 
-	public static String createQuerySql(String tableName,List<SQLColumnschemaResult> sqlColumnschemaResults){
+	public static String createQuerySql(String tableName,List<GetColumnsResult> getColumnsResults){
 		StringBuffer stringBuffer = new StringBuffer("select ");
-		sqlColumnschemaResults.forEach((SQLColumnschemaResult sqlColumnschemaResult)->{
-			stringBuffer.append("t.").append(sqlColumnschemaResult.getColumnName()).append(",");
+		getColumnsResults.forEach((GetColumnsResult getColumnsResult)->{
+			stringBuffer.append("t.").append(getColumnsResult.getColumnName()).append(",");
 		});
 		stringBuffer.deleteCharAt(stringBuffer.lastIndexOf(","));
 		stringBuffer.append(" from ").append(tableName).append(" t ");

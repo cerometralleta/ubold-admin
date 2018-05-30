@@ -518,14 +518,14 @@ public class SqlIdJdbcServiceImpl implements SqlIdJdbcService {
 
 
     @Override
-    public List<SQLTableschemaResult> queryTableschema(QuerytableParam querytableParam) {
+    public List<FindTablesResult> findTables(FindTablesParam findTablesParam) {
         Connection connection = null;
         try {
-            List<SQLTableschemaResult> dataList = new ArrayList<>();
-            if (StringUtils.isBlank(querytableParam.getTablename())) {
+            List<FindTablesResult> dataList = new ArrayList<>();
+            if (StringUtils.isBlank(findTablesParam.getTablename())) {
                 return dataList;
             }
-            JdbcTemplate jdbcTemplate = jdbcTemplateFactory.get(querytableParam.getDatasource());
+            JdbcTemplate jdbcTemplate = jdbcTemplateFactory.get(findTablesParam.getDatasource());
             connection = jdbcTemplate.getDataSource().getConnection();
             String sql = "select table_name,table_comment from information_schema.tables " +
                     "where table_schema= ?  and TABLE_NAME like ? ";
@@ -534,12 +534,12 @@ public class SqlIdJdbcServiceImpl implements SqlIdJdbcService {
 
             //get dbname
             paraMap.put("tableschema", connection.getCatalog());
-            paraMap.put("tableName", querytableParam.getTablename() + '%');
-            dataList = jdbcTemplate.query(sql, SimpleUtils.linkedHashMapToValues(paraMap), new RowMapper<SQLTableschemaResult>() {
+            paraMap.put("tableName", findTablesParam.getTablename() + '%');
+            dataList = jdbcTemplate.query(sql, SimpleUtils.linkedHashMapToValues(paraMap), new RowMapper<FindTablesResult>() {
 
                         @Override
-                        public SQLTableschemaResult mapRow(ResultSet resultSet, int i) throws SQLException {
-                            SQLTableschemaResult tablesResult = new SQLTableschemaResult();
+                        public FindTablesResult mapRow(ResultSet resultSet, int i) throws SQLException {
+                            FindTablesResult tablesResult = new FindTablesResult();
                             tablesResult.setTableName(resultSet.getString("table_name"));
                             tablesResult.setTableComment(resultSet.getString("table_comment"));
                             return tablesResult;
@@ -555,20 +555,20 @@ public class SqlIdJdbcServiceImpl implements SqlIdJdbcService {
     }
 
     @Override
-    public List<SQLColumnschemaResult> queryColumnschema(QuerytableParam querytableParam){
+    public List<GetColumnsResult> getColumns(String tablename, String datasource){
         Connection connection = null;
         try {
             String sql = "SELECT t.column_name,t.column_key,t.column_comment FROM information_schema.COLUMNS t where t.table_name = ? and t.table_schema = ? ";
             LinkedHashMap<String, Object> paraMap = new LinkedHashMap();
-            paraMap.put("tableName", querytableParam.getTablename());
-            JdbcTemplate jdbcTemplate = jdbcTemplateFactory.get(querytableParam.getDatasource());
+            paraMap.put("tableName", tablename);
+            JdbcTemplate jdbcTemplate = jdbcTemplateFactory.get(datasource);
             connection = jdbcTemplate.getDataSource().getConnection();
             paraMap.put("tableschema", connection.getCatalog());
-            List<SQLColumnschemaResult> dataList = jdbcTemplate.query(sql, SimpleUtils.linkedHashMapToValues(paraMap),
-                    new RowMapper<SQLColumnschemaResult>() {
+            List<GetColumnsResult> dataList = jdbcTemplate.query(sql, SimpleUtils.linkedHashMapToValues(paraMap),
+                    new RowMapper<GetColumnsResult>() {
                         @Override
-                        public SQLColumnschemaResult mapRow(ResultSet resultSet, int i) throws SQLException {
-                            SQLColumnschemaResult mySQLColumnResult = new SQLColumnschemaResult();
+                        public GetColumnsResult mapRow(ResultSet resultSet, int i) throws SQLException {
+                            GetColumnsResult mySQLColumnResult = new GetColumnsResult();
                             mySQLColumnResult.setColumnName(resultSet.getString("column_name"));
                             mySQLColumnResult.setColumnKey(resultSet.getString("column_key"));
                             mySQLColumnResult.setColumnComment(resultSet.getString("column_comment"));

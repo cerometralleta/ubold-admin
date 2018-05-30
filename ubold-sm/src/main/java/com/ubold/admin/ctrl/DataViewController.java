@@ -1,11 +1,13 @@
 package com.ubold.admin.ctrl;
 
 import com.ubold.admin.constant.PermitPrefixURI;
+import com.ubold.admin.model.FindTablesParam;
+import com.ubold.admin.model.FindTablesResult;
+import com.ubold.admin.model.SqldefinePreviewParam;
 import com.ubold.admin.request.DataViewCreateRequest;
 import com.ubold.admin.response.Response;
 import com.ubold.admin.service.DataViewService;
 import com.ubold.admin.service.SqlIdJdbcService;
-import com.ubold.admin.model.QuerytableParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
@@ -53,21 +55,20 @@ public class DataViewController{
     @ResponseBody
     @RequestMapping(value=PermitPrefixURI.permit + "/index",method= RequestMethod.GET)
     public Response index() {
-        log.info("application started");
         return Response.SUCCESS("ubold started");
     }
 
-    @ApiOperation(value = "查询数据库表列表")
+    @ApiOperation(value = "查询系统表")
     @ResponseBody
     @RequestMapping(value="/queryTableschemas",method= RequestMethod.POST)
-    public Response queryTableschema(@RequestBody @Valid QuerytableParam querytableParam) {
-        return Response.SUCCESS(sqlIdJdbcService.queryTableschema(querytableParam));
+    public Response<FindTablesResult> queryTableschemas(@RequestBody @Valid FindTablesParam findTablesParam) {
+        return Response.SUCCESS(sqlIdJdbcService.findTables(findTablesParam));
     }
 
-    @ApiOperation(value = "根据表名生成SQL定义内容")
+    @ApiOperation(value = "sql定义预览")
     @ResponseBody
     @RequestMapping(value="/queryTableschemaInfo",method= RequestMethod.POST)
-    public Response queryTableschemaInfo(@RequestBody @Valid QuerytableParam querytableParam) {
-        return dataViewService.queryTableschemaInfo(querytableParam);
+    public Response queryTableschemaInfo(@RequestBody @Valid SqldefinePreviewParam sqldefinePreviewParam) {
+        return dataViewService.sqldefinePreview(sqldefinePreviewParam);
     }
 }

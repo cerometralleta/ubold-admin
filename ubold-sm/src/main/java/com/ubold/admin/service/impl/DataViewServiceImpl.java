@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.ubold.admin.constant.SqlDefineStatusEnum;
 import com.ubold.admin.domain.DataView;
 import com.ubold.admin.domain.SqlDefine;
+import com.ubold.admin.model.*;
 import com.ubold.admin.repository.DataViewRepository;
 import com.ubold.admin.request.DataViewCreateRequest;
 import com.ubold.admin.response.Response;
@@ -11,7 +12,6 @@ import com.ubold.admin.service.DataViewService;
 import com.ubold.admin.service.SqlIdJdbcService;
 import com.ubold.admin.util.GUID;
 import com.ubold.admin.utils.SimpleUtils;
-import com.ubold.admin.model.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,18 +103,18 @@ public class DataViewServiceImpl implements DataViewService {
     }
 
     @Override
-    public Response<SqlDefine> queryTableschemaInfo(QuerytableParam querytableParam) {
+    public Response<SqlDefine> sqldefinePreview(SqldefinePreviewParam sqldefinePreviewParam) {
         SqlDefine sqlDefine = new SqlDefine();
-        sqlDefine.setMasterTable(querytableParam.getTablename());
-        List<SQLColumnschemaResult> columnList = sqlIdJdbcService.queryColumnschema(querytableParam);
-        for(SQLColumnschemaResult sqlColumnschemaResult : columnList){
-            if(StringUtils.isNoneBlank(sqlColumnschemaResult.getColumnKey())){
-                sqlDefine.setMasterTableId(sqlColumnschemaResult.getColumnName());
+        sqlDefine.setMasterTable(sqldefinePreviewParam.getTablename());
+        List<GetColumnsResult> columnList = sqlIdJdbcService.getColumns(sqldefinePreviewParam.getTablename(),sqldefinePreviewParam.getDatasource());
+        for(GetColumnsResult getColumnsResult : columnList){
+            if(StringUtils.isNoneBlank(getColumnsResult.getColumnKey())){
+                sqlDefine.setMasterTableId(getColumnsResult.getColumnName());
                 break;
             }
         }
         sqlDefine.setStatus(SqlDefineStatusEnum.UN_ISSUE.getCode());
-        sqlDefine.setSelectSql(SimpleUtils.createQuerySql(querytableParam.getTablename(),columnList));
+        sqlDefine.setSelectSql(SimpleUtils.createQuerySql(sqldefinePreviewParam.getTablename(),columnList));
         return Response.SUCCESS(sqlDefine);
     }
 
