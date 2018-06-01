@@ -1,6 +1,5 @@
 package com.ubold.admin.domain;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -15,7 +14,7 @@ import java.util.List;
  */
 @Data
 @Entity
-@Table(name = "tb_rbac_resources")
+@Table(name = "tb_rbac_resource")
 public class Resources extends Auditable {
 
     @ApiModelProperty(value = "文本")
@@ -36,6 +35,9 @@ public class Resources extends Auditable {
 
     @ApiModelProperty(value = "类型")
     private Integer type;
+
+    @ApiModelProperty(value = "扩展数据")
+    private String extra;
 
     /** 二级菜单 */
     @Transient
