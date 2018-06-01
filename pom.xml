@@ -11,7 +11,7 @@
 
     <modules>
         <module>ubold-framework</module>
-        <module>ubold-persistence</module>
+        <module>ubold-orm</module>
         <module>ubold-sm</module>
         <module>ubold-rabc</module>
         <module>ubold-jwt</module>
