@@ -32,10 +32,18 @@ import java.util.Map;
 @Slf4j
 @Service
 public class TokenAuthenticationService {
-    static final long EXPIRATIONTIME = 1000 * 60 * 60 * 24 * 5;     // 5天
-    static final String SECRET = "P@ssw02d";            // JWT密码
-    static final String TOKEN_PREFIX = "Bearer";        // Token前缀
-    static final String HEADER_STRING = "token";// 存放Token的Header Key
+
+    // 5天
+    static final long EXPIRATIONTIME = 1000 * 60 * 60 * 24 * 5;
+
+    // JWT密码
+    static final String SECRET = "P@ssw02d";
+
+    // Token前缀
+    static final String TOKEN_PREFIX = "Bearer";
+
+    // 存放Token的Header Key
+    static final String HEADER_STRING = "token";
     static final String AUTHORITIES = "authorities";
     static final String USER_TOKEN = "userToken:";
     private static final String permit_prefix = "/permit/";

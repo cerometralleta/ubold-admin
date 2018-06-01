@@ -155,7 +155,7 @@ public class BeanUtils {
                         if(!"class".equals(name) && beanUtilsBean.getPropertyUtils().isReadable(orig, name) && beanUtilsBean.getPropertyUtils().isWriteable(dest, name)) {
                             try {
                                 e = beanUtilsBean.getPropertyUtils().getSimpleProperty(orig, name);
-                                if(e != null && !e.toString().equals("null")) {
+                                if(e != null && !"null".equals(e.toString())) {
                                     beanUtilsBean.copyProperty(dest, name, e);
                                 }
                             } catch (NoSuchMethodException var6) {

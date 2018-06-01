@@ -418,6 +418,7 @@ public class SqlIdJdbcServiceImpl implements SqlIdJdbcService {
                 result = jdbcTemplateFactory.getNamedParameterJdbcTemplate(sqlDefine.getDatasource()).queryForList(
                         warpTreeSql(sqlDefine.getSelectSql(), treeOptionsParam.getIdKey()), paramMap);
                 break;
+            default:
         }
         ConditionParam conditionDto = new ConditionParam();
         conditionDto.setField(treeOptionsParam.getForeignKey());

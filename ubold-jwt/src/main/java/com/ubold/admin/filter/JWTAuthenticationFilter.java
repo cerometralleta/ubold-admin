@@ -31,14 +31,12 @@ public class JWTAuthenticationFilter extends GenericFilterBean {
                          FilterChain filterChain)
             throws IOException, ServletException {
         TokenAuthenticationService tokenAuthenticationService = SpringContextUtil.getBean(TokenAuthenticationService.class);
-
-
         Response<Authentication> authenticationResponse = tokenAuthenticationService.getAuthentication((HttpServletRequest) request);
         if(!authenticationResponse.checkSuccess()){
             HttpServletResponse httpServletResponse = (HttpServletResponse)response;
             httpServletResponse.setCharacterEncoding(CharEncoding.UTF_8);
             httpServletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            if(StatusCodeEnum.INSUFFICIENT_PRIVILEGES.getCode() == authenticationResponse.getCode()){
+            if(StatusCodeEnum.INSUFFICIENT_PRIVILEGES.getCode().equals(authenticationResponse.getCode())){
                 httpServletResponse.setStatus(HttpServletResponse.SC_FORBIDDEN);
             }else{
                 httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

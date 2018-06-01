@@ -138,7 +138,9 @@ public class SimpleUtils {
 		case Types.TIMESTAMP:
 			dataTypeVo.setType("Timestamp");
 			dataTypeVo.setTypePackage("import java.sql.Timestamp;");
-			return dataTypeVo; 
+			return dataTypeVo;
+		default:
+
 		}
 		return null;
 	}
