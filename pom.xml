@@ -15,6 +15,5 @@
         <module>ubold-jwt</module>
         <module>ubold-sm</module>
         <module>ubold-rabc</module>
-        <module>ubold-cms</module>
     </modules>
 </project>

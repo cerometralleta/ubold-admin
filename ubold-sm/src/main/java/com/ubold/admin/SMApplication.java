@@ -9,9 +9,9 @@ import org.springframework.cache.annotation.EnableCaching;
  */
 @SpringBootApplication
 @EnableCaching
-public class CMSApplication {
+public class SMApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(CMSApplication.class, args);
+        SpringApplication.run(SMApplication.class, args);
     }
 }

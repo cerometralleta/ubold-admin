@@ -16,7 +16,7 @@
         </dependency>
         <dependency>
             <groupId>com.ubold.admin</groupId>
-            <artifactId>ubold-orm</artifactId>
+            <artifactId>ubold-rabc</artifactId>
             <version>1.0.0</version>
         </dependency>
     </dependencies>
