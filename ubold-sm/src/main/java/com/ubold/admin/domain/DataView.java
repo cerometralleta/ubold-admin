@@ -11,7 +11,7 @@ import javax.persistence.Table;
  */
 @Data
 @Entity
-@Table(name="TB_SM_DATAVIEW")
+@Table(name="t_sm_dataview")
 public class DataView extends Auditable{
 
     @Column(name = "dataviewcode")

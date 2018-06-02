@@ -14,7 +14,7 @@ import java.util.List;
  */
 @Data
 @Entity
-@Table(name = "tb_rbac_resource")
+@Table(name = "t_rbac_resource")
 public class Resources extends Auditable {
 
     @ApiModelProperty(value = "文本")

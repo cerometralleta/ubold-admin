@@ -11,7 +11,7 @@ import javax.persistence.Table;
  */
 @Data
 @Entity
-@Table(name = "TB_RBAC_ROLE_USER_RELATION")
+@Table(name = "t_rbac_role_user_relation")
 public class RoleUserRelation extends Auditable {
 
     private String userId;

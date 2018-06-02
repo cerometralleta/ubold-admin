@@ -1,5 +1,6 @@
 package com.ubold.admin.service.impl;
 
+
 import com.ubold.admin.domain.UserInfo;
 import com.ubold.admin.response.Response;
 import com.ubold.admin.service.RoleService;

@@ -7,7 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 @Data
 @Entity
-@Table(name="TB_SM_SQLDEFINE")
+@Table(name="t_sm_sqldefine")
 public class SqlDefine extends Auditable{
 
 	/**

@@ -11,12 +11,12 @@
     <dependencies>
         <dependency>
             <groupId>com.ubold.admin</groupId>
-            <artifactId>ubold-orm</artifactId>
+            <artifactId>ubold-framework</artifactId>
             <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>com.ubold.admin</groupId>
-            <artifactId>ubold-rabc</artifactId>
+            <artifactId>ubold-orm</artifactId>
             <version>1.0.0</version>
         </dependency>
     </dependencies>

@@ -11,7 +11,7 @@ import javax.persistence.Table;
  */
 @Data
 @Entity
-@Table(name="TB_SM_FORMVIEW")
+@Table(name="t_sm_formview")
 public class FormView extends Auditable{
     private String code;
 
