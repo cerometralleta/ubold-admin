@@ -6,9 +6,11 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.Serializable;
+import java.util.concurrent.TimeUnit;
 
 /**
  * RedisCacheConfig Tester.
@@ -31,6 +33,10 @@ public class RedisCacheConfigTest {
     public void testStringRedisTemplate() throws Exception {
         // 保存字符串
 //        stringRedisTemplate.opsForValue().set("aaa", "applicationSessionId:administrator");
+        stringRedisTemplate.opsForValue().increment("aaa",1);
+        stringRedisTemplate.expire("aaa",10, TimeUnit.SECONDS);
+        stringRedisTemplate.boundValueOps("aaaaaaaaa").increment(1);
+
         System.out.println(stringRedisTemplate.opsForValue().get("applicationSessionId:administrator"));
         Assert.assertEquals("111", stringRedisTemplate.opsForValue().get("applicationSessionId:administrator"));
     }

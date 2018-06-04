@@ -1,4 +1,4 @@
-package com.ubold.admin.domain;
+package com.ubold.admin.pager;
 
 import lombok.Data;
 

@@ -68,11 +68,19 @@ public class UserServiceImpl implements UserService{
             sqlBuffer.append(" and password = :password ");
             paraMap.put("password",password);
         }
-        Query query = entityManager.createNativeQuery(sqlBuffer.toString(),UserInfo.class);
-        paraMap.forEach((k,v)-> {
-            query.setParameter(k,v);
-        });
-        return query.getResultList();
+        try {
+            Query query = entityManager.createNativeQuery(sqlBuffer.toString(), UserInfo.class);
+            paraMap.forEach((k, v) -> {
+                query.setParameter(k, v);
+            });
+            return query.getResultList();
+        }finally {
+
+            //关闭entityManager
+            if(entityManager != null) {
+                entityManager.close();
+            }
+        }
     }
 
     @Override
