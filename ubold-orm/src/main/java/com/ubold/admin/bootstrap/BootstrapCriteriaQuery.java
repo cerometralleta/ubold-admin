@@ -1,6 +1,5 @@
-package com.ubold.admin.pager;
+package com.ubold.admin.bootstrap;
 
-import lombok.extern.slf4j.Slf4j;
 import org.hibernate.SQLQuery;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -17,20 +16,19 @@ import java.util.Map;
 /**
  * Created by lenovo on 2018/6/5.
  */
-@Slf4j
 @Service
-public class CriteriaQueryPager {
+public class BootstrapCriteriaQuery {
 
     @PersistenceContext
     EntityManager entityManager;
 
     // bean属性映射
-    public <T> Page<T> find(String sql, Class<?> clazz, int page, int size){
-        return this.find(sql,clazz,page,size,(Sort)null);
+    public <T> Page<T> findAll(String sql, Class<?> clazz, int page, int size){
+        return this.findAll(sql,clazz,page,size,(Sort)null);
     }
 
     // bean属性映射
-    public <T> Page<T> find(String sql, Class<?> clazz, int page, int size, Sort sort){
+    public <T> Page<T> findAll(String sql, Class<?> clazz, int page, int size, Sort sort){
         List<T> list = null;
 
         //查询记录条数
@@ -63,12 +61,11 @@ public class CriteriaQueryPager {
             }
         }
         //设置分页信息
-        Page<T> pageInfo = new PageImpl<T>(list, new PageRequest(page, size, sort), Long.valueOf(totalCount.toString()));
-        return pageInfo;
+        return new PageImpl<T>(list, new PageRequest(page, size, sort), Long.valueOf(totalCount.toString()));
     }
 
     // bean属性映射
-    public <T> List<T> find(String sql, Class<?> clazz, Map<String,Object> paraMap){
+    public <T> List<T> findAll(String sql, Class<?> clazz, Map<String,Object> paraMap){
         List<T> list = null;
         try {
             Query nativeQuery = entityManager.createNativeQuery(sql);

@@ -2,7 +2,7 @@ package com.ubold.admin.service.impl;
 
 import com.ubold.admin.RabcApplication;
 import com.ubold.admin.domain.UserInfo;
-import com.ubold.admin.pager.CriteriaQueryPager;
+import com.ubold.admin.bootstrap.BootstrapCriteriaQuery;
 import com.ubold.admin.repository.UserRepository;
 import com.ubold.admin.service.UserService;
 import com.ubold.admin.util.GUID;
@@ -60,7 +60,7 @@ public class UserServiceImplTest {
 //            criteriaQueryPager.find(sql,UserInfo.class,1,50);
         Map<String,Object> param = new HashedMap();
         param.put("username","2222");
-      List<UserInfo> list =  criteriaQueryPager.find(sql,UserInfo.class,param);
+      List<UserInfo> list =  criteriaQueryPager.findAll(sql,UserInfo.class,param);
         list.forEach((UserInfo userInfo) -> {
             log.info("用户名 {}",userInfo.getUsername());
 //            log.info("总记录数 {}",pager.getTotalElements());

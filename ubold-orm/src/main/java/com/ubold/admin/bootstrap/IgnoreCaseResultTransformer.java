@@ -1,4 +1,4 @@
-package com.ubold.admin.pager;
+package com.ubold.admin.bootstrap;
 
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.ConvertUtils;
