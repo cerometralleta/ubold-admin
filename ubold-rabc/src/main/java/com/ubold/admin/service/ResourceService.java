@@ -33,5 +33,5 @@ public interface ResourceService {
 
     Map<String, String> getAuthority(String userId);
 
-    AccountInfoModel getAccountInfo(String userId);
+    AccountInfoModel loadCredentials(String userId);
 }

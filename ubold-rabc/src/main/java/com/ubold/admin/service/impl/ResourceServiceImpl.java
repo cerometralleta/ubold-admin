@@ -87,7 +87,7 @@ public class ResourceServiceImpl implements ResourceService {
             }
         }
         for (Resources resource : parentList) {
-            loopGetMenuItems(resource, childMap);
+            foreachGetMenuItems(resource, childMap);
         }
         return Response.SUCCESS(getMenuResult);
     }
@@ -109,7 +109,7 @@ public class ResourceServiceImpl implements ResourceService {
     }
 
     @Override
-    public AccountInfoModel getAccountInfo(String userId) {
+    public AccountInfoModel loadCredentials(String userId) {
         AccountInfoModel accountInfoModel = new AccountInfoModel();
 
         //读取用户信息
@@ -129,7 +129,7 @@ public class ResourceServiceImpl implements ResourceService {
     }
 
     //遍历
-    protected void loopGetMenuItems(Resources resource, Map<String, List<Resources>>
+    protected void foreachGetMenuItems(Resources resource, Map<String, List<Resources>>
             childMap) {
 
         //当前节点存在子节点
@@ -138,7 +138,7 @@ public class ResourceServiceImpl implements ResourceService {
         }
         resource.setChildren(childMap.get(resource.getId()));
         for (Resources res : resource.getChildren()) {
-            loopGetMenuItems(res, childMap);
+            foreachGetMenuItems(res, childMap);
         }
     }
 }

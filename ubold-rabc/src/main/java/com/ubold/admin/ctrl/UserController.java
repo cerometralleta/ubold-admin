@@ -39,9 +39,9 @@ public class UserController {
         return principal;
     }
 
-    @ApiOperation(value = "获取账号基本信息")
-    @RequestMapping(value = "/getAccountInfo", method = RequestMethod.GET)
-    public Response<AccountInfoModel> getAccount(Request request) {
-        return Response.SUCCESS(resourceService.getAccountInfo(request.getSessionUserId()));
+    @ApiOperation(value = "获取凭证")
+    @RequestMapping(value = "/loadCredentials", method = RequestMethod.GET)
+    public Response<AccountInfoModel> loadCredentials(Request request) {
+        return Response.SUCCESS(resourceService.loadCredentials(request.getSessionUserId()));
     }
 }

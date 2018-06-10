@@ -12,6 +12,6 @@ import javax.persistence.Table;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name="TB_USER_INFO")
+@Table(name="t_user_info")
 public class UserInfo extends User{
 }

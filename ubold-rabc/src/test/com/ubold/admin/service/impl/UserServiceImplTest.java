@@ -2,7 +2,7 @@ package com.ubold.admin.service.impl;
 
 import com.ubold.admin.RabcApplication;
 import com.ubold.admin.domain.UserInfo;
-import com.ubold.admin.pager.CriteriaQueryPager;
+import com.ubold.admin.pager.BootstrapCriteriaQuery;
 import com.ubold.admin.repository.UserRepository;
 import com.ubold.admin.service.UserService;
 import com.ubold.admin.util.GUID;
