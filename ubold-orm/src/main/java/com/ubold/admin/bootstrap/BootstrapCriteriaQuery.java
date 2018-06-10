@@ -1,6 +1,5 @@
-package com.ubold.admin.pager;
+package com.ubold.admin.bootstrap;
 
-import lombok.extern.slf4j.Slf4j;
 import org.hibernate.SQLQuery;
 import org.springframework.stereotype.Service;
 
@@ -13,16 +12,15 @@ import java.util.Map;
 /**
  * Created by lenovo on 2018/6/5.
  */
-@Slf4j
 @Service
 public class BootstrapCriteriaQuery {
 
     @PersistenceContext
     EntityManager entityManager;
 
+
     // bean属性映射
-    public <T> Pager<T> find(String sql, Class<?> clazz, int pageNo, int pageSize){
-        List<T> list = null;
+    public <T> Pager<T> findAll(String sql, Class<?> clazz, int pageNo, int pageSize){
 
         //查询记录条数
         String countSql = new StringBuffer("select count(1) as cnt from (" ).append(sql).append( ") t ").toString();
@@ -42,9 +40,12 @@ public class BootstrapCriteriaQuery {
         //每页数量数
         nativeQuery.setMaxResults(pageSize);
         try {
-            list = nativeQuery.unwrap(SQLQuery.class)
+            List<T> list = nativeQuery.unwrap(SQLQuery.class)
                     .setResultTransformer(new IgnoreCaseResultTransformer(clazz))
                     .list();
+
+            //设置分页信息
+            return new Pager(pageNo,pageSize,Long.valueOf(totalCount.toString()),list);
         } finally {
 
             //关闭entityManager
@@ -52,24 +53,16 @@ public class BootstrapCriteriaQuery {
                 entityManager.close();
             }
         }
-        //设置分页信息
-        Pager pager = new Pager();
-        pager.setPageNo(pageNo);
-        pager.setPageSize(pageSize);
-        pager.setTotalElements(Long.valueOf(totalCount.toString()));
-        pager.setContent(list);
-        return pager;
     }
 
     // bean属性映射
-    public <T> List<T> find(String sql, Class<?> clazz, Map<String,Object> paraMap){
-        List<T> list = null;
+    public <T> List<T> findAll(String sql, Class<?> clazz, Map<String,Object> paraMap){
         try {
             Query nativeQuery = entityManager.createNativeQuery(sql);
             paraMap.forEach((k,v)-> {
                 nativeQuery.setParameter(k,v);
             });
-            list = nativeQuery.unwrap(SQLQuery.class)
+            return nativeQuery.unwrap(SQLQuery.class)
                     .setResultTransformer(new IgnoreCaseResultTransformer(clazz))
                     .list();
         } finally {
@@ -79,6 +72,5 @@ public class BootstrapCriteriaQuery {
                 entityManager.close();
             }
         }
-        return list;
     }
 }

@@ -1,5 +1,6 @@
-package com.ubold.admin.pager;
+package com.ubold.admin.bootstrap;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -10,6 +11,7 @@ import java.util.List;
  * @author zkning
  */
 @Data
+@AllArgsConstructor
 public class Pager<T> implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private int pageSize;
